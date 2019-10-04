@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/diagnostics.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 
 void main() => runApp(MyApp());
@@ -267,9 +266,11 @@ class HomePage extends StatelessWidget {
                 ),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(0, 40, 0, 0),
-                  child: Text(
-                    "UCFBox",
-                    style: TextStyle(fontSize: 60),
+                  child: Center(
+                    child: Text(
+                      "UCFBox",
+                      style: TextStyle(fontSize: 60),
+                    ),
                   ),
                 ),
                 SizedBox(),
