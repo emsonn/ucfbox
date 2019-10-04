@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class myAppBar extends StatelessWidget implements PreferredSizeWidget {
+class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
@@ -24,8 +24,8 @@ class myAppBar extends StatelessWidget implements PreferredSizeWidget {
         IconButton(
           icon: Icon(Icons.home),
           onPressed: () {
-            Navigator.push(
-                context, MaterialPageRoute(builder: (context) => HomePage()));
+            Navigator.popUntil(
+                context, ModalRoute.withName(Navigator.defaultRouteName));
           },
         )
       ],
@@ -37,32 +37,102 @@ class myAppBar extends StatelessWidget implements PreferredSizeWidget {
 }
 
 class GameCard extends StatelessWidget {
-  GameCard({this.label, this.color});
+  GameCard({this.label, this.color, this.route});
   final label;
   final color;
+  final route;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       child: Padding(
         padding: const EdgeInsets.fromLTRB(50, 50, 50, 100),
-        child: Card(
-          color: color,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.all(15.0),
-                child: Text(
-                  label,
-                  style: TextStyle(
-                    fontSize: 50,
-                    fontWeight: FontWeight.bold,
+        child: InkWell(
+          onTap: () {
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => route));
+          },
+          child: Card(
+            color: color,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.all(15.0),
+                  child: Text(
+                    label,
+                    style: TextStyle(
+                      fontSize: 50,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class Citronot extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.black,
+      appBar: MyAppBar(),
+      body: SafeArea(
+        child: Center(
+          child: Text(
+            "CITRONOT GAME PLAY",
+            style: TextStyle(
+              fontSize: 60,
+              color: Colors.white,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class Quiplash extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.black,
+      appBar: MyAppBar(),
+      body: SafeArea(
+        child: Center(
+          child: Text(
+            "QUIPLASH GAME PLAY",
+            style: TextStyle(
+              fontSize: 60,
+              color: Colors.white,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class NightNightKnightro extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.black,
+      appBar: MyAppBar(),
+      body: SafeArea(
+        child: Center(
+          child: Text(
+            "NIGHTNIGHTKNIGHTRO GAME PLAY",
+            style: TextStyle(
+              fontSize: 60,
+              color: Colors.white,
+            ),
           ),
         ),
       ),
@@ -74,15 +144,18 @@ class GameLobby extends StatelessWidget {
   List<GameCard> games = [
     GameCard(
       label: "CITRO\nNOT",
-      color: Colors.red,
+      color: Color(0xFFF10429),
+      route: Citronot(),
     ),
     GameCard(
       label: "QUIP\nLASH",
-      color: Colors.yellow,
+      color: Color(0xFF3DDA03),
+      route: Quiplash(),
     ),
     GameCard(
       label: "NIGHT\nNIGHT\nKNIGHTRO",
-      color: Colors.blue,
+      color: Color(0xFFBE038B),
+      route: NightNightKnightro(),
     ),
   ];
 
@@ -92,7 +165,7 @@ class GameLobby extends StatelessWidget {
       children: <Widget>[
         Scaffold(
           backgroundColor: Colors.black,
-          appBar: myAppBar(),
+          appBar: MyAppBar(),
           body: SafeArea(
             child: Swiper(
               itemBuilder: (BuildContext context, int index) {
@@ -118,7 +191,7 @@ class JoinRoom extends StatelessWidget {
         ),
         Scaffold(
           backgroundColor: Colors.transparent,
-          appBar: myAppBar(),
+          appBar: MyAppBar(),
           body: SafeArea(
             child: Padding(
               padding: const EdgeInsets.fromLTRB(50, 50, 50, 100),
@@ -181,7 +254,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xFFFFC904),
-      appBar: myAppBar(),
+      appBar: MyAppBar(),
       body: SafeArea(
         child: Center(
           child: Padding(
