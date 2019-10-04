@@ -35,6 +35,27 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
   Size get preferredSize => Size.fromHeight(55);
 }
 
+class CreateRoom extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.black,
+      appBar: MyAppBar(),
+      body: SafeArea(
+        child: Center(
+          child: Text(
+            "CREATE GAME",
+            style: TextStyle(
+              fontSize: 60,
+              color: Colors.white,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 class GameCard extends StatelessWidget {
   GameCard({this.label, this.color, this.route});
   final label;
@@ -224,12 +245,7 @@ class JoinRoom extends StatelessWidget {
                         ),
                       ),
                       FlatButton(
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => GameLobby()));
-                        },
+                        onPressed: () {},
                         color: Colors.black,
                         child: Text(
                           "CHARGE ON!",
@@ -275,7 +291,10 @@ class HomePage extends StatelessWidget {
                 ),
                 SizedBox(),
                 OutlineButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => CreateRoom()));
+                  },
                   borderSide: BorderSide(
                     color: Colors.white,
                     width: 2.5,
