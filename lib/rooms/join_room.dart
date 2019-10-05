@@ -39,6 +39,7 @@ class JoinRoom extends StatelessWidget {
                             ),
                             hintText: "Enter the 8 digit game code"),
                       ),
+                      // TODO: I added the Navigator.push()
                       FlatButton(
                         onPressed: () {
                           Navigator.push(
