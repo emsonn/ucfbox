@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "1094330469942",
+    "firebase_url": "https://ucfbox.firebaseio.com",
+    "project_id": "ucfbox",
+    "storage_bucket": "ucfbox.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1094330469942:android:6b91276fa60493ea655297",
+        "android_client_info": {
+          "package_name": "group15.ucfbox"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1094330469942-dpbkvlo8gj3v3eni3h8f13r22d419lr8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB7zDcwAoBDsqC0XFIgkeZWOgstMHLwamg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1094330469942-dpbkvlo8gj3v3eni3h8f13r22d419lr8.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1094330469942-2aduhq7fvi428pkrf4gf388649ioqs3i.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "group15.ucfbox"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
