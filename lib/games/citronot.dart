@@ -1,6 +1,8 @@
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
 import '../my_app_bar.dart';
+import 'generateCode.dart';
 
 class Citronot extends StatelessWidget {
   @override
@@ -21,4 +23,13 @@ class Citronot extends StatelessWidget {
       ),
     );
   }
+}
+
+void createCitronotRoom() {
+  FirebaseDatabase.instance.reference().child(generateCode()).set({
+    "gameType": "citronot",
+    "players": [],
+    "voteCount": 0,
+    "allTopics": [],
+  });
 }
