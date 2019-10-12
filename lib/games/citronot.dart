@@ -7,6 +7,7 @@ import 'generateCode.dart';
 class Citronot extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    createCitronotRoom();
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: MyAppBar(),

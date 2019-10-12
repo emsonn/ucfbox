@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_database/firebase_database.dart';
 
 import '../my_app_bar.dart';
+import 'generateCode.dart';
 
 class Quiplash extends StatelessWidget {
   @override
@@ -21,4 +23,13 @@ class Quiplash extends StatelessWidget {
       ),
     );
   }
+}
+
+void createQuiplash() {
+  FirebaseDatabase.instance.reference().child(generateCode()).set({
+    "gameType": "Citronot",
+    "players": [],
+    "currentFact": "",
+    "answerCount": 0,
+  });
 }
