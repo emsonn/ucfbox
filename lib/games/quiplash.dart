@@ -7,6 +7,7 @@ import 'generateCode.dart';
 class Quiplash extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    createQuiplash();
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: MyAppBar(),
