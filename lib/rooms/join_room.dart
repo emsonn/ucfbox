@@ -11,6 +11,7 @@ class JoinRoom extends StatelessWidget {
       children: <Widget>[
         Image.asset('images/classroom.png', fit: BoxFit.cover),
         Scaffold(
+          resizeToAvoidBottomInset: false,
           backgroundColor: Colors.transparent,
           appBar: MyAppBar(),
           body: SafeArea(
