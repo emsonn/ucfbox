@@ -35,6 +35,7 @@ class JoinRoom extends StatelessWidget {
                       TextField(
                         inputFormatters: [
                           LengthLimitingTextInputFormatter(8),
+                          WhitelistingTextInputFormatter(RegExp("[a-zA-Z0-9]")),
                       ],
                         decoration: InputDecoration(
                             border: OutlineInputBorder(
