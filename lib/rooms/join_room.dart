@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:ucfbox/menu_of_games/game_lobby.dart';
 
 import '../my_app_bar.dart';
@@ -32,6 +33,9 @@ class JoinRoom extends StatelessWidget {
                         ),
                       ),
                       TextField(
+                        inputFormatters: [
+                          LengthLimitingTextInputFormatter(8),
+                      ],
                         decoration: InputDecoration(
                             border: OutlineInputBorder(
                               borderSide:
@@ -39,7 +43,6 @@ class JoinRoom extends StatelessWidget {
                             ),
                             hintText: "Enter the 8 digit game code"),
                       ),
-                      // TODO: I added the Navigator.push()
                       FlatButton(
                         onPressed: () {
                           Navigator.push(
