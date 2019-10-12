@@ -27,7 +27,7 @@ class Quiplash extends StatelessWidget {
 
 void createQuiplash() {
   FirebaseDatabase.instance.reference().child(generateCode()).set({
-    "gameType": "Citronot",
+    "gameType": "quiplash",
     "players": [],
     "currentFact": "",
     "answerCount": 0,
