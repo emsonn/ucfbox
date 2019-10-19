@@ -1,15 +1,34 @@
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:ucfbox/menu_of_games/game_lobby.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 import '../my_app_bar.dart';
 
 class JoinRoom extends StatelessWidget {
+
+  Future<bool> gameRoomExists(String gameCode) async {
+
+    //database reference.
+    return FirebaseDatabase.instance.reference().child(gameCode).once().then((DataSnapshot data)
+    {
+      print(data.key);
+      print(data.value);
+      print( data.key.isNotEmpty );
+      return data.key.isNotEmpty && data.value != null;
+    });
+  }
+
+
+
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: <Widget>[
         Image.asset('images/classroom.png', fit: BoxFit.cover),
         Scaffold(
+          resizeToAvoidBottomInset: false,
           backgroundColor: Colors.transparent,
           appBar: MyAppBar(),
           body: SafeArea(
@@ -32,27 +51,68 @@ class JoinRoom extends StatelessWidget {
                         ),
                       ),
                       TextField(
+                        autocorrect: false,
+                        inputFormatters: [
+                          LengthLimitingTextInputFormatter(8),
+                          WhitelistingTextInputFormatter(RegExp("[a-zA-Z0-9]")),
+                      ],
                         decoration: InputDecoration(
                             border: OutlineInputBorder(
                               borderSide:
                                   BorderSide(color: Colors.white, width: 2.5),
                             ),
                             hintText: "Enter the 8 digit game code"),
-                      ),
-                      // TODO: I added the Navigator.push()
-                      FlatButton(
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => GameLobby()));
-                        },
-                        color: Colors.black,
-                        child: Text(
-                          "CHARGE ON!",
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      ),
+                            onSubmitted: (gameCode) async {
+                              if ( await gameRoomExists(gameCode) ) {
+                                // TODO: create user name and update the gameroom.
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => GameLobby()));
+                              }
+                              else {
+                                Alert(
+                                  context: context,
+                                  type: AlertType.error,
+                                  title: "UCFBox Alert",
+                                  desc: "The game room you entered does not exist!",
+                                  buttons: [
+                                      DialogButton(
+                                        color: Color.fromRGBO(225, 202, 6, 100),
+                                        child: Text(
+                                          "CHARGE ON!",
+                                          style: TextStyle(
+                                              color: Colors.black, fontSize: 20),
+                                        ),
+                                        onPressed: () => Navigator.pop(context),
+                                        width: 120,
+                                      )
+                                    ],
+                                  ).show();
+                                }
+                              }),
+//                          },
+//                      ),
+//                      FlatButton(
+//                        onPressed: () {
+//                          Navigator.push(
+//                              context,
+//                              MaterialPageRoute(
+//                                  builder: (context) => GameLobby()));
+//
+//                      ),
+//                      // TODO: I added the Navigator.push()
+//                      FlatButton(
+//                        onPressed: () {
+//
+//                          }
+//                        },
+//                        color: Colors.black,
+//                        child: Text(
+//                          "CHARGE ON!",
+//                          style: TextStyle(color: Colors.white),
+//                        ),
+//                      ),
                     ],
                   ),
                 ),
