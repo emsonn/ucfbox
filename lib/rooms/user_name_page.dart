@@ -4,10 +4,10 @@ import 'package:ucfbox/menu_of_games/game_lobby.dart';
 import '../my_app_bar.dart';
 
 class UserName extends StatefulWidget {
+  final myController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
-    final myController = TextEditingController();
-
     return Stack(
       children: <Widget>[
         Image.asset('images/classroom.png', fit: BoxFit.cover),
@@ -48,8 +48,8 @@ class UserName extends StatefulWidget {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) =>
-                                      GameLobby(myController.text)));
+                                  builder: (context) => GameLobby(
+                                      playerName: myController.text)));
                         },
                         color: Colors.black,
                         child: Text(
@@ -70,6 +70,8 @@ class UserName extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
+    // TODO: implement createState
+
     return null;
   }
 }

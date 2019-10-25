@@ -9,34 +9,34 @@ import 'game_card.dart';
 
 class GameLobby extends StatelessWidget {
   GameLobby({this.playerName});
-  final playerName;
-
-  List<GameCard> games = [
-    GameCard(
-      label: "CITRO\nNOT",
-      color: Color(0xFFF10429),
-      route: Citronot(
-        playerName: playerName,
-      ),
-    ),
-    GameCard(
-      label: "QUIP\nLASH",
-      color: Color(0xFF3DDA03),
-      route: Quiplash(
-        playerName: playerName,
-      ),
-    ),
-    GameCard(
-      label: "NIGHT\nNIGHT\nKNIGHTRO",
-      color: Color(0xFFBE038B),
-      route: NightNightKnightro(
-        playerName: playerName,
-      ),
-    ),
-  ];
+  final String playerName;
 
   @override
   Widget build(BuildContext context) {
+    List<GameCard> games = [
+      GameCard(
+        label: "CITRO\nNOT",
+        color: Color(0xFFF10429),
+        route: Citronot(
+          playerName: playerName,
+        ),
+      ),
+      GameCard(
+        label: "QUIP\nLASH",
+        color: Color(0xFF3DDA03),
+        route: Quiplash(
+          playerName: playerName,
+        ),
+      ),
+      GameCard(
+        label: "NIGHT\nNIGHT\nKNIGHTRO",
+        color: Color(0xFFBE038B),
+        route: NightNightKnightro(
+          playerName: playerName,
+        ),
+      ),
+    ];
+
     return Stack(
       children: <Widget>[
         Scaffold(
