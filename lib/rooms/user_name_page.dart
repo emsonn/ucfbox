@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:ucfbox/menu_of_games/game_lobby.dart';
 
 import '../my_app_bar.dart';
 
-class CreateRoom extends StatelessWidget {
+class UserName extends StatefulWidget {
   @override
   Widget build(BuildContext context) {
+    final myController = TextEditingController();
+
     return Stack(
       children: <Widget>[
         Image.asset('images/classroom.png', fit: BoxFit.cover),
@@ -25,7 +28,7 @@ class CreateRoom extends StatelessWidget {
                       Padding(
                         padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
                         child: Text(
-                          "ENTER\nYOUR\nGAME CODE",
+                          "ENTER\nYOUR\nUSER NAME",
                           style: TextStyle(
                               fontSize: 30, fontWeight: FontWeight.bold),
                         ),
@@ -36,11 +39,18 @@ class CreateRoom extends StatelessWidget {
                               borderSide:
                                   BorderSide(color: Colors.white, width: 2.5),
                             ),
-                            hintText: "Enter the 8 digit game code"),
+                            hintText: "1-12 characters"),
+                        controller: myController,
                       ),
                       // TODO: I added the Navigator.push()
                       FlatButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      GameLobby(myController.text)));
+                        },
                         color: Colors.black,
                         child: Text(
                           "CHARGE ON!",
@@ -56,5 +66,10 @@ class CreateRoom extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  @override
+  State<StatefulWidget> createState() {
+    return null;
   }
 }

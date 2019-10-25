@@ -5,9 +5,12 @@ import '../my_app_bar.dart';
 import 'generateCode.dart';
 
 class Quiplash extends StatelessWidget {
+  Quiplash({this.playerName});
+  final playerName;
+
   @override
   Widget build(BuildContext context) {
-    createQuiplash();
+    createQuiplash(playerName);
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: MyAppBar(),
@@ -26,10 +29,17 @@ class Quiplash extends StatelessWidget {
   }
 }
 
-void createQuiplash() {
+void createQuiplash(String playerName) {
   FirebaseDatabase.instance.reference().child(generateCode()).set({
     "gameType": "quiplash",
-    "players": [],
+    "players": [
+      {
+        "playerName": playerName,
+        "score": 0,
+        "start": false,
+        "answer": "",
+      }
+    ],
     "currentFact": "",
     "answerCount": 0,
   });

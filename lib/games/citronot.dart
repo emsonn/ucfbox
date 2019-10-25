@@ -5,9 +5,12 @@ import '../my_app_bar.dart';
 import 'generateCode.dart';
 
 class Citronot extends StatelessWidget {
+  Citronot({this.playerName});
+  final playerName;
+
   @override
   Widget build(BuildContext context) {
-    createCitronotRoom();
+    createCitronotRoom(playerName);
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: MyAppBar(),
@@ -26,10 +29,17 @@ class Citronot extends StatelessWidget {
   }
 }
 
-void createCitronotRoom() {
+void createCitronotRoom(String playerName) {
   FirebaseDatabase.instance.reference().child(generateCode()).set({
     "gameType": "citronot",
-    "players": [],
+    "players": [
+      {
+        "playerName": playerName,
+        "score": 0,
+        "start": false,
+        "answer": "",
+      }
+    ],
     "voteCount": 0,
     "allTopics": [],
   });
