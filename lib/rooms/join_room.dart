@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ucfbox/menu_of_games/game_lobby.dart';
+import 'package:ucfbox/rooms/create_room.dart';
 
 import '../my_app_bar.dart';
 
@@ -45,7 +45,7 @@ class JoinRoom extends StatelessWidget {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => GameLobby()));
+                                  builder: (context) => CreateRoom()));
                         },
                         color: Colors.black,
                         child: Text(

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'my_app_bar.dart';
 import 'rooms/join_room.dart';
-import 'rooms/user_name_page.dart';
+import 'rooms/create_room.dart';
 
 class HomePage extends StatelessWidget {
   @override
@@ -28,7 +28,7 @@ class HomePage extends StatelessWidget {
                 OutlineButton(
                   onPressed: () {
                     Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => UserName()));
+                        MaterialPageRoute(builder: (context) => CreateRoom()));
                   },
                   borderSide: BorderSide(color: Colors.white, width: 2.5),
                   child: Text("CREATE ROOM",

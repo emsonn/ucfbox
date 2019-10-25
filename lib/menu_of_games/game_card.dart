@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import '../rooms/user_name_page.dart';
 
 class GameCard extends StatelessWidget {
-  GameCard({this.label, this.color, this.route});
+  GameCard({this.label, this.color});
   final label;
   final color;
-  final route;
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +14,7 @@ class GameCard extends StatelessWidget {
         child: InkWell(
           onTap: () {
             Navigator.push(
-                context, MaterialPageRoute(builder: (context) => route));
+                context, MaterialPageRoute(builder: (context) => UserName()));
           },
           child: Card(
             color: color,
