@@ -1,9 +1,21 @@
-import 'package:flutter/material.dart';
-import 'package:ucfbox/rooms/create_room.dart';
+import 'dart:convert';
 
+import 'package:flutter/material.dart';
+import 'package:ucfbox/games/citronot.dart';
+import 'package:ucfbox/games/night_night_knightro.dart';
+import 'package:ucfbox/games/quiplash.dart';
 import '../my_app_bar.dart';
 
 class UserName extends StatefulWidget {
+  UserName({this.gameRoomCode, this.gameType});
+  final gameRoomCode;
+  final gameType;
+
+  @override
+  _UserNameState createState() => _UserNameState();
+}
+
+class _UserNameState extends State<UserName> {
   @override
   Widget build(BuildContext context) {
     final myController = TextEditingController();
@@ -45,10 +57,25 @@ class UserName extends StatefulWidget {
                       // TODO: I added the Navigator.push()
                       FlatButton(
                         onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => CreateRoom()));
+                          if (widget.gameType == "citronot") {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => Citronot()));
+                          } else if (widget.gameType == "quiplash") {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => Quiplash()));
+                          } else if (widget.gameType == "nightNightKnightro") {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        NightNightKnightro()));
+                          } else {
+                            print('you failed');
+                          }
                         },
                         color: Colors.black,
                         child: Text(
@@ -65,10 +92,5 @@ class UserName extends StatefulWidget {
         ),
       ],
     );
-  }
-
-  @override
-  State<StatefulWidget> createState() {
-    return null;
   }
 }
