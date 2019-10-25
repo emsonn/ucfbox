@@ -11,6 +11,7 @@ class JoinRoom extends StatelessWidget {
       children: <Widget>[
         Image.asset('images/classroom.png', fit: BoxFit.cover),
         Scaffold(
+          // Slides keyboard up so the input box is not covered.
           resizeToAvoidBottomInset: false,
           backgroundColor: Colors.transparent,
           appBar: MyAppBar(),
@@ -34,6 +35,7 @@ class JoinRoom extends StatelessWidget {
                         ),
                       ),
                       TextField(
+                        // Restricts input <=8 chars, a-z and A-Z and 0-9 allowed.
                         inputFormatters: [
                           LengthLimitingTextInputFormatter(8),
                           WhitelistingTextInputFormatter(RegExp("[a-zA-Z0-9]")),
