@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:ucfbox/games/citronot.dart';
 import 'package:ucfbox/games/night_night_knightro.dart';
@@ -10,6 +11,7 @@ class UserName extends StatefulWidget {
   UserName({this.gameRoomCode, this.gameType});
   final gameRoomCode;
   final gameType;
+  var playerName;
 
   @override
   _UserNameState createState() => _UserNameState();
@@ -18,8 +20,6 @@ class UserName extends StatefulWidget {
 class _UserNameState extends State<UserName> {
   @override
   Widget build(BuildContext context) {
-    final myController = TextEditingController();
-
     return Stack(
       children: <Widget>[
         Image.asset('images/classroom.png', fit: BoxFit.cover),
@@ -46,17 +46,39 @@ class _UserNameState extends State<UserName> {
                         ),
                       ),
                       TextField(
+                        onSubmitted: (text) {
+                          if (FirebaseDatabase.instance
+                                  .reference()
+                                  .child(widget.gameRoomCode)
+                                  .child('players')
+                                  .child('0') ==
+                              "") {
+                            FirebaseDatabase.instance
+                                .reference()
+                                .child(widget.gameRoomCode)
+                                .child('players')
+                                .child('0')
+                                .update({'playerName': text});
+                          }
+                        },
                         decoration: InputDecoration(
                             border: OutlineInputBorder(
                               borderSide:
                                   BorderSide(color: Colors.white, width: 2.5),
                             ),
                             hintText: "1-12 characters"),
-                        controller: myController,
                       ),
                       // TODO: I added the Navigator.push()
                       FlatButton(
                         onPressed: () {
+                          print(widget.gameRoomCode);
+                          print(widget.playerName);
+                          FirebaseDatabase.instance
+                              .reference()
+                              .child(widget.gameRoomCode)
+                              .child('players')
+                              .child('0')
+                              .update({'playerName': widget.playerName});
                           if (widget.gameType == "citronot") {
                             Navigator.push(
                                 context,
