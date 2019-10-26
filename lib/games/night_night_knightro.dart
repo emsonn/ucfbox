@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 
 import '../my_app_bar.dart';
-import 'generateCode.dart';
+import 'generate_code.dart';
 
 class NightNightKnightro extends StatelessWidget {
   NightNightKnightro({this.playerName});

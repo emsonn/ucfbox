@@ -1,6 +1,6 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:ucfbox/games/generateCode.dart';
+import 'package:ucfbox/games/generate_code.dart';
 import '../rooms/user_name_page.dart';
 
 class GameCard extends StatelessWidget {
