@@ -20,6 +20,7 @@ class UserName extends StatefulWidget {
 class _UserNameState extends State<UserName> {
   @override
   Widget build(BuildContext context) {
+    /// Put one widget on top of another
     return Stack(
       children: <Widget>[
         Image.asset('images/classroom.png', fit: BoxFit.cover),
@@ -33,6 +34,8 @@ class _UserNameState extends State<UserName> {
                 color: Color(0xFFFFC904),
                 child: Padding(
                   padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+
+                  /// Organize things on a vertical orientation
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -45,8 +48,13 @@ class _UserNameState extends State<UserName> {
                               fontSize: 30, fontWeight: FontWeight.bold),
                         ),
                       ),
+
+                      /// Player enter the name
                       TextField(
                         onSubmitted: (text) {
+
+                          //TODO: ERROR on the if Statement
+                          // wrong data types being compare
                           if (FirebaseDatabase.instance
                                   .reference()
                                   .child(widget.gameRoomCode)
