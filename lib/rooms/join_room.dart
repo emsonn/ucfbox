@@ -1,6 +1,6 @@
 // import 'dart:core' as prefix0;
 
-import 'package:firebase_core/firebase_core.dart';
+// import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -19,9 +19,7 @@ class JoinRoom extends StatelessWidget {
         .child(gameCode)
         .once()
         .then((DataSnapshot data) {
-          print('gameRoomExists print');
-          print(data.key.isNotEmpty && data.value != null);
-          print('\n');
+          print('gameRoomExists: ${data.key.isNotEmpty && data.value != null}\n');
       return data.key.isNotEmpty && data.value != null;
     });
   }
@@ -35,7 +33,7 @@ class JoinRoom extends StatelessWidget {
         .child('gameType')
         .once()
         .then((DataSnapshot data) {
-        print('getGameType print:\n ${data.value}');
+        print('getGameType print: ${data.value}\n');
       return data.value;
     });
   }
@@ -96,7 +94,7 @@ class JoinRoom extends StatelessWidget {
                           /// If the gameCode matches with a existing room, then push player
                           /// into the room with the gameCode and gameRoomType.
                           if (await gameRoomExists(gameCode)) {
-                            // TODO: create user name and update the gameroom.
+                            // create user name and update the gameroom.
                             getGameType(gameCode).then(
                               (gameRoomType) {
                                 Navigator.push(

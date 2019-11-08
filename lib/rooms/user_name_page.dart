@@ -1,4 +1,4 @@
-import 'dart:convert';
+// import 'dart:convert';
 
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -42,6 +42,8 @@ class _UserNameState extends State<UserName> {
                     children: <Widget>[
                       Padding(
                         padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
+
+                        /// Player enter name
                         child: Text(
                           "ENTER\nYOUR\nUSER NAME",
                           style: TextStyle(
@@ -51,23 +53,29 @@ class _UserNameState extends State<UserName> {
 
                       /// Player enter the name
                       TextField(
-                        onSubmitted: (text) {
-
-                          //TODO: ERROR on the if Statement
+                        onChanged: (text) {
+                          // This is not printing either
+                          print('POTATO name before the for loop is $text');
+                          // ERROR on the if Statement
                           // wrong data types being compare
-                          if (FirebaseDatabase.instance
-                                  .reference()
-                                  .child(widget.gameRoomCode)
-                                  .child('players')
-                                  .child('0') ==
-                              "") {
-                            FirebaseDatabase.instance
-                                .reference()
-                                .child(widget.gameRoomCode)
-                                .child('players')
-                                .child('0')
-                                .update({'playerName': text});
-                          }
+                          // if (FirebaseDatabase.instance
+                          //         .reference()
+                          //         .child('gameRoomCode')
+                          //         .child('players')
+                          //         .child('1') ==
+                          //     "") {
+                          FirebaseDatabase.instance
+                              .reference()
+                              .child('gameRoomCode')
+                              .child('players')
+                              .child('1')
+                              .update({'playerName': text});
+
+                          /// The players name is not being store on the database
+                          /// because this print stament never runs which means we
+                          /// are never entering the for loop
+                          print('After for loop POTATO\'S name: $text');
+                          // }
                         },
                         decoration: InputDecoration(
                             border: OutlineInputBorder(
@@ -76,16 +84,18 @@ class _UserNameState extends State<UserName> {
                             ),
                             hintText: "1-12 characters"),
                       ),
-                      // TODO: I added the Navigator.push()
+                      //  I added the Navigator.push()
                       FlatButton(
                         onPressed: () {
-                          print(widget.gameRoomCode);
-                          print(widget.playerName);
+                          /// Print statements for gameRoomCode and playerName
+                          print('gameRoomCode is ${widget.gameRoomCode}');
+                          print('Player name is ${widget.playerName}');
+
                           FirebaseDatabase.instance
                               .reference()
                               .child(widget.gameRoomCode)
                               .child('players')
-                              .child('0')
+                              .child('1')
                               .update({'playerName': widget.playerName});
                           if (widget.gameType == "citronot") {
                             Navigator.push(
