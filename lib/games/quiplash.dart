@@ -16,8 +16,9 @@ class Quiplash extends StatelessWidget {
       appBar: MyAppBar(),
       body: SafeArea(
         child: Center(
+          // Trying to display the players name
           child: Text(
-            "QUIPLASH GAME PLAY",
+            "QUIPLASH GAME PLAY\n$playerName",
             style: TextStyle(
               fontSize: 60,
               color: Colors.white,
@@ -29,6 +30,8 @@ class Quiplash extends StatelessWidget {
   }
 }
 
+//// Why is this outside of the class?
+/// Is it a global variable?
 void createQuiplash(String playerName) {
   FirebaseDatabase.instance.reference().child(generateCode()).set({
     "gameType": "quiplash",
