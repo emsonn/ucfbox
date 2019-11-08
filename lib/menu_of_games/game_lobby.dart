@@ -14,17 +14,17 @@ class GameLobby extends StatelessWidget {
     GameCard(
       label: "CITRO\nNOT",
       color: Color(0xFFF10429),
-      route: Citronot(),
+  //    route: Citronot(),
     ),
     GameCard(
       label: "QUIP\nLASH",
       color: Color(0xFF3DDA03),
-      route: Quiplash(),
+   //   route: Quiplash(),
     ),
     GameCard(
       label: "NIGHT\nNIGHT\nKNIGHTRO",
       color: Color(0xFFBE038B),
-      route: NightNightKnightro(),
+   //   route: NightNightKnightro(),
     ),
   ];
 

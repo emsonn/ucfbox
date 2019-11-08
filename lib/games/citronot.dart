@@ -16,8 +16,10 @@ class Citronot extends StatelessWidget {
       appBar: MyAppBar(),
       body: SafeArea(
         child: Center(
+          /// Trying to display the player name, but its showing null
+          /// In the database my name leuname doesn't appear.
           child: Text(
-            "CITRONOT GAME PLAY",
+            "CITRONOT GAME PLAY\nPlayer Name = ${playerName.toString()}",
             style: TextStyle(
               fontSize: 60,
               color: Colors.white,
