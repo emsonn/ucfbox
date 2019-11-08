@@ -84,6 +84,7 @@ class CreateRoom extends StatelessWidget {
             /// Swiper gives the cards a horizontal movement
             child: Swiper(
               itemBuilder: (BuildContext context, int index) {
+                print('\n\n${games[index].toStringDeep()}\n\n');
                 return games[index];
               },
               itemCount: 3,
