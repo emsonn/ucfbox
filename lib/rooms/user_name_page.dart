@@ -58,24 +58,24 @@ class _UserNameState extends State<UserName> {
                           print('POTATO name before the for loop is $text');
                           // ERROR on the if Statement
                           // wrong data types being compare
-                          // if (FirebaseDatabase.instance
-                          //         .reference()
-                          //         .child('gameRoomCode')
-                          //         .child('players')
-                          //         .child('1') ==
-                          //     "") {
-                          FirebaseDatabase.instance
-                              .reference()
-                              .child('gameRoomCode')
-                              .child('players')
-                              .child('1')
-                              .update({'playerName': text});
+                          if (FirebaseDatabase.instance
+                                  .reference()
+                                  .child('gameRoomCode')
+                                  .child('players')
+                                  .child('0') ==
+                              "") {
+                            FirebaseDatabase.instance
+                                .reference()
+                                .child('gameRoomCode')
+                                .child('players')
+                                .child('0')
+                                .update({'playerName': text});
 
-                          /// The players name is not being store on the database
-                          /// because this print stament never runs which means we
-                          /// are never entering the for loop
-                          print('After for loop POTATO\'S name: $text');
-                          // }
+                            /// The players name is not being store on the database
+                            /// because this print stament never runs which means we
+                            /// are never entering the for loop
+                            print('After for loop POTATO\'S name: $text');
+                          }
                         },
                         decoration: InputDecoration(
                             border: OutlineInputBorder(
@@ -95,7 +95,7 @@ class _UserNameState extends State<UserName> {
                               .reference()
                               .child(widget.gameRoomCode)
                               .child('players')
-                              .child('1')
+                              .child('0')
                               .update({'playerName': widget.playerName});
                           if (widget.gameType == "citronot") {
                             Navigator.push(

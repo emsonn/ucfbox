@@ -14,6 +14,7 @@ class JoinRoom extends StatelessWidget {
   /// Checks to see if the room exits
   Future<bool> gameRoomExists(String gameCode) async {
     //database reference.
+    print('code pass to gameRoomExists function: $gameCode');
     return FirebaseDatabase.instance
         .reference()
         .child(gameCode)
@@ -27,13 +28,14 @@ class JoinRoom extends StatelessWidget {
   /// Return the game type that was choosen
   Future<String> getGameType(String gameCode) async {
     //database reference.
+    print('code pass to getGameType function: $gameCode');
     return FirebaseDatabase.instance
         .reference()
         .child(gameCode)
         .child('gameType')
         .once()
         .then((DataSnapshot data) {
-        print('getGameType print: ${data.value}\n');
+        print('getGameType data.value: ${data.value}\n');
       return data.value;
     });
   }
