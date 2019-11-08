@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 
-import 'package:ucfbox/games/citronot.dart';
-import 'package:ucfbox/games/night_night_knightro.dart';
-import 'package:ucfbox/games/quiplash.dart';
+// import 'package:ucfbox/games/citronot.dart';
+// import 'package:ucfbox/games/night_night_knightro.dart';
+// import 'package:ucfbox/games/quiplash.dart';
 import 'package:ucfbox/my_app_bar.dart';
 import 'game_card.dart';
 
 
-//TODO: Create the ROUTING SYSTEM to be able to move to game.
+//Create the ROUTING SYSTEM to be able to move to game.
 class GameLobby extends StatelessWidget {
   List<GameCard> games = [
     GameCard(
