@@ -10,6 +10,14 @@ import 'package:ucfbox/rooms/user_name_page.dart';
 import '../my_app_bar.dart';
 
 class JoinRoom extends StatelessWidget {
+    final dbReference = FirebaseDatabase.instance.reference();
+  String gameCode;
+
+  Future<bool> gameRoomExitst2(String gameCode) async {
+    print('code pass to gameRoomExists function: $gameCode');
+    print('\nDoes room exist: ${gameCode == dbReference.child(gameCode).toString()}');
+    //return gameCode == dbReference.child(gameCode).once().then(DataSnapshot data);
+  }
   ///
   /// Checks to see if the room exits
   Future<bool> gameRoomExists(String gameCode) async {
@@ -92,10 +100,12 @@ class JoinRoom extends StatelessWidget {
                         /// Async function
                         /// gameCode is enter by user
                         onSubmitted: (gameCode) async {
+                          gameRoomExitst2(gameCode);
                           ///
                           /// If the gameCode matches with a existing room, then push player
                           /// into the room with the gameCode and gameRoomType.
                           if (await gameRoomExists(gameCode)) {
+                            gameRoomExitst2(gameCode);
                             // create user name and update the gameroom.
                             getGameType(gameCode).then(
                               (gameRoomType) {
