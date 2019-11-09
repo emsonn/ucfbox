@@ -17,6 +17,8 @@ class _JoinRoomState extends State<JoinRoom> {
   /// Checks to see if the room exist
   bool gameRoomExitst(String gameCode) {
     print('\nCode pass to gameRoomExists function: $gameCode');
+    print(
+        'The gameCode being pull out is: ${dbReference.}');
     return gameCode == dbReference.child(gameCode).once().toString();
   }
 

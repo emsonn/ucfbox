@@ -13,11 +13,11 @@ class JoinRoom extends StatelessWidget {
     final dbReference = FirebaseDatabase.instance.reference();
   String gameCode;
 
-  Future<bool> gameRoomExitst2(String gameCode) async {
-    print('code pass to gameRoomExists function: $gameCode');
-    print('\nDoes room exist: ${gameCode == dbReference.child(gameCode).toString()}');
-    //return gameCode == dbReference.child(gameCode).once().then(DataSnapshot data);
-  }
+  // Future<bool> gameRoomExitst2(String gameCode) async {
+  //   print('code pass to gameRoomExists function: $gameCode');
+  //   print('\nDoes room exist: ${gameCode == dbReference.child(gameCode).toString()}');
+  //   //return gameCode == dbReference.child(gameCode).once().then(DataSnapshot data);
+  // }
   ///
   /// Checks to see if the room exits
   Future<bool> gameRoomExists(String gameCode) async {
