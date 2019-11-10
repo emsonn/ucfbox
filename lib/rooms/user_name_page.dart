@@ -105,7 +105,7 @@ class _UserNameState extends State<UserName> {
                               .reference()
                               .child(widget.gameRoomCode)
                               .child('players')
-                              .child('2')
+                              .child('1')
                               .update({'playerName': playerName});
 
                           /// I'm going to try and take the name out of the database
@@ -119,7 +119,7 @@ class _UserNameState extends State<UserName> {
                               .reference()
                               .child(widget.gameRoomCode)
                               .child('players')
-                              .child('2')
+                              .child('1')
                               .child('playerName')
                               .once()
                               .then((DataSnapshot snapShot) {
