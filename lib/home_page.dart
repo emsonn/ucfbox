@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'my_app_bar.dart';
-import 'rooms/redo_join_room.dart';
+import 'rooms/join_room.dart';
 import 'rooms/create_room.dart';
 
 class HomePage extends StatelessWidget {

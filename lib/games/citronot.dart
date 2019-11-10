@@ -6,11 +6,11 @@ import 'generate_code.dart';
 
 class Citronot extends StatelessWidget {
   Citronot({this.playerName});
-  final playerName;
+  final String playerName;
 
   @override
   Widget build(BuildContext context) {
-    createCitronotRoom(playerName);
+    // createCitronotRoom(playerName);
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: MyAppBar(),
@@ -19,7 +19,7 @@ class Citronot extends StatelessWidget {
           /// Trying to display the player name, but its showing null
           /// In the database my name leuname doesn't appear.
           child: Text(
-            "CITRONOT GAME PLAY\nPlayer Name = ${playerName.toString()}",
+            "CITRONOT GAME PLAY\nPlayer Name = $playerName",
             style: TextStyle(
               fontSize: 60,
               color: Colors.white,

@@ -11,13 +11,20 @@ class UserName extends StatefulWidget {
   UserName({this.gameRoomCode, this.gameType});
   final gameRoomCode;
   final gameType;
-  var playerName;
 
   @override
   _UserNameState createState() => _UserNameState();
 }
 
 class _UserNameState extends State<UserName> {
+  String playerName;
+  @override
+  void initState() {
+    super.initState();
+    print(
+        '\n User Name Page\nThe gameRoomCode being pass is: ${widget.gameRoomCode}');
+  }
+
   @override
   Widget build(BuildContext context) {
     /// Put one widget on top of another
@@ -54,26 +61,24 @@ class _UserNameState extends State<UserName> {
                       /// Player enter the name
                       TextField(
                         onChanged: (text) {
-                          // This is not printing either
-                          print('POTATO name before the for loop is $text');
-                          // ERROR on the if Statement
-                          // wrong data types being compare
+                          ///
+                          /// print('POTATO\'s name before the for loop is $text');
+                          playerName = text;
                           if (FirebaseDatabase.instance
                                   .reference()
-                                  .child('gameRoomCode')
+                                  .child(widget.gameRoomCode)
                                   .child('players')
-                                  .child('0') ==
+                                  .child('1') ==
                               "") {
+                            print('We are inside the if statement');
                             FirebaseDatabase.instance
                                 .reference()
-                                .child('gameRoomCode')
+                                .child(widget.gameRoomCode)
                                 .child('players')
-                                .child('0')
+                                .child('1')
                                 .update({'playerName': text});
 
-                            /// The players name is not being store on the database
-                            /// because this print stament never runs which means we
-                            /// are never entering the for loop
+                            /// See if the playerName is in the if statement
                             print('After for loop POTATO\'S name: $text');
                           }
                         },
@@ -84,36 +89,51 @@ class _UserNameState extends State<UserName> {
                             ),
                             hintText: "1-12 characters"),
                       ),
-                      //  I added the Navigator.push()
+
+                      ///  I added the Navigator.push()
                       FlatButton(
                         onPressed: () {
-                          /// Print statements for gameRoomCode and playerName
-                          print('gameRoomCode is ${widget.gameRoomCode}');
-                          print('Player name is ${widget.playerName}');
+                          print(
+                              'FlatButton gameRoomCode is ${widget.gameRoomCode}');
+                          print('FlatButton playerName is $playerName');
 
                           FirebaseDatabase.instance
                               .reference()
                               .child(widget.gameRoomCode)
                               .child('players')
-                              .child('0')
-                              .update({'playerName': widget.playerName});
+                              .child('1')
+                              .update({'playerName': playerName});
+
+                          /// Citronot
                           if (widget.gameType == "citronot") {
                             Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => Citronot()));
-                          } else if (widget.gameType == "quiplash") {
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    Citronot(playerName: playerName),
+                              ),
+                            );
+                          }
+
+                          /// Knightquips
+                          else if (widget.gameType == "quiplash") {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => Quiplash()));
-                          } else if (widget.gameType == "nightNightKnightro") {
+                          }
+
+                          /// NNN_Knightro
+                          else if (widget.gameType == "nightNightKnightro") {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) =>
                                         NightNightKnightro()));
-                          } else {
+                          }
+
+                          /// You suck
+                          else {
                             print('you failed');
                           }
                         },
