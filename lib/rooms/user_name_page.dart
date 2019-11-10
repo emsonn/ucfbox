@@ -61,8 +61,8 @@ class _UserNameState extends State<UserName> {
                       /// Player enter the name
                       TextField(
                         onChanged: (text) {
-                          ///
-                          /// print('POTATO\'s name before the for loop is $text');
+                          /// This is bypasing the if statement and storing directly
+                          /// into the json in the FlatButton widget.
                           playerName = text;
                           if (FirebaseDatabase.instance
                                   .reference()
