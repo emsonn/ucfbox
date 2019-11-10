@@ -63,6 +63,8 @@ class _UserNameState extends State<UserName> {
                         onChanged: (text) {
                           /// This is bypasing the if statement and storing directly
                           /// into the json in the FlatButton widget.
+                          /// Have to think of a way to code it where we don't use the
+                          /// value of 1 for the player in location ONE
                           playerName = text;
                           if (FirebaseDatabase.instance
                                   .reference()
