@@ -70,14 +70,14 @@ class _UserNameState extends State<UserName> {
                                   .reference()
                                   .child(widget.gameRoomCode)
                                   .child('players')
-                                  .child('1') ==
+                                  .child('2') ==
                               "") {
                             print('We are inside the if statement');
                             FirebaseDatabase.instance
                                 .reference()
                                 .child(widget.gameRoomCode)
                                 .child('players')
-                                .child('1')
+                                .child('2')
                                 .update({'playerName': text});
 
                             /// See if the playerName is in the if statement
@@ -103,8 +103,13 @@ class _UserNameState extends State<UserName> {
                               .reference()
                               .child(widget.gameRoomCode)
                               .child('players')
-                              .child('1')
+                              .child('2')
                               .update({'playerName': playerName});
+
+                          /// I'm going to try and take the name out of the database
+                          /// by using a data snapShot like it's was done in join_room
+                          /// then store that in a variable called playerNamePractice
+                          /// to see if I did.
 
                           /// Citronot
                           if (widget.gameType == "citronot") {
