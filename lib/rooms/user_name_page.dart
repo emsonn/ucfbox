@@ -17,7 +17,9 @@ class UserName extends StatefulWidget {
 }
 
 class _UserNameState extends State<UserName> {
+  FirebaseDatabase dbReference = FirebaseDatabase.instance;
   String playerName;
+  String playerNamePractice;
   @override
   void initState() {
     super.initState();
@@ -94,7 +96,7 @@ class _UserNameState extends State<UserName> {
 
                       ///  I added the Navigator.push()
                       FlatButton(
-                        onPressed: () {
+                        onPressed: () async {
                           print(
                               'FlatButton gameRoomCode is ${widget.gameRoomCode}');
                           print('FlatButton playerName is $playerName');
@@ -111,13 +113,27 @@ class _UserNameState extends State<UserName> {
                           /// then store that in a variable called playerNamePractice
                           /// to see if I did.
 
+                          /// WORKS!!!!
+                          /// CAN EXTRACT INFORMATION FROM THE DATABASE
+                          FirebaseDatabase.instance
+                              .reference()
+                              .child(widget.gameRoomCode)
+                              .child('players')
+                              .child('2')
+                              .child('playerName')
+                              .once()
+                              .then((DataSnapshot snapShot) {
+                            playerNamePractice = snapShot.value
+                                .toString(); //snapShot.value.toString();
+                          }).toString();
+
                           /// Citronot
                           if (widget.gameType == "citronot") {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
                                 builder: (context) =>
-                                    Citronot(playerName: playerName),
+                                    Citronot(playerName: playerNamePractice),
                               ),
                             );
                           }
