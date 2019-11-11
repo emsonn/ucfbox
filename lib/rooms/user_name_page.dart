@@ -1,10 +1,8 @@
-// import 'dart:convert';
-
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:ucfbox/games/citronot.dart';
-import 'package:ucfbox/games/night_night_knightro.dart';
-import 'package:ucfbox/games/quiplash.dart';
+import 'package:ucfbox/games/citronot/citronot.dart';
+import 'package:ucfbox/games/night_night_knightro/night_night_knightro.dart';
+import 'package:ucfbox/games/knightquips/knightquips.dart';
 import '../my_app_bar.dart';
 
 class UserName extends StatefulWidget {
@@ -113,7 +111,7 @@ class _UserNameState extends State<UserName> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => Quiplash()));
+                                    builder: (context) => KnightQuips()));
                           }
 
                           /// NNN_Knightro
