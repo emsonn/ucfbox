@@ -63,28 +63,7 @@ class _UserNameState extends State<UserName> {
                       /// Player enter the name
                       TextField(
                         onChanged: (text) {
-                          /// This is bypasing the if statement and storing directly
-                          /// into the json in the FlatButton widget.
-                          /// Have to think of a way to code it where we don't use the
-                          /// value of 1 for the player in location ONE
                           playerName = text;
-                          if (FirebaseDatabase.instance
-                                  .reference()
-                                  .child(widget.gameRoomCode)
-                                  .child('players')
-                                  .child('2') ==
-                              "") {
-                            print('We are inside the if statement');
-                            FirebaseDatabase.instance
-                                .reference()
-                                .child(widget.gameRoomCode)
-                                .child('players')
-                                .child('2')
-                                .update({'playerName': text});
-
-                            /// See if the playerName is in the if statement
-                            print('After for loop POTATO\'S name: $text');
-                          }
                         },
                         decoration: InputDecoration(
                             border: OutlineInputBorder(
@@ -101,45 +80,36 @@ class _UserNameState extends State<UserName> {
                               'FlatButton gameRoomCode is ${widget.gameRoomCode}');
                           print('FlatButton playerName is $playerName');
 
-                          FirebaseDatabase.instance
+                          DatabaseReference newPlayer = FirebaseDatabase
+                              .instance
                               .reference()
                               .child(widget.gameRoomCode)
                               .child('players')
-                              .child('1')
-                              .update({'playerName': playerName});
-
-                          /// I'm going to try and take the name out of the database
-                          /// by using a data snapShot like it's was done in join_room
-                          /// then store that in a variable called playerNamePractice
-                          /// to see if I did.
-
-                          /// WORKS!!!!
-                          /// CAN EXTRACT INFORMATION FROM THE DATABASE
-                          FirebaseDatabase.instance
-                              .reference()
-                              .child(widget.gameRoomCode)
-                              .child('players')
-                              .child('1')
-                              .child('playerName')
-                              .once()
-                              .then((DataSnapshot snapShot) {
-                            playerNamePractice = snapShot.value
-                                .toString(); //snapShot.value.toString();
-                          }).toString();
+                              .push();
 
                           /// Citronot
                           if (widget.gameType == "citronot") {
+                            newPlayer.set({
+                              'playerName': playerName,
+                              'score': 0,
+                              'answer': '',
+                              'start': false
+                            });
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) =>
-                                    Citronot(playerName: playerNamePractice),
+                                builder: (context) => Citronot(),
                               ),
                             );
                           }
 
                           /// Knightquips
                           else if (widget.gameType == "quiplash") {
+                            newPlayer.set({
+                              'playerName': playerName,
+                              'score': 0,
+                              'start': false
+                            });
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
@@ -148,6 +118,13 @@ class _UserNameState extends State<UserName> {
 
                           /// NNN_Knightro
                           else if (widget.gameType == "nightNightKnightro") {
+                            newPlayer.set({
+                              'playerName': playerName,
+                              'alive': true,
+                              'role': '',
+                              'votes': 0,
+                              'start': false
+                            });
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
