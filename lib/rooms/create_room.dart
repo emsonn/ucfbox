@@ -19,14 +19,7 @@ class CreateRoom extends StatelessWidget {
         gameRoomTemplate: {
           "noOfPlayers": 1,
           "gameType": "citronot",
-          "players": [
-            {
-              "playerName": '',
-              "score": 0,
-              "start": false,
-              "answer": "",
-            }
-          ],
+          "players": [],
           "voteCount": 0,
           "allTopics": [],
         },
@@ -40,14 +33,7 @@ class CreateRoom extends StatelessWidget {
         gameRoomTemplate: {
           "noOfPlayers": 1,
           "gameType": "quiplash",
-          "players": [
-            {
-              "playerName": '',
-              "score": 0,
-              "start": false,
-              "answer": "",
-            }
-          ],
+          "players": [],
           "currentFact": "",
           "answerCount": 0,
         },
@@ -61,14 +47,7 @@ class CreateRoom extends StatelessWidget {
         gameRoomTemplate: {
           "noOfPlayers": 1,
           "gameType": "nightNightKnightro",
-          "players": [
-            {
-              "playerName": '',
-              "alive": false,
-              "role": "",
-              "votes": 0,
-            }
-          ],
+          "players": [],
           "alivePlayersCount": 0,
           "voteCount": 0,
           "killed": "",
