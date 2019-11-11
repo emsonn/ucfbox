@@ -11,12 +11,13 @@ class CreateRoom extends StatelessWidget {
   Widget build(BuildContext context) {
     /// List that contains all the games JSON formats.
     List<GameCard> games = [
-      /// Cirtronot
+      /// Citronot
       GameCard(
         label: "CITRO\nNOT",
         color: Color(0xFFF10429),
         gameType: "citronot",
         gameRoomTemplate: {
+          "noOfPlayers": 1,
           "gameType": "citronot",
           "players": [
             {
@@ -37,6 +38,7 @@ class CreateRoom extends StatelessWidget {
         color: Color(0xFF3DDA03),
         gameType: "quiplash",
         gameRoomTemplate: {
+          "noOfPlayers": 1,
           "gameType": "quiplash",
           "players": [
             {
@@ -57,6 +59,7 @@ class CreateRoom extends StatelessWidget {
         color: Color(0xFFBE038B),
         gameType: "nightNightKnightro",
         gameRoomTemplate: {
+          "noOfPlayers": 1,
           "gameType": "nightNightKnightro",
           "players": [
             {
