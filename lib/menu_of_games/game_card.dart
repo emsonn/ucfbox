@@ -1,10 +1,16 @@
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:ucfbox/games/generate_code.dart';
+import '../rooms/user_name_page.dart';
 
 class GameCard extends StatelessWidget {
-  GameCard({this.label, this.color, this.route});
+  GameCard({this.label, this.color, this.gameRoomTemplate, this.gameType});
   final label;
   final color;
-  final route;
+  final gameRoomTemplate;
+  final gameType;
+
+  final gameRoomCode = generateCode();
 
   @override
   Widget build(BuildContext context) {
@@ -13,8 +19,14 @@ class GameCard extends StatelessWidget {
         padding: EdgeInsets.fromLTRB(50, 50, 50, 100),
         child: InkWell(
           onTap: () {
+            pushToDB(gameRoomCode, gameRoomTemplate);
             Navigator.push(
-                context, MaterialPageRoute(builder: (context) => route));
+                context,
+                MaterialPageRoute(
+                    builder: (context) => UserName(
+                          gameRoomCode: gameRoomCode,
+                          gameType: gameType,
+                        )));
           },
           child: Card(
             color: color,
@@ -39,4 +51,8 @@ class GameCard extends StatelessWidget {
       ),
     );
   }
+}
+
+void pushToDB(roomCode, gameRoomInstance) {
+  FirebaseDatabase.instance.reference().child(roomCode).set(gameRoomInstance);
 }
