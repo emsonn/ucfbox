@@ -2,15 +2,14 @@ import 'dart:ui' as prefix0;
 
 import 'package:flutter/material.dart';
 import 'package:ucfbox/my_app_bar.dart';
-import 'package:ucfbox/citronot/howtoplay.dart';
+import 'package:ucfbox/games/citronot/howtoplay.dart';
 
 void CNGame() => runApp(Citronot());
 
 class Citronot extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return new MaterialApp(
-        home: CitronotHomeScreen());
+    return new MaterialApp(home: CitronotHomeScreen());
   }
 }
 
@@ -24,7 +23,6 @@ class CitronotHomeScreen extends StatelessWidget {
 //        )),
       body: SafeArea(
         child: Column(
-
           children: <Widget>[
             Expanded(
               flex: 0,
@@ -97,4 +95,3 @@ class CitronotHomeScreen extends StatelessWidget {
     );
   }
 }
-

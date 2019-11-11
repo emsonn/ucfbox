@@ -2,15 +2,14 @@ import 'dart:ui' as prefix0;
 
 import 'package:flutter/material.dart';
 import 'package:ucfbox/my_app_bar.dart';
-import 'package:ucfbox/knightquips/howtoplay.dart';
+import 'package:ucfbox/games/knightquips/howtoplay.dart';
 
 void KQGame() => runApp(KnightQuips());
 
 class KnightQuips extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return new MaterialApp(
-        home: KnightQuipsHomeScreen());
+    return new MaterialApp(home: KnightQuipsHomeScreen());
   }
 }
 
@@ -24,7 +23,6 @@ class KnightQuipsHomeScreen extends StatelessWidget {
 //        )),
       body: SafeArea(
         child: Column(
-
           children: <Widget>[
             Expanded(
               flex: 0,

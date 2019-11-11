@@ -2,15 +2,14 @@ import 'dart:ui' as prefix0;
 
 import 'package:flutter/material.dart';
 import 'package:ucfbox/my_app_bar.dart';
-import 'package:ucfbox/night_night_knightro/howtoplay.dart';
+import 'package:ucfbox/games/night_night_knightro/howtoplay.dart';
 
 void NNKGame() => runApp(NightNightKnightro());
 
 class NightNightKnightro extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return new MaterialApp(
-        home: NightNightKnightroHomeScreen());
+    return new MaterialApp(home: NightNightKnightroHomeScreen());
   }
 }
 
@@ -24,7 +23,6 @@ class NightNightKnightroHomeScreen extends StatelessWidget {
 //        )),
       body: SafeArea(
         child: Column(
-
           children: <Widget>[
             Expanded(
               flex: 0,
