@@ -15,7 +15,7 @@ class CreateRoom extends StatelessWidget {
         color: Color(0xFFF10429),
         gameType: "citronot",
         gameRoomTemplate: {
-          "noOfPlayers": 1,
+          "noOfPlayers": 0,
           "gameType": "citronot",
           "players": [],
           "voteCount": 0,
@@ -29,7 +29,7 @@ class CreateRoom extends StatelessWidget {
         color: Color(0xFF3DDA03),
         gameType: "quiplash",
         gameRoomTemplate: {
-          "noOfPlayers": 1,
+          "noOfPlayers": 0,
           "gameType": "quiplash",
           "players": [],
           "currentFact": "",
@@ -43,7 +43,7 @@ class CreateRoom extends StatelessWidget {
         color: Color(0xFFBE038B),
         gameType: "nightNightKnightro",
         gameRoomTemplate: {
-          "noOfPlayers": 1,
+          "noOfPlayers": 0,
           "gameType": "nightNightKnightro",
           "players": [],
           "alivePlayersCount": 0,

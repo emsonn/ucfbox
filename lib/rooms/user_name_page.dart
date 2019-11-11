@@ -85,6 +85,16 @@ class _UserNameState extends State<UserName> {
                               .child('players')
                               .push();
 
+                          DatabaseReference noOfPlayers = FirebaseDatabase
+                              .instance
+                              .reference()
+                              .child(widget.gameRoomCode)
+                              .child('noOfPlayers');
+
+                          noOfPlayers.once().then((DataSnapshot snapshot) {
+                            noOfPlayers.set(snapshot.value + 1);
+                          });
+
                           /// Citronot
                           if (widget.gameType == "citronot") {
                             newPlayer.set({
