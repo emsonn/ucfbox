@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:ucfbox/games/citronot/citronot.dart';
 import 'package:ucfbox/games/night_night_knightro/night_night_knightro.dart';
 import 'package:ucfbox/games/knightquips/knightquips.dart';
+import 'package:ucfbox/game_data.dart' as game_data;
 import '../my_app_bar.dart';
 
 class UserName extends StatefulWidget {
@@ -90,6 +91,11 @@ class _UserNameState extends State<UserName> {
                               .reference()
                               .child(widget.gameRoomCode)
                               .child('noOfPlayers');
+
+                          game_data.gameRoom = FirebaseDatabase
+                              .instance
+                              .reference()
+                              .child(widget.gameRoomCode);
 
                           noOfPlayers.once().then((DataSnapshot snapshot) {
                             noOfPlayers.set(snapshot.value + 1);
