@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:ucfbox/games/citronot/citronot.dart';
 import 'package:ucfbox/games/night_night_knightro/night_night_knightro.dart';
 import 'package:ucfbox/games/knightquips/knightquips.dart';
+import 'package:flutter/services.dart';
 import '../my_app_bar.dart';
 
 class UserName extends StatefulWidget {
@@ -32,6 +33,7 @@ class _UserNameState extends State<UserName> {
       children: <Widget>[
         Image.asset('images/classroom.png', fit: BoxFit.cover),
         Scaffold(
+          resizeToAvoidBottomInset: false,
           backgroundColor: Colors.transparent,
           appBar: MyAppBar(),
           body: SafeArea(
@@ -60,9 +62,16 @@ class _UserNameState extends State<UserName> {
 
                       /// Player enter the name
                       TextField(
+                        autocorrect: false,
                         onChanged: (text) {
                           playerName = text;
                         },
+
+                        inputFormatters: [
+                          LengthLimitingTextInputFormatter(12),
+                          WhitelistingTextInputFormatter(RegExp("[a-zA-Z0-9]")),
+                        ],
+                        
                         decoration: InputDecoration(
                             border: OutlineInputBorder(
                               borderSide:
