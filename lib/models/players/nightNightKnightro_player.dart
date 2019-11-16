@@ -19,6 +19,13 @@ class NightNightKnightroPlayer {
         start = snapshot.value["start"],
         votes = snapshot.value["votes"];
 
+  NightNightKnightroPlayer.fromJson(Map jsonMap)
+      : alive = jsonMap["alive"],
+        playerName = jsonMap["playerName"],
+        role = jsonMap["role"],
+        start = jsonMap["start"],
+        votes = jsonMap["votes"];
+
   toJson() {
     return {
       "alive": alive,

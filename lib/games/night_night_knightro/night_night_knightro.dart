@@ -1,5 +1,6 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:ucfbox/models/game_rooms/nightNightKnightro_room.dart';
 import 'package:ucfbox/models/players/nightNightKnightro_player.dart';
 
 class NightNightKnightro extends StatefulWidget {
@@ -15,9 +16,7 @@ class _NightNightKnightroState extends State<NightNightKnightro> {
   }
 
   _onEntryAdded(Event event) {
-    NightNightKnightroPlayer test =
-        new NightNightKnightroPlayer.fromSnapshot(event.snapshot);
-    print(test.playerName);
+    NightNightKnightroRoom.printTest(event.snapshot);
   }
 
   @override
