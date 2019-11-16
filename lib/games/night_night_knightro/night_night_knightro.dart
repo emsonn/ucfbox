@@ -54,8 +54,6 @@ class _NightNightKnightroState extends State<NightNightKnightro> {
                   .then((DataSnapshot snapshot) {
                 NightNightKnightroRoom room =
                     NightNightKnightroRoom.fromSnapshot(snapshot);
-                players = room.players;
-                print('this is json: ${room.toJson()}');
               });
             },
           )
