@@ -55,6 +55,7 @@ class _NightNightKnightroState extends State<NightNightKnightro> {
                 NightNightKnightroRoom room =
                     NightNightKnightroRoom.fromSnapshot(snapshot);
                 players = room.players;
+                print('this is json: ${room.toJson()}');
               });
             },
           )

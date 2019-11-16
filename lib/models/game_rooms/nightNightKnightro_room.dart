@@ -18,7 +18,6 @@ class NightNightKnightroRoom {
   NightNightKnightroRoom.fromSnapshot(DataSnapshot snapshot)
       : key = snapshot.key,
         players = (snapshot.value['players'] as List).map((i) {
-          print(snapshot.value['players']);
           return NightNightKnightroPlayer.fromJson(i);
         }).toList(),
         gameType = snapshot.value["gameType"],
@@ -30,7 +29,9 @@ class NightNightKnightroRoom {
   toJson() {
     return {
       "gameType": gameType,
-      "players": players,
+      "players": players.map((i) {
+        return i.toJson();
+      }).toList(),
       'alivePlayersCount': alivePlayersCount,
       'voteCount': voteCount,
       'killed': killed,
