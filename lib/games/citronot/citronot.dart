@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ucfbox/my_app_bar.dart';
 import 'package:ucfbox/games/citronot/howtoplay.dart';
+import 'package:ucfbox/games/citronot/question.dart';
 
 class Citronot extends StatefulWidget {
   @override
@@ -77,7 +78,8 @@ class _CitronotState extends State<Citronot> {
                   ),
                 ),
                 onPressed: () {
-                  print('Start Game button has been pressed');
+                   Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => Question()));
                 },
               ),
             ),
