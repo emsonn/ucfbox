@@ -1,96 +1,49 @@
-import 'dart:ui' as prefix0;
-
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:ucfbox/my_app_bar.dart';
-import 'package:ucfbox/games/night_night_knightro/howtoplay.dart';
+import 'package:ucfbox/models/players/nightNightKnightro_player.dart';
 
-void NNKGame() => runApp(NightNightKnightro());
-
-class NightNightKnightro extends StatelessWidget {
+class NightNightKnightro extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    return new MaterialApp(home: NightNightKnightroHomeScreen());
-  }
+  _NightNightKnightroState createState() => _NightNightKnightroState();
 }
 
-class NightNightKnightroHomeScreen extends StatelessWidget {
+class _NightNightKnightroState extends State<NightNightKnightro> {
+  @override
+  void initState() {
+    super.initState();
+    FirebaseDatabase.instance.reference().onChildAdded.listen(_onEntryAdded);
+  }
+
+  _onEntryAdded(Event event) {
+    NightNightKnightroPlayer test =
+        new NightNightKnightroPlayer.fromSnapshot(event.snapshot);
+    print(test.playerName);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-      backgroundColor: Color(0xFFFFC904),
-      appBar: MyAppBar(),
-//
-//        )),
-      body: SafeArea(
-        child: Column(
-          children: <Widget>[
-            Expanded(
-              flex: 0,
-              child: Image.asset(
-                'images/nightnightknightro.png',
-              ),
-            ),
-//              SizedBox(
-//                height: 20,
-//              ),
-            Expanded(
-              flex: 3,
-              child: Text(
-                'PLAYERS',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 25,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-            SizedBox(
-              height: 60,
-            ),
-            Expanded(
-              flex: 0,
-              child: RaisedButton(
-                textColor: Color(0xFFFFC904),
-                color: Colors.black,
-                child: Text(
-                  'How to Play',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => HowToPlay()));
-                },
-              ),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-
-            Expanded(
-              flex: 0,
-              child: RaisedButton(
-                textColor: Color(0xFFFFC904),
-                color: Colors.black,
-                child: Text(
-                  'Start Game',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                onPressed: () {
-                  print('Start Game button has been pressed');
-                },
-              ),
-            ),
-            SizedBox(
-              height: 30,
-            ),
-          ],
-        ),
+    return Container(
+      child: Column(
+        children: <Widget>[
+          FlatButton(
+            child: Text('push'),
+            color: Colors.white,
+            onPressed: () {
+              FirebaseDatabase.instance.reference().push().set(
+                  NightNightKnightroPlayer(true, 'kelly', 'knightro', false, 0)
+                      .toJson());
+            },
+          ),
+          FlatButton(
+            child: Text('map'),
+            color: Colors.white,
+            onPressed: () {
+              FirebaseDatabase.instance.reference().push().set(
+                  NightNightKnightroPlayer(true, 'kelly', 'knightro', false, 0)
+                      .toJson());
+            },
+          )
+        ],
       ),
     );
   }
