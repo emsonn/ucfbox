@@ -9,15 +9,19 @@ class NightNightKnightro extends StatefulWidget {
 }
 
 class _NightNightKnightroState extends State<NightNightKnightro> {
+  List<NightNightKnightroPlayer> players;
   @override
   void initState() {
     super.initState();
-    FirebaseDatabase.instance.reference().onChildAdded.listen(_onEntryAdded);
+    FirebaseDatabase.instance
+        .reference()
+        .child('asdlkasd')
+        .child('players')
+        .onChildAdded
+        .listen(_onEntryAdded);
   }
 
-  _onEntryAdded(Event event) {
-    NightNightKnightroRoom.printTest(event.snapshot);
-  }
+  _onEntryAdded(Event event) {}
 
   @override
   Widget build(BuildContext context) {
@@ -28,18 +32,30 @@ class _NightNightKnightroState extends State<NightNightKnightro> {
             child: Text('push'),
             color: Colors.white,
             onPressed: () {
-              FirebaseDatabase.instance.reference().push().set(
-                  NightNightKnightroPlayer(true, 'kelly', 'knightro', false, 0)
-                      .toJson());
+              FirebaseDatabase.instance
+                  .reference()
+                  .child('asdlkasd')
+                  .once()
+                  .then((DataSnapshot snapshot) {
+                NightNightKnightroRoom room =
+                    NightNightKnightroRoom.fromSnapshot(snapshot);
+                players = room.players;
+              });
             },
           ),
           FlatButton(
             child: Text('map'),
             color: Colors.white,
             onPressed: () {
-              FirebaseDatabase.instance.reference().push().set(
-                  NightNightKnightroPlayer(true, 'kelly', 'knightro', false, 0)
-                      .toJson());
+              FirebaseDatabase.instance
+                  .reference()
+                  .child('asdlkasd')
+                  .once()
+                  .then((DataSnapshot snapshot) {
+                NightNightKnightroRoom room =
+                    NightNightKnightroRoom.fromSnapshot(snapshot);
+                players = room.players;
+              });
             },
           )
         ],
