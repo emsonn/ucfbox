@@ -17,6 +17,12 @@ class CitronotPlayer {
         start = snapshot.value["start"],
         answer = snapshot.value["answer"];
 
+  CitronotPlayer.fromJson(DataSnapshot snapshot)
+      : playerName = snapshot.value["playerName"],
+        score = snapshot.value["score"],
+        start = snapshot.value["start"],
+        answer = snapshot.value["answer"];
+
   toJson() {
     return {
       "playerName": playerName,
