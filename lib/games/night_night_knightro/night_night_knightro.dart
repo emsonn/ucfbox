@@ -2,6 +2,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:ucfbox/models/game_rooms/nightNightKnightro_room.dart';
 import 'package:ucfbox/models/players/nightNightKnightro_player.dart';
+import 'package:ucfbox/game_data.dart' as game_data;
 
 class NightNightKnightro extends StatefulWidget {
   @override
@@ -13,9 +14,8 @@ class _NightNightKnightroState extends State<NightNightKnightro> {
   @override
   void initState() {
     super.initState();
-    FirebaseDatabase.instance
-        .reference()
-        .child('asdlkasd')
+    game_data
+        .gameRoom
         .child('players')
         .onChildAdded
         .listen(_onEntryAdded);
@@ -32,9 +32,8 @@ class _NightNightKnightroState extends State<NightNightKnightro> {
             child: Text('push'),
             color: Colors.white,
             onPressed: () {
-              FirebaseDatabase.instance
-                  .reference()
-                  .child('asdlkasd')
+              game_data
+                  .gameRoom
                   .once()
                   .then((DataSnapshot snapshot) {
                 NightNightKnightroRoom room =
@@ -47,9 +46,8 @@ class _NightNightKnightroState extends State<NightNightKnightro> {
             child: Text('map'),
             color: Colors.white,
             onPressed: () {
-              FirebaseDatabase.instance
-                  .reference()
-                  .child('asdlkasd')
+              game_data
+                  .gameRoom
                   .once()
                   .then((DataSnapshot snapshot) {
                 NightNightKnightroRoom room =

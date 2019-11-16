@@ -7,8 +7,7 @@ class CitronotPlayer {
   bool start;
   String answer;
 
-  CitronotPlayer(
-      this.playerName, this.score, this.start, this.answer);
+  CitronotPlayer(this.playerName, this.score, this.start, this.answer);
 
   CitronotPlayer.fromSnapshot(DataSnapshot snapshot)
       : key = snapshot.key,
