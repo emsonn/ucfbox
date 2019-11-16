@@ -7,12 +7,17 @@ class CitronotPlayer {
   bool start;
   String answer;
 
-  CitronotPlayer(
-      this.playerName, this.score, this.start, this.answer);
+  CitronotPlayer(this.playerName, this.score, this.start, this.answer);
 
   CitronotPlayer.fromSnapshot(DataSnapshot snapshot)
       : key = snapshot.key,
         playerName = snapshot.value["playerName"],
+        score = snapshot.value["score"],
+        start = snapshot.value["start"],
+        answer = snapshot.value["answer"];
+
+  CitronotPlayer.fromJson(DataSnapshot snapshot)
+      : playerName = snapshot.value["playerName"],
         score = snapshot.value["score"],
         start = snapshot.value["start"],
         answer = snapshot.value["answer"];
