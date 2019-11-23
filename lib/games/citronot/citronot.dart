@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:ucfbox/my_app_bar.dart';
 import 'package:ucfbox/games/citronot/howtoplay.dart';
 import 'package:ucfbox/games/citronot/question.dart';
+import 'package:ucfbox/models/widgets/playerlistview.dart';
 
 class Citronot extends StatefulWidget {
   @override
@@ -9,6 +10,13 @@ class Citronot extends StatefulWidget {
 }
 
 class _CitronotState extends State<Citronot> {
+  @override
+  void initState() {
+    super.initState();
+    print('\nWe are in the citronot initstate');
+    PlayerList();
+  }
+
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -78,7 +86,7 @@ class _CitronotState extends State<Citronot> {
                   ),
                 ),
                 onPressed: () {
-                   Navigator.push(context,
+                  Navigator.push(context,
                       MaterialPageRoute(builder: (context) => Question()));
                 },
               ),
