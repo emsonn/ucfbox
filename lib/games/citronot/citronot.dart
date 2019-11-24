@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:firebase_database/ui/utils/stream_subscriber_mixin.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -17,65 +18,58 @@ class Citronot extends StatefulWidget {
 }
 
 class _CitronotState extends State<Citronot> {
-  CitronotRoom list;
-
-  StreamSubscription<Event> onChangedSubscription;
-
-  void getPlayerList() async {
-   var work = (await game_data.gameRoom.once()).toString();
-   print(work);
-    list = CitronotRoom.fromSnapshot(await game_data.gameRoom.once());
-  }
+  List<CitronotPlayer> playerList = new List<CitronotPlayer>();
+  CitronotPlayer player;
+  DatabaseReference playerRef;
 
   @override
   void initState() {
     super.initState();
-    getPlayerList();
-    
-    // CitronotPlayer player1 = CitronotPlayer('qwery', 2, false, 'Do Work');
-    // CitronotPlayer player2 = CitronotPlayer('helo', 3, true, 'Do run');
+    player = new CitronotPlayer("", 0, false, "");
+    playerRef = game_data.gameRoom.child('players');
+    playerRef.onChildAdded.listen(_onPlayerAdded);
+    playerRef.onChildChanged.listen(_onPlayerChanged);
+  }
 
-    // list.add(player1);
-    // list.add(player2);
-    // print(list[0].playerName);
+  _onPlayerAdded(Event event) {
+    setState(() {
+      playerList.add(CitronotPlayer.fromSnapshot(event.snapshot));
+    });
+  }
+
+  _onPlayerChanged(Event event) {
+    var old = playerList.singleWhere((entry) {
+      return entry.key == event.snapshot.key;
+    });
+    setState(() {
+      playerList[playerList.indexOf(old)] = CitronotPlayer.fromSnapshot(event.snapshot);
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-        child: StreamBuilder(
-          stream: game_data.gameRoom.onChildChanged,
-          builder: (context, snapshot) {
-            if ( snapshot.connectionState == ConnectionState.done)
-              {
-                var room = CitronotRoom.fromSnapshot(snapshot.data);
-                return Text('${room.players[0]}');
-              }
-            else if ( snapshot.connectionState == ConnectionState.waiting)
-              {
-                return Text("Loading...");
-              }
-            else if ( snapshot.hasError)
-              {
-                return Text("Error!");
-              }
-          },
-        )
+    return new MaterialApp(
+      home: new Container(
+        child: new Column(
+            children: <Widget>[
+              new Flexible(
+                child: new FirebaseAnimatedList(
+                    query: playerRef,
+                    itemBuilder:(_, DataSnapshot snapshot, Animation<double> animation, int index){
+                      return new Material(
+                        child: ListTile(
+                          title: new Text(snapshot.value['playerName']),
+                          subtitle: new Text(playerList[index].playerName),
+                        )
+                      );
+                    }
+                ),
+              )
+            ]
+        ),
+      )
     );
   }
-
-  Widget citronotListView(CitronotRoom room)
-  {
-    return ListView.builder(
-        itemCount: room.players.length,
-        itemBuilder: (context, position){
-          return new Text('${room.players[position]}');
-        }
-        
-    );
-  }
-
-
 }
 
 // // class CitronotHomeScreen extends StatelessWidget {
