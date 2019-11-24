@@ -12,7 +12,7 @@ class GameLobby extends StatelessWidget {
       //   route: Citronot(),
     ),
     GameCard(
-      label: "QUIP\nLASH",
+      label: "KNIGHT\nQUIPS",
       color: Color(0xFF3DDA03),
       //   route: Quiplash(),
     ),

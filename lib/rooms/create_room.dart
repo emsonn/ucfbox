@@ -25,7 +25,7 @@ class CreateRoom extends StatelessWidget {
 
       /// Quiplash
       GameCard(
-        label: "QUIP\nLASH",
+        label: "KNIGHT\nQUIPS",
         color: Color(0xFF3DDA03),
         gameType: "quiplash",
         gameRoomTemplate: {
