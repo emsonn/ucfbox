@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:firebase_database/ui/utils/stream_subscriber_mixin.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:ucfbox/game_data.dart' as game_data;
@@ -16,7 +19,11 @@ class Citronot extends StatefulWidget {
 class _CitronotState extends State<Citronot> {
   CitronotRoom list;
 
+  StreamSubscription<Event> onChangedSubscription;
+
   void getPlayerList() async {
+   var work = (await game_data.gameRoom.once()).toString();
+   print(work);
     list = CitronotRoom.fromSnapshot(await game_data.gameRoom.once());
   }
 
@@ -24,6 +31,8 @@ class _CitronotState extends State<Citronot> {
   void initState() {
     super.initState();
     getPlayerList();
+    onChangedSubscription = game_data.gameRoom.onChildChanged.listen(onChanged); 
+    
     // CitronotPlayer player1 = CitronotPlayer('qwery', 2, false, 'Do Work');
     // CitronotPlayer player2 = CitronotPlayer('helo', 3, true, 'Do run');
 
@@ -35,16 +44,24 @@ class _CitronotState extends State<Citronot> {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: ListView.builder(
-        shrinkWrap: true,
-        itemCount: list.players.length,
-        padding: const EdgeInsets.all(15.0),
-        itemBuilder: (context, position) {
-          return new Text('${list.players[position]}');
-        },
-      ),
-    );
-  }
+      child: StreamBuilder<CitronotRoom>(
+        stream: ,)
+        ,)
+//     return Center(
+//       child: StreamBuilder(
+// stream: game_data.gameRoom.child('players')
+
+//               child: ListView.builder(
+//           shrinkWrap: true,
+//           itemCount: list.players.length,
+//           padding: const EdgeInsets.all(15.0),
+//           itemBuilder: (context, position) {
+//             return new Text('${list.players[position]}');
+//           },
+//         ),
+//       ),
+//     );
+//   }
 }
 // class Citronot extends StatefulWidget {
 //   @override
