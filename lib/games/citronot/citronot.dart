@@ -59,7 +59,6 @@ class _CitronotState extends State<Citronot> {
                       return new Material(
                         child: ListTile(
                           title: new Text(snapshot.value['playerName']),
-                          subtitle: new Text(playerList[index].playerName),
                         )
                       );
                     }
