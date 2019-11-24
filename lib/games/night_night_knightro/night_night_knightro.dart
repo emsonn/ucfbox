@@ -14,11 +14,7 @@ class _NightNightKnightroState extends State<NightNightKnightro> {
   @override
   void initState() {
     super.initState();
-    game_data
-        .gameRoom
-        .child('players')
-        .onChildAdded
-        .listen(_onEntryAdded);
+    game_data.gameRoom.child('players').onChildAdded.listen(_onEntryAdded);
   }
 
   _onEntryAdded(Event event) {}
@@ -32,10 +28,7 @@ class _NightNightKnightroState extends State<NightNightKnightro> {
             child: Text('push'),
             color: Colors.white,
             onPressed: () {
-              game_data
-                  .gameRoom
-                  .once()
-                  .then((DataSnapshot snapshot) {
+              game_data.gameRoom.once().then((DataSnapshot snapshot) {
                 NightNightKnightroRoom room =
                     NightNightKnightroRoom.fromSnapshot(snapshot);
                 players = room.players;
@@ -46,10 +39,7 @@ class _NightNightKnightroState extends State<NightNightKnightro> {
             child: Text('map'),
             color: Colors.white,
             onPressed: () {
-              game_data
-                  .gameRoom
-                  .once()
-                  .then((DataSnapshot snapshot) {
+              game_data.gameRoom.once().then((DataSnapshot snapshot) {
                 NightNightKnightroRoom room =
                     NightNightKnightroRoom.fromSnapshot(snapshot);
               });
