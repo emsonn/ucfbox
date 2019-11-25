@@ -37,6 +37,7 @@ class _CitronotState extends State<Citronot> {
     if ((await game_data.gameRoom.once()).value['answerCount'] ==
         (await game_data.gameRoom.once()).value['noOfPlayers'])
       {
+        game_data.globalNumPlayers = playerList.length;
         Navigator.push(context,
             MaterialPageRoute(builder: (context) => Question()));
       }
@@ -45,7 +46,6 @@ class _CitronotState extends State<Citronot> {
   _onPlayerAdded(Event event) {
     setState(() {
       playerList.add(CitronotPlayer.fromSnapshot(event.snapshot));
-      game_data.globalNumPlayers++;
     });
   }
 
