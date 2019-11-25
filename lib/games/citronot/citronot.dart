@@ -8,10 +8,8 @@ import 'package:ucfbox/game_data.dart' as game_data;
 import 'package:ucfbox/models/game_rooms/citronot_room.dart';
 import 'package:ucfbox/models/players/citronot_player.dart';
 import 'package:ucfbox/my_app_bar.dart';
-// import 'package:ucfbox/my_app_bar.dart';
  import 'package:ucfbox/games/citronot/howtoplay.dart';
  import 'package:ucfbox/games/citronot/question.dart';
-// import 'package:ucfbox/models/widgets/playerlistview.dart';
 
 class Citronot extends StatefulWidget {
   @override
@@ -47,6 +45,7 @@ class _CitronotState extends State<Citronot> {
   _onPlayerAdded(Event event) {
     setState(() {
       playerList.add(CitronotPlayer.fromSnapshot(event.snapshot));
+      game_data.globalNumPlayers++;
     });
   }
 
@@ -70,10 +69,17 @@ class _CitronotState extends State<Citronot> {
         child: Column(
           children: <Widget>[
             Expanded(
-                flex: 1,
-                child: Text('${game_data.gameRoom.key}',
-                  style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-                )
+                flex: 2,
+
+                child: Text('Game Room Code:\n ${game_data.gameRoom.key}',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                  fontSize: 25,
+                  fontWeight: FontWeight.bold,
+                ),
+                ),
+
+
             ),
             Expanded(
               flex: 7,
@@ -83,7 +89,7 @@ class _CitronotState extends State<Citronot> {
             ),
 
             Expanded(
-              flex: 3,
+              flex: 2,
               child: Text(
                 'PLAYERS',
                 textAlign: TextAlign.center,
@@ -94,7 +100,7 @@ class _CitronotState extends State<Citronot> {
               ),
             ),
             Flexible(
-              flex: 7,
+              flex: 8,
               child: new FirebaseAnimatedList(
                   query: playerRef,
                   itemBuilder: (_, DataSnapshot snapshot,
@@ -152,7 +158,6 @@ class _CitronotState extends State<Citronot> {
                   // Update Users who have answered
                   var answered = (await game_data.gameRoom.once()).value['answerCount'];
                   game_data.gameRoom.child('answerCount').set(answered + 1);
-
                 },
               ),
             ),

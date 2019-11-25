@@ -1,5 +1,3 @@
-import 'dart:ui' as prefix0;
-
 import 'package:ucfbox/my_app_bar.dart';
 import 'package:flutter/material.dart';
 
@@ -9,18 +7,16 @@ class HowToPlay extends StatelessWidget {
     return Scaffold(
       appBar: MyAppBar(),
       backgroundColor: Color(0xFFFFC904),
-      body: SafeArea(
+      body: Center(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             SizedBox(
-              height: 150,
+              height: 55,
             ),
             Expanded(
-              flex: 0,
               child: Text(
-                '      HOW TO PLAY',
-                textAlign: TextAlign.center,
+                'HOW TO PLAY',
                 style: TextStyle(
                   fontSize: 35,
                   fontWeight: FontWeight.bold,
@@ -28,17 +24,27 @@ class HowToPlay extends StatelessWidget {
               ),
             ),
             Expanded(
+              flex: 7,
               child: Text(
-                '\n'
-                    '     KnightQuips is a UCF trivia party\n'
-                    '     game where you try to trick\n'
-                    '      your opponents with your own\n '
-                    '    lie, and try to pick out the\n '
-                    '    truth out of a pool of\n '
-                    '    possible wrong answers.',
+                'Knight Quips is a competitive comedy\n '
+                'game in which the users are asked\n'
+                'to cleverly respond to a prompt\n'
+                'that is also given to another random player.\n\n'
+                'After inputting your answer, and all\n'
+                'players have answered their own prompts,\n'
+                'The prompts will one by one be displayed,\n'
+                'and all players but the ones who responded\n'
+                'to that given prompt, will vote on whichever\n'
+                ' answer they find the most humorous. \n\n'
+                ''
+                'If all players vote on your answer, then you have\n'
+                'achieved the max points for that round, and\n'
+                'the greatest accomplishment in this game: a KNIGHTQUIP!\n\n'
+                'The player with the greatest number of votes\n'
+                'wins!',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: 25,
+                  fontSize: 20,
                   fontWeight: FontWeight.normal,
                 ),
               ),
