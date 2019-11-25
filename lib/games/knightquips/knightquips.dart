@@ -8,8 +8,8 @@ import 'package:firebase_database/ui/firebase_animated_list.dart';
 //import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:ucfbox/game_data.dart' as game_data;
+
 //import 'package:ucfbox/models/game_rooms/knightquips_room.dart';
-//import 'package:ucfbox/models/players/citronot_player.dart';
 
 class KnightQuips extends StatefulWidget {
   @override

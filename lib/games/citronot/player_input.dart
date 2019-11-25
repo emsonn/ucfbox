@@ -48,11 +48,12 @@ class _PlayerInputState extends State<PlayerInput> {
             /// Submit Answer Button
             FlatButton(
               color: Colors.black,
-              child: Text('Submite',
+              child: Text('Submit',
                   style: TextStyle(
                       color: Color(0xFFFFC904),
                       fontSize: 25.0,
-                      fontWeight: FontWeight.bold)),
+                      fontWeight: FontWeight.bold
+                  )),
               onPressed: () {
                 print('The user input is the following: $userInput');
               },
