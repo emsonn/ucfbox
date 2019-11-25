@@ -15,20 +15,11 @@ class PlayerList extends StatefulWidget {
 }
 
 class _PlayerListState extends State<PlayerList> {
-   Future<List<CitronotPlayer>> getPlayersInRoom() async
-  {
-    List<CitronotPlayer> players = CitronotRoom.fromSnapshot(await gameRoom.once()).players;
-    print('\n\n$players');
-    return players;
-  }
-
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     print('\nWe are in the playerList View.');
-      getPlayersInRoom();
- 
   }
   @override
   Widget build(BuildContext context) {
