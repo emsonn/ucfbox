@@ -43,27 +43,23 @@ class _CitronotState extends State<Citronot> {
       return entry.key == event.snapshot.key;
     });
     setState(() {
-      playerList[playerList.indexOf(old)] = CitronotPlayer.fromSnapshot(event.snapshot);
+      playerList[playerList.indexOf(old)] =
+          CitronotPlayer.fromSnapshot(event.snapshot);
     });
-  }
-
-  Color getColor(bool state)
-  {
-
   }
 
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
       backgroundColor: Color(0xFFFFC904),
-      appBar: MyAppBar( ),
+      appBar: MyAppBar(),
 
       body: SafeArea(
         child: Column(
           children: <Widget>[
             Expanded(
-              flex: 1,
-              child: Text('${game_data.gameRoom.key}')
+                flex: 1,
+                child: Text('${game_data.gameRoom.key}')
             ),
             Expanded(
               flex: 3,
@@ -84,17 +80,20 @@ class _CitronotState extends State<Citronot> {
               ),
             ),
             Flexible(
-                child: new FirebaseAnimatedList(
-                    query: playerRef,
-                    itemBuilder:(_, DataSnapshot snapshot, Animation<double> animation, int index){
-                      return new Material(
-                        color: snapshot.value['start'] == true ? Colors.green : Colors.white,
-                          child: ListTile(
-                            title: new Text(snapshot.value['playerName']),
-                          )
-                      );
-                    }
-                ),
+              child: new FirebaseAnimatedList(
+                  query: playerRef,
+                  itemBuilder: (_, DataSnapshot snapshot,
+                      Animation<double> animation, int index) {
+                    return new Material(
+                        color: snapshot.value['start'] == true
+                            ? Colors.green
+                            : Colors.white,
+                        child: ListTile(
+                          title: new Text(snapshot.value['playerName']),
+                        )
+                    );
+                  }
+              ),
             ),
             Expanded(
               flex: 0,
@@ -126,8 +125,12 @@ class _CitronotState extends State<Citronot> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                onPressed: () {
+                onPressed: () async {
                   print('Start Game button has been pressed');
+                  var myPlayer = CitronotPlayer.fromSnapshot(
+                      await game_data.player.once());
+                  myPlayer.start = true;
+                  game_data.player.set(myPlayer.toJson());
                 },
               ),
             ),
@@ -139,36 +142,4 @@ class _CitronotState extends State<Citronot> {
       ),
     );
   }
-
-//  @override
-//  Widget build(BuildContext context) {
-//    return new MaterialApp(
-//      home: new Container(
-//        child: new Column(
-//            children: <Widget>[
-//              new Flexible(
-//                child: new FirebaseAnimatedList(
-//                    query: playerRef,
-//                    itemBuilder:(_, DataSnapshot snapshot, Animation<double> animation, int index){
-//                      return new Material(
-//                        child: ListTile(
-//                          title: new Text(snapshot.value['playerName']),
-//                        )
-//                      );
-//                    }
-//                ),
-//              )
-//            ]
-//        ),
-//      )
-//    );
-//  }
 }
-
-//class CitronotHomeScreen extends StatelessWidget {
-//
-//
-//
-//
-//
-//}

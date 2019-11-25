@@ -79,7 +79,7 @@ class _UserNameState extends State<UserName> {
                               'FlatButton gameRoomCode is ${widget.gameRoomCode}');
                           print('FlatButton playerName is $playerName');
 
-                          DatabaseReference newPlayer = FirebaseDatabase
+                          game_data.player = FirebaseDatabase
                               .instance
                               .reference()
                               .child(widget.gameRoomCode)
@@ -103,7 +103,7 @@ class _UserNameState extends State<UserName> {
 
                           /// Citronot
                           if (widget.gameType == "citronot") {
-                            newPlayer.set({
+                            game_data.player.set({
                               'playerName': playerName,
                               'score': 0,
                               'answer': '',
@@ -119,7 +119,7 @@ class _UserNameState extends State<UserName> {
 
                           /// Knightquips
                           else if (widget.gameType == "quiplash") {
-                            newPlayer.set({
+                            game_data.player.set({
                               'playerName': playerName,
                               'score': 0,
                               'start': false
@@ -132,7 +132,7 @@ class _UserNameState extends State<UserName> {
 
                           /// NNN_Knightro
                           else if (widget.gameType == "nightNightKnightro") {
-                            newPlayer.set({
+                            game_data.player.set({
                               'playerName': playerName,
                               'alive': true,
                               'role': '',
