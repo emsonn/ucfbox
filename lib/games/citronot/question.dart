@@ -12,16 +12,6 @@ class Question extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.black,
 
-      /// BUTTON WHERE THE USER CAN ENTER THE QUESTION.
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.white,
-        child: Icon(Icons.question_answer, color: Color(0xff654a07)),
-        onPressed: () {
-          showModalBottomSheet(
-              context: context, builder: (context) => PlayerInput());
-        },
-      ),
-
       /// Container
       body: SafeArea(
         child: Container(
@@ -55,13 +45,13 @@ class Question extends StatelessWidget {
 
               SizedBox(height: 100),
 
-              /// Start Button
+              /// Answer Button
               Expanded(
                 flex: 0,
                 child: RaisedButton(
                   color: Color(0xFFFFC904),
                   child: Text(
-                    'Next',
+                    'Answer',
 //                    textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 40.0,
@@ -70,41 +60,8 @@ class Question extends StatelessWidget {
                     ),
                   ),
                   onPressed: () async {
-
-                    /// NEED TO ADD IF STATEMENT HERE TO SEE WHICH UI WILL BE USED
-                    /// DEPENDING ON THE NUMBER OF PLAYERS WE HAVE
-
-//
-//           if (noOfPlayers 4) {
-//             print('THIS IS WORKINGGGGKAKJDAKL');
-//             Navigator.push(context,
-//                 MaterialPageRoute(
-//                     builder: (context) => FourPlayers()));
-//           }
-//           else if (game_data.globalNumPlayers == 5) {
-//             Navigator.push(context,
-//                 MaterialPageRoute(builder: (context) => FivePlayers()));
-//           }
-//
-//           else if (game_data.globalNumPlayers == 6) {
-//             Navigator.push(context,
-//                 MaterialPageRoute(builder: (context) => SixPlayers()));
-//           }
-//
-//           else if (game_data.globalNumPlayers == 7) {
-//             Navigator.push(context,
-//                 MaterialPageRoute(builder: (context) => SevenPlayers()));
-//           }
-//
-//           else if (game_data.globalNumPlayers == 8) {
-//             Navigator.push(context,
-////                 MaterialPageRoute(builder: (context) => EightPlayers()));
-//           }
-
-
-                    Navigator.push(context,
-                     MaterialPageRoute(builder: (context) => AnimatedListSample()));
-////                    ),
+                    showModalBottomSheet(
+                        context: context, builder: (context) => PlayerInput());
                   }, // OnPressed
                 ),
               ),
