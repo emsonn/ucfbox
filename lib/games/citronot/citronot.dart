@@ -59,10 +59,12 @@ class _CitronotState extends State<Citronot> {
           children: <Widget>[
             Expanded(
                 flex: 1,
-                child: Text('${game_data.gameRoom.key}')
+                child: Text('${game_data.gameRoom.key}',
+                  style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                )
             ),
             Expanded(
-              flex: 3,
+              flex: 7,
               child: Image.asset(
                 'images/citronot.png',
               ),
@@ -80,6 +82,7 @@ class _CitronotState extends State<Citronot> {
               ),
             ),
             Flexible(
+              flex: 7,
               child: new FirebaseAnimatedList(
                   query: playerRef,
                   itemBuilder: (_, DataSnapshot snapshot,
