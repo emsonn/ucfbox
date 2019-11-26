@@ -6,6 +6,8 @@ import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:ucfbox/game_data.dart' as game_data;
 import 'package:ucfbox/games/citronot/citronot.dart';
+import 'package:ucfbox/games/citronot/waiting_room.dart';
+
 class Question extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

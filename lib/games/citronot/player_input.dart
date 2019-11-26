@@ -4,6 +4,7 @@ import 'package:ucfbox/game_data.dart';
 import 'package:ucfbox/games/citronot/voting_animatedlist.dart';
 import 'package:ucfbox/models/players/citronot_player.dart';
 import 'package:ucfbox/game_data.dart' as game_data;
+import 'package:ucfbox/games/citronot/waiting_room.dart';
 
 class PlayerInput extends StatefulWidget {
   @override
@@ -62,12 +63,19 @@ class _PlayerInputState extends State<PlayerInput> {
               onPressed: () async {
                 print('The user input is the following: $userInput');
 
+                // Update my Answer
                 var user = CitronotPlayer.fromSnapshot( await game_data.player.once() );
                 user.answer = userInput;
+                user.start = true;
                 game_data.player.set(user.toJson());
 
+                // Update Answer Count
+                // Update Users who have answered
+                var answered = (await game_data.gameRoom.once()).value['answerCount'];
+                game_data.gameRoom.child('answerCount').set(answered + 1);
+
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => AnimatedListSample()));
+                    MaterialPageRoute(builder: (context) => WaitingRoom()));
               },
             ),
           ],

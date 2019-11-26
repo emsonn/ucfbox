@@ -20,24 +20,52 @@ class _CitronotState extends State<Citronot> {
   List<CitronotPlayer> playerList = new List<CitronotPlayer>();
   CitronotPlayer player;
   DatabaseReference playerRef;
+  var listen1;
+  var listen2;
+  var listen3;
 
   @override
   void initState() {
     super.initState();
     player = new CitronotPlayer("", 0, false, "");
     playerRef = game_data.gameRoom.child('players');
-    playerRef.onChildAdded.listen(_onPlayerAdded);
-    playerRef.onChildChanged.listen(_onPlayerChanged);
+    listen1 = playerRef.onChildAdded.listen(_onPlayerAdded);
+    listen2 = playerRef.onChildChanged.listen(_onPlayerChanged);
 
     // Ready
-    game_data.gameRoom.child('answerCount').onValue.listen(_onCountChanged);
+    listen3 = game_data.gameRoom.child('answerCount').onValue.listen(_onCountChanged);
   }
+
+//  @override
+//  void dispose() {
+//    super.dispose();
+//    listen1.cancel();
+//    listen2.cancel();
+//    listen3.cancel();
+//  }
 
   _onCountChanged(Event event) async{
     if ((await game_data.gameRoom.once()).value['answerCount'] ==
         (await game_data.gameRoom.once()).value['noOfPlayers'])
       {
         game_data.globalNumPlayers = playerList.length;
+        // Set player count
+        //game_data.globalNumPlayers = ( await game_data.gameRoom.once()).value['noOfPlayers'];
+
+        // Set var back to false
+        var myPlayer = CitronotPlayer.fromSnapshot(
+            await game_data.player.once());
+        myPlayer.start = false;
+        game_data.player.set(myPlayer.toJson());
+
+        // Set answerCount back to zero
+        game_data.gameRoom.child('answerCount').set(0);
+
+        listen1.cancel();
+        listen2.cancel();
+        listen3.cancel();
+
+        // Continue
         Navigator.push(context,
             MaterialPageRoute(builder: (context) => Question()));
       }
