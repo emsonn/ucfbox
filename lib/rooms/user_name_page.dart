@@ -19,7 +19,7 @@ class UserName extends StatefulWidget {
 class _UserNameState extends State<UserName> {
   FirebaseDatabase dbReference = FirebaseDatabase.instance;
   String playerName;
-  String playerNamePractice;
+
   @override
   void initState() {
     super.initState();
