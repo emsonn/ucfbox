@@ -66,9 +66,17 @@ class _AnimatedListSampleState extends State<AnimatedListSample> {
                             child: SizedBox(
                               height: 128.0,
                               child: Card(
-                                color: Colors.primaries[index % Colors.primaries.length],
+                                color: Colors.black,
                                 child: Center(
-                                  child: Text("${snapshot.value['answer']}"),
+                                  child: Text("${snapshot.value['answer']}",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      color: Color(0xFFFFC904),
+                                      fontSize: 25.0,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+
                                 ),
                               ),
                             ),

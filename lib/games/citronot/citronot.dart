@@ -68,28 +68,26 @@ class _CitronotState extends State<Citronot> {
       body: SafeArea(
         child: Column(
           children: <Widget>[
+
             Expanded(
-                flex: 2,
-
-                child: Text('Game Room Code:\n ${game_data.gameRoom.key}',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                  fontSize: 25,
-                  fontWeight: FontWeight.bold,
-                ),
-                ),
-
-
-            ),
-            Expanded(
-              flex: 7,
+              flex: 3,
               child: Image.asset(
                 'images/citronot.png',
               ),
             ),
-
             Expanded(
-              flex: 2,
+              flex: 4,
+
+              child: Text('Game Room Code:\n ${game_data.gameRoom.key}',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 25,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            Expanded(
+              flex: 3,
               child: Text(
                 'PLAYERS',
                 textAlign: TextAlign.center,

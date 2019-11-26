@@ -111,8 +111,8 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Firebase: da031bc7012374e3bed17a6731b89327b29863b9
-  firebase_core: 971ffa0fb29e49b80a2ad295eb1ad1cdbd680ec4
-  firebase_database: 9fb71952703b719484bc1de5347522a11b6ccc38
+  firebase_core: ae55ea92448ec8675d325da4db22cf3b4d58a54d
+  firebase_database: 03cd65b8e4203286a337877bb3dd744f4817f71e
   FirebaseAnalytics: 4e53a7eb7b76bc703c4d9239bc964545e9b23361
   FirebaseAuthInterop: 0ffa57668be100582bb7643d4fcb7615496c41fc
   FirebaseCore: bcd6c112429249d7921e907d661e8955a3549e26
@@ -120,7 +120,7 @@ SPEC CHECKSUMS:
   FirebaseCoreDiagnosticsInterop: e9b1b023157e3a2fc6418b5cb601e79b9af7b3a0
   FirebaseDatabase: 963515d232ded06f36f6ce830507c94551866170
   FirebaseInstanceID: ebd2ea79ee38db0cb5f5167b17a0d387e1cc7b6e
-  Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
+  Flutter: 58dd7d1b27887414a370fcccb9e645c08ffd7a6a
   GoogleAppMeasurement: 037f46d1d8ae8b312720f1042585ab961a1289e3
   GoogleDataTransport: 166f9b9f82cbf60a204e8fe2daa9db3e3ec1fb15
   GoogleDataTransportCCTSupport: f6ab1962e9dc05ab1fb938b795e5b310209edeec

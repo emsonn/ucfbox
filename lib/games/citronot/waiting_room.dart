@@ -88,6 +88,7 @@ class _WaitingState extends State<WaitingRoom> {
                             : Colors.white,
                         child: ListTile(
                           title: new Text(snapshot.value['playerName']),
+
                         ),
                     );
                   }
