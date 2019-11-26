@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:ucfbox/game_data.dart' as game_data;
+import 'package:ucfbox/games/citronot/waiting_room.dart';
 
 
 class AnimatedListSample extends StatefulWidget {
@@ -153,6 +154,9 @@ class CardItem extends StatelessWidget {
     TextStyle textStyle = Theme.of(context).textTheme.display1;
     if (selected)
       textStyle = textStyle.copyWith(color: Colors.lightGreenAccent[400]);
+//      Navigator.push(context,
+//          MaterialPageRoute(builder: (context) => WaitingRoom()));
+
     return Padding(
       padding: const EdgeInsets.all(2.0),
       child: SizeTransition(
@@ -167,6 +171,7 @@ class CardItem extends StatelessWidget {
               color: Colors.primaries[item % Colors.primaries.length],
               child: Center(
                 child: Text('lol im stupid', style: textStyle),
+
               ),
             ),
           ),
