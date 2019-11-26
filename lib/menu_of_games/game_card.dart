@@ -2,6 +2,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:ucfbox/games/generate_code.dart';
 import '../rooms/user_name_page.dart';
+import 'package:ucfbox/game_data.dart' as game_data;
 
 class GameCard extends StatelessWidget {
   GameCard({this.label, this.color, this.gameRoomTemplate, this.gameType});
@@ -20,6 +21,7 @@ class GameCard extends StatelessWidget {
         child: InkWell(
           onTap: () {
             pushToDB(gameRoomCode, gameRoomTemplate);
+            game_data.status = game_data.Status.host;
             Navigator.push(
                 context,
                 MaterialPageRoute(

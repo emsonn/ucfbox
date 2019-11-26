@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:ucfbox/rooms/user_name_page.dart';
-
+import 'package:ucfbox/game_data.dart' as game_data;
 import '../my_app_bar.dart';
 
 class JoinRoom extends StatelessWidget {
@@ -93,6 +93,9 @@ class JoinRoom extends StatelessWidget {
                           if (await gameRoomExists(gameCode)) {
                             getGameType(gameCode).then(
                               (gameRoomType) {
+
+                                game_data.status = game_data.Status.guest;
+
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:ucfbox/game_data.dart';
 import 'package:ucfbox/games/citronot/voting_animatedlist.dart';
+import 'package:ucfbox/models/answers/citronot_answer.dart';
 import 'package:ucfbox/models/players/citronot_player.dart';
 import 'package:ucfbox/game_data.dart' as game_data;
 import 'package:ucfbox/games/citronot/waiting_room.dart';
@@ -65,9 +66,12 @@ class _PlayerInputState extends State<PlayerInput> {
 
                 // Update my Answer
                 var user = CitronotPlayer.fromSnapshot( await game_data.player.once() );
-                user.answer = userInput;
+//                user.answer = userInput;
                 user.start = true;
                 game_data.player.set(user.toJson());
+                var myAnswer = new CitronotAnswer(game_data.player.key, userInput);
+                var answerRef = game_data.gameRoom.child('answers').push();
+                answerRef.set(myAnswer.toJson());
 
                 // Update Answer Count
                 // Update Users who have answered

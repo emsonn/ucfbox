@@ -14,13 +14,12 @@ class AnimatedListSample extends StatefulWidget {
 
 class _AnimatedListSampleState extends State<AnimatedListSample> {
   CitronotPlayer player;
-  DatabaseReference playerRef;
+  DatabaseReference answerRef;
 
   @override
   void initState() {
     super.initState();
-    player = new CitronotPlayer("", 0, false, "");
-    playerRef = game_data.gameRoom.child('players');
+    answerRef = game_data.gameRoom.child('answers');
   }
 
   @override
@@ -35,20 +34,46 @@ class _AnimatedListSampleState extends State<AnimatedListSample> {
                   height: 50,
                 ),
                 Expanded(
-                  child: Text(
-                    game_data.questionBank.documents[game_data.question]['0'],
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 25.0,
-                      fontWeight: FontWeight.bold,
-                    ),
+                  child: new StreamBuilder<Event>(
+                      stream: game_data.gameRoom
+                          .child('prompt')
+                          .onValue,
+                      builder: (BuildContext context, AsyncSnapshot<Event> event) {
+                        if (event.data.snapshot.value != null) {
+                          String prompt = event.data.snapshot.value;
+                          return new Center(
+                              child: Text(
+                                '$prompt',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 40.0,
+                                    fontWeight: FontWeight.bold
+                                ),
+                              )
+                          );
+                        }
+                        return new Center(
+                            child: Text(
+                              'Loading...',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 40.0,
+                                  fontWeight: FontWeight.bold
+                              ),
+                            )
+                        );
+                      }
                   ),
                 ),
                 Expanded(
                   flex:3,
                   child: FirebaseAnimatedList(
-                    query: playerRef,
+                    sort: (a, b) {
+                      return a.value['answer'].toString().toLowerCase().compareTo(b.value['answer'].toString().toLowerCase());
+                      },
+                    query: answerRef,
                     itemBuilder: (_, DataSnapshot snapshot,
                         Animation<double> animation, int index) {
                       return Padding(
@@ -59,9 +84,24 @@ class _AnimatedListSampleState extends State<AnimatedListSample> {
                           child: GestureDetector(
                             behavior: HitTestBehavior.opaque,
                             onTap: () async {
-                              var score = ( await game_data.gameRoom.child('players').child(snapshot.key).once()).value['score'];
-                              score += 10;
-                              game_data.gameRoom.child('players').child(snapshot.key).child('score').set(score);
+                              var playerKey = ( await game_data.gameRoom.child('answers').child(snapshot.key).once()).value['playerKey'];
+                              var score = ( await game_data.gameRoom.child('players').child(playerKey).once()).value['score'];
+
+                              if ( game_data.player.key != playerKey ){
+
+                                if ( snapshot.value['correct'] == true ){
+                                  score += 10;
+                                  game_data.player.set(score);
+                                }
+                                else{
+                                  score += 10;
+                                  game_data.gameRoom.child('players').child(playerKey).child('score').set(score);
+                                }
+
+                                Navigator.push(context,
+                                    MaterialPageRoute(builder: (context) => WaitingRoom()));
+                              }
+
                             },
                             child: SizedBox(
                               height: 128.0,

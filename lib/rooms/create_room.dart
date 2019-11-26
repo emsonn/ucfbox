@@ -17,6 +17,7 @@ class CreateRoom extends StatelessWidget {
         gameRoomTemplate: {
           "noOfPlayers": 0,
           "players:": [],
+          "answers:": [],
           "gameType": "citronot",
           "prompt": "",
           "fact":"",

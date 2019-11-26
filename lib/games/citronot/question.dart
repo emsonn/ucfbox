@@ -8,7 +8,32 @@ import 'package:ucfbox/game_data.dart' as game_data;
 import 'package:ucfbox/games/citronot/citronot.dart';
 import 'package:ucfbox/games/citronot/waiting_room.dart';
 
-class Question extends StatelessWidget {
+
+class Question extends StatefulWidget {
+  @override
+  _QuestionState createState() => new _QuestionState();
+}
+
+
+class _QuestionState extends State<Question>
+{
+  String roundPrompt;
+
+  Future<String> getPrompt() async {
+    var roomRef = game_data.gameRoom.once();
+    roomRef.then((snapshot) {
+      roundPrompt = snapshot.value['prompt'];
+    }
+    );
+    print('roundPrompt: $roundPrompt');
+    return roundPrompt;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,21 +52,42 @@ class Question extends StatelessWidget {
               Expanded(
                 flex: 1,
                 child: Container(
-                  decoration: BoxDecoration(
-                    color: Color(0xFFFFC904),
-                    borderRadius: BorderRadius.circular(15.0),
-                  ),
-                  child: Center(
-                    child: Text(
-                      game_data.questionBank.documents[game_data.question]['0'],
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 40.0,
-                        fontWeight: FontWeight.bold,
-                      ),
+                    decoration: BoxDecoration(
+                      color: Color(0xFFFFC904),
+                      borderRadius: BorderRadius.circular(15.0),
                     ),
-                  ),
+                    child: new StreamBuilder<Event>(
+                      stream: game_data.gameRoom
+                        .child('prompt')
+                        .onValue,
+                      builder: (BuildContext context, AsyncSnapshot<Event> event) {
+                        if (event.data.snapshot.value != null) {
+                      String prompt = event.data.snapshot.value;
+                      return new Center(
+                          child: Text(
+                              '$prompt',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 40.0,
+                              fontWeight: FontWeight.bold
+                            ),
+                          )
+                        );
+                      }
+                      return new Center(
+                          child: Text(
+                            'Loading...',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 40.0,
+                                fontWeight: FontWeight.bold
+                            ),
+                          )
+                        );
+                      }
+                    ),
                 ),
               ),
 
@@ -68,7 +114,7 @@ class Question extends StatelessWidget {
                 ),
               ),
 
-              SizedBox(height: 70),
+                SizedBox(height: 70),
             ],
           ),
         ),

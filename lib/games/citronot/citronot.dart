@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
@@ -6,6 +7,7 @@ import 'package:firebase_database/ui/utils/stream_subscriber_mixin.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:ucfbox/game_data.dart' as game_data;
+import 'package:ucfbox/models/answers/citronot_answer.dart';
 import 'package:ucfbox/models/game_rooms/citronot_room.dart';
 import 'package:ucfbox/models/players/citronot_player.dart';
 import 'package:ucfbox/my_app_bar.dart';
@@ -59,12 +61,14 @@ class _CitronotState extends State<Citronot> {
         myPlayer.start = false;
         game_data.player.set(myPlayer.toJson());
 
-        // Set answerCount back to zero
-        game_data.gameRoom.child('answerCount').set(0);
-
         listen1.cancel();
         listen2.cancel();
         listen3.cancel();
+
+        // Set answerCount back to zero
+        if ( game_data.status == game_data.Status.host){
+          game_data.gameRoom.child('answerCount').set(0);
+        }
 
         // Continue
         Navigator.push(context,
@@ -177,7 +181,19 @@ class _CitronotState extends State<Citronot> {
                   print('Start Game button has been pressed');
 
                   // Download Q/As
-                  game_data.questionBank = await Firestore.instance.collection('citronot').getDocuments();
+                  if ( game_data.status == game_data.Status.host ) {
+                    game_data.questionBank = await Firestore.instance.collection('citronot').getDocuments();
+
+                    var choose = new Random().nextInt(game_data.questionBank.documents.length);
+
+                    var prompt = game_data.questionBank.documents[game_data.question][choose.toString()];
+                    game_data.gameRoom.child('prompt').set(prompt);
+
+                    var answer = game_data.questionBank.documents[game_data.answer][choose.toString()];
+                    var correctAnswer = new CitronotAnswer("", answer, correct: true);
+                    var answerRef = game_data.gameRoom.child('answers').push();
+                    answerRef.set(correctAnswer.toJson());
+                    }
 
                   // Update Player
                   var myPlayer = CitronotPlayer.fromSnapshot(

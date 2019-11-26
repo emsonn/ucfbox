@@ -31,18 +31,28 @@ class _WaitingState extends State<WaitingRoom> {
     listen2 = game_data.gameRoom.child('answerCount').onValue.listen(_onCountChanged);
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-    listen1.cancel();
-    listen2.cancel();
-  }
+//  @override
+//  void dispose() {
+//    super.dispose();
+//    listen1.cancel();
+//    listen2.cancel();
+//  }
 
   _onCountChanged(Event event) async{
     if ((await game_data.gameRoom.once()).value['answerCount'] ==
         (await game_data.gameRoom.once()).value['noOfPlayers'])
     {
+
+      listen1.cancel();
+      listen2.cancel();
       /// Make a Results.Dart
+
+      game_data.player.child('start').set(false);
+
+      if ( game_data.status == game_data.Status.host){
+        game_data.gameRoom.child('answerCount').set(0);
+      }
+
       Navigator.push(context,
           MaterialPageRoute(builder: (context) => AnimatedListSample()));
     }
