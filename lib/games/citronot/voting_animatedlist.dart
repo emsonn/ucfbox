@@ -76,7 +76,6 @@ class _AnimatedListSampleState extends State<AnimatedListSample> {
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
-
                                 ),
                               ),
                             ),
