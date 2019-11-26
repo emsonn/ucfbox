@@ -1,6 +1,7 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:ucfbox/games/citronot/citronot.dart';
+import 'package:ucfbox/models/game_rooms/citronot_room.dart' as citronot_room;
 import 'package:ucfbox/games/night_night_knightro/night_night_knightro.dart';
 import 'package:ucfbox/games/knightquips/knightquips.dart';
 import 'package:ucfbox/game_data.dart' as game_data;
@@ -25,7 +26,7 @@ class _UserNameState extends State<UserName> {
   void initState() {
     super.initState();
     print(
-        '\n User Name Page\nThe gameRoomCode being pass is: ${widget.gameRoomCode}');
+        '\n User Name Page\nThe gameRoomCode being passed is: ${widget.gameRoomCode}');
   }
 
 //   @override
@@ -83,90 +84,90 @@ class _UserNameState extends State<UserName> {
 //                       ),
 
 //                       ///  I added the Navigator.push()
-//                       FlatButton(
-//                         onPressed: () {
+                      // FlatButton(
+                      //   onPressed: () {
                           
-//                           print(
-//                               'FlatButton gameRoomCode is ${widget.gameRoomCode}');
-//                           print('FlatButton playerName is $playerName');
+                      //     print(
+                      //         'FlatButton gameRoomCode is ${widget.gameRoomCode}');
+                      //     print('FlatButton playerName is $playerName');
 
-//                           game_data.player = FirebaseDatabase
-//                               .instance
-//                               .reference()
-//                               .child(widget.gameRoomCode)
-//                               .child('players')
-//                               .push();
+                      //     game_data.player = FirebaseDatabase
+                      //         .instance
+                      //         .reference()
+                      //         .child(widget.gameRoomCode)
+                      //         .child('players')
+                      //         .push();
 
-//                           DatabaseReference noOfPlayers = FirebaseDatabase
-//                               .instance
-//                               .reference()
-//                               .child(widget.gameRoomCode)
-//                               .child('noOfPlayers');
+                      //     DatabaseReference noOfPlayers = FirebaseDatabase
+                      //         .instance
+                      //         .reference()
+                      //         .child(widget.gameRoomCode)
+                      //         .child('noOfPlayers');
 
-//                           game_data.gameRoom = FirebaseDatabase
-//                               .instance
-//                               .reference()
-//                               .child(widget.gameRoomCode);
+                      //     game_data.gameRoom = FirebaseDatabase
+                      //         .instance
+                      //         .reference()
+                      //         .child(widget.gameRoomCode);
 
-//                           noOfPlayers.once().then((DataSnapshot snapshot) {
-//                             noOfPlayers.set(snapshot.value + 1);
-//                           });
+                      //     noOfPlayers.once().then((DataSnapshot snapshot) {
+                      //       noOfPlayers.set(snapshot.value + 1);
+                      //     });
 
-//                           /// Citronot
-//                           if (widget.gameType == "citronot") {
-//                             game_data.player.set({
-//                               'playerName': playerName,
-//                               'score': 0,
-//                               'answer': '',
-//                               'start': false
-//                             });
-//                             Navigator.push(
-//                               context,
-//                               MaterialPageRoute(
-//                                 builder: (context) => Citronot(),
-//                               ),
-//                             );
-//                           }
+                      //     /// Citronot
+                      //     if (widget.gameType == "citronot") {
+                      //       game_data.player.set({
+                      //         'playerName': playerName,
+                      //         'score': 0,
+                      //         'answer': '',
+                      //         'start': false
+                      //       });
+                      //       Navigator.push(
+                      //         context,
+                      //         MaterialPageRoute(
+                      //           builder: (context) => Citronot(),
+                      //         ),
+                      //       );
+                      //     }
 
-//                           /// Knightquips
-//                           else if (widget.gameType == "quiplash") {
-//                             game_data.player.set({
-//                               'playerName': playerName,
-//                               'score': 0,
-//                               'start': false
-//                             });
-//                             Navigator.push(
-//                                 context,
-//                                 MaterialPageRoute(
-//                                     builder: (context) => KnightQuips()));
-//                           }
+                      //     /// Knightquips
+                      //     else if (widget.gameType == "quiplash") {
+                      //       game_data.player.set({
+                      //         'playerName': playerName,
+                      //         'score': 0,
+                      //         'start': false
+                      //       });
+                      //       Navigator.push(
+                      //           context,
+                      //           MaterialPageRoute(
+                      //               builder: (context) => KnightQuips()));
+                      //     }
 
-//                           /// NNN_Knightro
-//                           else if (widget.gameType == "nightNightKnightro") {
-//                             game_data.player.set({
-//                               'playerName': playerName,
-//                               'alive': true,
-//                               'role': '',
-//                               'votes': 0,
-//                               'start': false
-//                             });
-//                             Navigator.push(
-//                                 context,
-//                                 MaterialPageRoute(
-//                                     builder: (context) =>
-//                                         NightNightKnightro()));
-//                           }
+                      //     /// NNN_Knightro
+                      //     else if (widget.gameType == "nightNightKnightro") {
+                      //       game_data.player.set({
+                      //         'playerName': playerName,
+                      //         'alive': true,
+                      //         'role': '',
+                      //         'votes': 0,
+                      //         'start': false
+                      //       });
+                      //       Navigator.push(
+                      //           context,
+                      //           MaterialPageRoute(
+                      //               builder: (context) =>
+                      //                   NightNightKnightro()));
+                      //     }
 
-//                           /// You suck
-//                           else {
-//                             print('you failed');
-//                           }
-//                         },
-//                         color: Colors.black,
-//                         child: Text(
-//                           "CHARGE ON!",
-//                           style: TextStyle(color: Colors.white),
-//                         ),
+                      //     /// You suck
+                      //     else {
+                      //       print('you failed');
+                      //     }
+                      //   },
+                      //   color: Colors.black,
+                      //   child: Text(
+                      //     "CHARGE ON!",
+                      //     style: TextStyle(color: Colors.white),
+                      //   ),
 //                       ),
 //                     ],
 //                   ),
@@ -231,10 +232,33 @@ class _UserNameState extends State<UserName> {
                             ),
                             hintText: "Enter in a 12 character player name"),
 
-                        /// gameCode is enter by user
+                        /// Input playerName is empty.
                         onSubmitted: (gameCode) async {
-                          if (playerName.length > 0) {
+                          if (playerName.length ==  0) {
+                            Alert(
+                              context: context,
+                              type: AlertType.error,
+                              title: "UCFBox Alert",
+                              desc: "Please enter in 1-12 characters for your username.",
+                              buttons: [
+                                DialogButton(
+                                  color: Color.fromRGBO(225, 202, 6, 100),
+                                  child: Text(
+                                    "CHARGE ON!",
+                                    style: TextStyle(
+                                        color: Colors.black, fontSize: 20),
+                                  ),
+                                  onPressed: () => Navigator.pop(context),
+                                  width: 120,
+                                )
+                              ],
+                            ).show();
+                          }
 
+                          // Add in case to check for duplicate names.
+                         
+                          /// Input playerName is valid
+                          else {
                             print('FlatButton gameRoomCode is ${widget.gameRoomCode}');
                             print('FlatButton playerName is $playerName');
 
@@ -306,32 +330,10 @@ class _UserNameState extends State<UserName> {
                                     NightNightKnightro()));
                             }
 
-                            /// You suck
+                            /// Failure condition
                             else {
-                              print('you failed');
+                              print('failure');
                             }
-                          }
-
-                          /// If the name isn't valid
-                          else {
-                            Alert(
-                              context: context,
-                              type: AlertType.error,
-                              title: "UCFBox Alert",
-                              desc: "Please enter in 1-12 characters for your username.",
-                              buttons: [
-                                DialogButton(
-                                  color: Color.fromRGBO(225, 202, 6, 100),
-                                  child: Text(
-                                    "CHARGE ON!",
-                                    style: TextStyle(
-                                        color: Colors.black, fontSize: 20),
-                                  ),
-                                  onPressed: () => Navigator.pop(context),
-                                  width: 120,
-                                )
-                              ],
-                            ).show();
                           }
                         },
                       ),
