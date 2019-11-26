@@ -90,11 +90,11 @@ class _AnimatedListSampleState extends State<AnimatedListSample> {
                               if ( game_data.player.key != playerKey ){
 
                                 if ( snapshot.value['correct'] == true ){
-                                  score += 10;
+                                  score = score + 10;
                                   game_data.player.set(score);
                                 }
                                 else{
-                                  score += 10;
+                                  score = score + 10;
                                   game_data.gameRoom.child('players').child(playerKey).child('score').set(score);
                                 }
 

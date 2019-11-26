@@ -48,12 +48,11 @@ class _CitronotState extends State<Citronot> {
 //  }
 
   _onCountChanged(Event event) async{
-    if ((await game_data.gameRoom.once()).value['answerCount'] ==
-        (await game_data.gameRoom.once()).value['noOfPlayers'])
+    if ( game_data.status == game_data.Status.guest &&
+        ((await game_data.gameRoom.once()).value['answerCount'] ==
+        (await game_data.gameRoom.once()).value['noOfPlayers']) )
       {
-        game_data.globalNumPlayers = playerList.length;
-        // Set player count
-        //game_data.globalNumPlayers = ( await game_data.gameRoom.once()).value['noOfPlayers'];
+        game_data.globalNumPlayers = ( await game_data.gameRoom.once()).value['noOfPlayers'];
 
         // Set var back to false
         var myPlayer = CitronotPlayer.fromSnapshot(
@@ -65,15 +64,35 @@ class _CitronotState extends State<Citronot> {
         listen2.cancel();
         listen3.cancel();
 
-        // Set answerCount back to zero
-        if ( game_data.status == game_data.Status.host){
-          game_data.gameRoom.child('answerCount').set(0);
-        }
-
+        var answerCount = (await game_data.gameRoom.once()).value['answerCount'];
+        game_data.gameRoom.child('answerCount').set(answerCount+1);
         // Continue
         Navigator.push(context,
             MaterialPageRoute(builder: (context) => Question()));
       }
+
+    // Set answerCount back to zero
+    if ( game_data.status == game_data.Status.host &&
+        ((await game_data.gameRoom.once()).value['answerCount'] == ( (await game_data.gameRoom.once()).value['noOfPlayers'] * 2) - 1 ) ){
+
+      game_data.globalNumPlayers = playerList.length;
+      // Set player count
+      game_data.globalNumPlayers = ( await game_data.gameRoom.once()).value['noOfPlayers'];
+
+      // Set var back to false
+      var myPlayer = CitronotPlayer.fromSnapshot(
+          await game_data.player.once());
+      myPlayer.start = false;
+      game_data.player.set(myPlayer.toJson());
+
+      listen1.cancel();
+      listen2.cancel();
+      listen3.cancel();
+
+      game_data.gameRoom.child('answerCount').set(0);
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => Question()));
+    }
   }
 
   _onPlayerAdded(Event event) {
