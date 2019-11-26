@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:firebase_database/ui/utils/stream_subscriber_mixin.dart';
 import 'package:flutter/material.dart';
@@ -174,6 +175,9 @@ class _CitronotState extends State<Citronot> {
                 ),
                 onPressed: () async {
                   print('Start Game button has been pressed');
+
+                  // Download Q/As
+                  game_data.questionBank = await Firestore.instance.collection('citronot').getDocuments();
 
                   // Update Player
                   var myPlayer = CitronotPlayer.fromSnapshot(

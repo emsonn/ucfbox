@@ -36,7 +36,7 @@ class _AnimatedListSampleState extends State<AnimatedListSample> {
                 ),
                 Expanded(
                   child: Text(
-                    'This is a test to see how many characters should a player be able to see Also for when they input a answer to a question This is me adding x',
+                    game_data.questionBank.documents[game_data.question]['0'],
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: Colors.black,

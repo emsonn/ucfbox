@@ -11,6 +11,7 @@ dependencies:
     sdk: flutter
   firebase_core: ^0.4.0+9
   firebase_database: ^3.0.7
+  cloud_firestore: ^0.12.10+2
   random_string: ^1.1.0
 
 
