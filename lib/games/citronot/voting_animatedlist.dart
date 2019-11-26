@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:ucfbox/game_data.dart' as game_data;
 
+
 class AnimatedListSample extends StatefulWidget {
   @override
   _AnimatedListSampleState createState() => _AnimatedListSampleState();
@@ -17,34 +18,35 @@ class _AnimatedListSampleState extends State<AnimatedListSample> {
     super.initState();
     _list = ListModel<int>(
       listKey: _listKey,
+
       /// This determines how many players are in the game but only displays on the Item # in textbox
-      initialItems: <int>[0,1,2,3,4,5,6,7,8,9],
+      initialItems: <int>[0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
       removedItemBuilder: _buildRemovedItem,
     );
   }
 
   // Used to build list items that haven't been removed.
-  Widget _buildItem(
-      BuildContext context, int index, Animation<double> animation) {
-      return CardItem(
-        animation: animation,
-        item: _list[index],
-        selected: _selectedItem == _list[index],
-        onTap: () {
-          setState(() {
-            _selectedItem = _selectedItem == _list[index] ? null : _list[index];
-          });
-        },
-      );
-    }
+  Widget _buildItem(BuildContext context, int index,
+      Animation<double> animation) {
+    return CardItem(
+      animation: animation,
+      item: _list[index],
+      selected: _selectedItem == _list[index],
+      onTap: () {
+        setState(() {
+          _selectedItem = _selectedItem == _list[index] ? null : _list[index];
+        });
+      },
+    );
+  }
 
   // Used to build an item after it has been removed from the list. This method is
   // needed because a removed item remains  visible until its animation has
   // completed (even though it's gone as far this ListModel is concerned).
   // The widget will be used by the [AnimatedListState.removeItem] method's
   // [AnimatedListRemovedItemBuilder] parameter.
-  Widget _buildRemovedItem(
-      int item, BuildContext context, Animation<double> animation) {
+  Widget _buildRemovedItem(int item, BuildContext context,
+      Animation<double> animation) {
     return CardItem(
       animation: animation,
       item: item,
@@ -53,21 +55,39 @@ class _AnimatedListSampleState extends State<AnimatedListSample> {
     );
   }
 
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        appBar: AppBar(
-          title: const Text('AnimatedList'),
-        ),
-        body: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: AnimatedList(
-            key: _listKey,
-            initialItemCount: _list.length,
-            itemBuilder: _buildItem,
+        backgroundColor: Color(0xFFFFC904),
+        body: SafeArea(
+          child: Column(
+              children: <Widget>[
+                SizedBox(
+                  height: 50,
+                ),
+                Expanded(
+                  child: Text(
+                    'This is a test to see how many characters should a player be able to see Also for when they input a answer to a question This is me adding x',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 25.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                Expanded(
+                  flex:3,
+                  child: AnimatedList(
+                    key: _listKey,
+                    initialItemCount: _list.length,
+                    itemBuilder: _buildItem,
+                  ),
+                ),
+              ]
           ),
+
         ),
       ),
     );
