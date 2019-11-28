@@ -32,6 +32,8 @@ class _QuestionState extends State<Question>
   @override
   void initState() {
     super.initState();
+
+    game_data.nextRoom = game_data.NextRoom.voting;
   }
 
   @override

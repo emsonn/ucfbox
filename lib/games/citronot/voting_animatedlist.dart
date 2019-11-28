@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:ucfbox/game_data.dart' as game_data;
 import 'package:ucfbox/games/citronot/leaderboard.dart';
-//import 'package:ucfbox/games/citronot/waiting_room.dart';
+import 'package:ucfbox/games/citronot/waiting_room.dart';
 import 'package:ucfbox/models/players/citronot_player.dart';
 
 
@@ -21,6 +21,9 @@ class _AnimatedListSampleState extends State<AnimatedListSample> {
   void initState() {
     super.initState();
     answerRef = game_data.gameRoom.child('answers');
+
+    // Set next room
+    game_data.nextRoom = game_data.NextRoom.leaderboard;
   }
 
   @override

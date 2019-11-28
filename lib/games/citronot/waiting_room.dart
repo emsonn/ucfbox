@@ -6,6 +6,7 @@ import 'package:ucfbox/games/citronot/howtoplay.dart';
 import 'package:ucfbox/models/players/citronot_player.dart';
 import 'package:ucfbox/my_app_bar.dart';
 import 'package:ucfbox/games/citronot/voting_animatedlist.dart';
+import 'package:ucfbox/games/citronot/results.dart';
 
 class WaitingRoom extends StatefulWidget {
   @override
@@ -31,13 +32,6 @@ class _WaitingState extends State<WaitingRoom> {
     listen2 = game_data.gameRoom.child('answerCount').onValue.listen(_onCountChanged);
   }
 
-//  @override
-//  void dispose() {
-//    super.dispose();
-//    listen1.cancel();
-//    listen2.cancel();
-//  }
-
   _onCountChanged(Event event) async{
     if ((await game_data.gameRoom.once()).value['answerCount'] ==
         (await game_data.gameRoom.once()).value['noOfPlayers'])
@@ -55,8 +49,14 @@ class _WaitingState extends State<WaitingRoom> {
         return transaction;
       });
 
-      Navigator.push(context,
-          MaterialPageRoute(builder: (context) => AnimatedListSample()));
+      if (game_data.nextRoom == game_data.NextRoom.voting) {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => AnimatedListSample()));
+        }
+      else if (game_data.nextRoom == game_data.NextRoom.leaderboard){
+        Navigator.push(context,
+        MaterialPageRoute(builder: (context) => Results()));
+      }
     }
   }
 
