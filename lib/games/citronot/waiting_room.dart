@@ -49,9 +49,11 @@ class _WaitingState extends State<WaitingRoom> {
 
       game_data.player.child('start').set(false);
 
-      if ( game_data.status == game_data.Status.host){
-        game_data.gameRoom.child('answerCount').set(0);
-      }
+      // Update Users who have answered
+      await game_data.gameRoom.child('nextRoom').runTransaction((transaction) async {
+        transaction.value = (transaction.value ?? 0) + 1;
+        return transaction;
+      });
 
       Navigator.push(context,
           MaterialPageRoute(builder: (context) => AnimatedListSample()));

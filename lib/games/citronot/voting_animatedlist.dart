@@ -84,24 +84,43 @@ class _AnimatedListSampleState extends State<AnimatedListSample> {
                           child: GestureDetector(
                             behavior: HitTestBehavior.opaque,
                             onTap: () async {
-                              var playerKey = ( await game_data.gameRoom.child('answers').child(snapshot.key).once()).value['playerKey'];
-                              var score = ( await game_data.gameRoom.child('players').child(playerKey).once()).value['score'];
-
-                              if ( game_data.player.key != playerKey ){
+                              if ( game_data.player.key != snapshot.value['playerKey']){
+                                print('HERE!!!');
 
                                 if ( snapshot.value['correct'] == true ){
-                                  score = score + 10;
-                                  game_data.player.set(score);
+                                  await game_data.player.child('score').runTransaction((transaction) async {
+                                    transaction.value = (transaction.value ?? 0 ) + 20;
+                                    return transaction;
+                                  });
                                 }
                                 else{
-                                  score = score + 10;
-                                  game_data.gameRoom.child('players').child(playerKey).child('score').set(score);
+                                  await game_data
+                                      .gameRoom
+                                      .child('players')
+                                      .child(snapshot.value['playerKey'])
+                                      .child('score')
+                                      .runTransaction((transaction) async {
+                                    transaction.value = (transaction.value ?? 0 ) + 10;
+                                    return transaction;
+                                  });
                                 }
 
-                                Navigator.push(context,
-                                    MaterialPageRoute(builder: (context) => WaitingRoom()));
-                              }
+                                // Update Answer Count
+                                // Update Users who have answered
+                                final TransactionResult result =
+                                await game_data
+                                    .gameRoom
+                                    .child('answerCount')
+                                    .runTransaction((transaction) async {
+                                  transaction.value = (transaction.value ?? 0 ) + 1;
+                                  return transaction;
+                                });
 
+                                if (result.committed){
+                                  game_data.player.child('start').set(true);
+                                  Navigator.push(context, MaterialPageRoute(builder: (context) => WaitingRoom()));
+                                }
+                              }
                             },
                             child: SizedBox(
                               height: 128.0,

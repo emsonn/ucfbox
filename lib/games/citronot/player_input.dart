@@ -1,3 +1,4 @@
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:ucfbox/game_data.dart';
@@ -64,22 +65,31 @@ class _PlayerInputState extends State<PlayerInput> {
               onPressed: () async {
                 print('The user input is the following: $userInput');
 
-                // Update my Answer
-                var user = CitronotPlayer.fromSnapshot( await game_data.player.once() );
+                if ( (await game_data.gameRoom.once()).value['nextRoom'] == 0 ){
+                  // Update my Answer
+                  var user = CitronotPlayer.fromSnapshot( await game_data.player.once() );
 //                user.answer = userInput;
-                user.start = true;
-                game_data.player.set(user.toJson());
-                var myAnswer = new CitronotAnswer(game_data.player.key, userInput);
-                var answerRef = game_data.gameRoom.child('answers').push();
-                answerRef.set(myAnswer.toJson());
+                  user.start = true;
+                  game_data.player.set(user.toJson());
+                  var myAnswer = new CitronotAnswer(game_data.player.key, userInput);
+                  var answerRef = game_data.gameRoom.child('answers').push();
+                  answerRef.set(myAnswer.toJson());
 
-                // Update Answer Count
-                // Update Users who have answered
-                var answered = (await game_data.gameRoom.once()).value['answerCount'];
-                game_data.gameRoom.child('answerCount').set(answered + 1);
+                  // Update Answer Count
+                  // Update Users who have answered
+                  final TransactionResult transactionResult =
+                    await game_data
+                        .gameRoom
+                        .child('answerCount')
+                        .runTransaction((transaction) async {
+                    transaction.value = (transaction.value ?? 0 ) + 1;
+                    return transaction;
+                  });
 
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => WaitingRoom()));
+                  if (transactionResult.committed )
+                    Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => WaitingRoom()));
+                }
               },
             ),
           ],

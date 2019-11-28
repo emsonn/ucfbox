@@ -21,6 +21,7 @@ class CreateRoom extends StatelessWidget {
           "gameType": "citronot",
           "prompt": "",
           "fact":"",
+          "nextRoom": 0,
           "answerCount": 0
         },
       ),
