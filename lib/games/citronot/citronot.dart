@@ -27,6 +27,7 @@ class _CitronotState extends State<Citronot> {
   var listen1;
   var listen2;
   var listen3;
+  var nextRoomListener;
 
   @override
   void initState() {
@@ -38,62 +39,50 @@ class _CitronotState extends State<Citronot> {
 
     // Ready
     listen3 = game_data.gameRoom.child('answerCount').onValue.listen(_onCountChanged);
+
+    // Setup Gamewide Game leave room listern for host, DO NOT DISPOSE!!!
+    // This should probably be set up elsewhere when we have time
+    if (game_data.status == game_data.Status.host)
+      nextRoomListener = game_data.gameRoom.child('nextRoom').onValue.listen(_onNext);
   }
 
-//  @override
-//  void dispose() {
-//    super.dispose();
-//    listen1.cancel();
-//    listen2.cancel();
-//    listen3.cancel();
-//  }
+  _onNext(Event event) async {
+    if ((await game_data.gameRoom.once()).value['noOfPlayers'] ==
+        (await game_data.gameRoom.once()).value['nextRoom']){
+      game_data.gameRoom.child('nextRoom').set(0);
+      game_data.gameRoom.child('answerCount').set(0);
+    }
+  }
 
   _onCountChanged(Event event) async{
-    if ( game_data.status == game_data.Status.guest &&
-        ((await game_data.gameRoom.once()).value['answerCount'] ==
-        (await game_data.gameRoom.once()).value['noOfPlayers']) )
+    if ((await game_data.gameRoom.once()).value['answerCount'] ==
+        (await game_data.gameRoom.once()).value['noOfPlayers'])
       {
         game_data.globalNumPlayers = ( await game_data.gameRoom.once()).value['noOfPlayers'];
 
-        // Set var back to false
-        var myPlayer = CitronotPlayer.fromSnapshot(
-            await game_data.player.once());
-        myPlayer.start = false;
-        game_data.player.set(myPlayer.toJson());
+        final TransactionResult result =
+          await game_data.gameRoom.child('nextRoom').runTransaction((transaction) async {
+            transaction.value = (transaction.value ?? 0 ) + 1;
+            return transaction;
+          });
 
-        listen1.cancel();
-        listen2.cancel();
-        listen3.cancel();
+        if (result.committed) {
+          listen1.cancel();
+          listen2.cancel();
+          listen3.cancel();
 
-        var answerCount = (await game_data.gameRoom.once()).value['answerCount'];
-        game_data.gameRoom.child('answerCount').set(answerCount+1);
-        // Continue
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => Question()));
+          // Set var back to false
+          var myPlayer = CitronotPlayer.fromSnapshot(
+              await game_data.player.once());
+          myPlayer.start = false;
+          game_data.player.set(myPlayer.toJson());
+
+          // Continue
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => Question()));
+        }
+        print("Error!!!");
       }
-
-    // Set answerCount back to zero
-    if ( game_data.status == game_data.Status.host &&
-        ((await game_data.gameRoom.once()).value['answerCount'] == ( (await game_data.gameRoom.once()).value['noOfPlayers'] * 2) - 1 ) ){
-
-      game_data.globalNumPlayers = playerList.length;
-      // Set player count
-      game_data.globalNumPlayers = ( await game_data.gameRoom.once()).value['noOfPlayers'];
-
-      // Set var back to false
-      var myPlayer = CitronotPlayer.fromSnapshot(
-          await game_data.player.once());
-      myPlayer.start = false;
-      game_data.player.set(myPlayer.toJson());
-
-      listen1.cancel();
-      listen2.cancel();
-      listen3.cancel();
-
-      game_data.gameRoom.child('answerCount').set(0);
-      Navigator.push(context,
-          MaterialPageRoute(builder: (context) => Question()));
-    }
   }
 
   _onPlayerAdded(Event event) {
@@ -224,8 +213,10 @@ class _CitronotState extends State<Citronot> {
                   game_data.player.set(myPlayer.toJson());
 
                   // Update Users who have answered
-                  var answered = (await game_data.gameRoom.once()).value['answerCount'];
-                  game_data.gameRoom.child('answerCount').set(answered + 1);
+                  await game_data.gameRoom.child('answerCount').runTransaction((transaction) async {
+                    transaction.value = (transaction.value ?? 0 ) + 1;
+                    return transaction;
+                  });
                 },
               ),
             ),
