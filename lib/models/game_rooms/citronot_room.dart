@@ -5,6 +5,7 @@ import '../players/citronot_player.dart';
 
 class CitronotRoom {
   String key;
+  int noOfPlayers;
   String gameType;
   List<CitronotPlayer> players;
   String prompt;
@@ -16,6 +17,7 @@ class CitronotRoom {
 
   CitronotRoom.fromSnapshot(DataSnapshot snapshot)
       : key = snapshot.key,
+        noOfPlayers = snapshot.value['noOfPlayers'],
         players = (snapshot.value['players'] as List).map((i) {
           return CitronotPlayer.fromJson(i);
         }).toList(),
@@ -32,7 +34,7 @@ class CitronotRoom {
       }).toList(),
       'prompt': prompt,
       'fact': fact,
-      'answerCount': answerCount 
+      'answerCount': answerCount
     };
   }
 }

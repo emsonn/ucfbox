@@ -1,5 +1,13 @@
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:ucfbox/game_data.dart';
+import 'package:ucfbox/games/citronot/voting_animatedlist.dart';
+import 'package:ucfbox/models/answers/citronot_answer.dart';
+import 'package:ucfbox/models/players/citronot_player.dart';
+import 'package:ucfbox/game_data.dart' as game_data;
+import 'package:ucfbox/games/citronot/waiting_room.dart';
+
 class PlayerInput extends StatefulWidget {
   @override
   _PlayerInputState createState() => _PlayerInputState();
@@ -48,13 +56,40 @@ class _PlayerInputState extends State<PlayerInput> {
             /// Submit Answer Button
             FlatButton(
               color: Colors.black,
-              child: Text('Submite',
+              child: Text('Submit',
                   style: TextStyle(
                       color: Color(0xFFFFC904),
                       fontSize: 25.0,
-                      fontWeight: FontWeight.bold)),
-              onPressed: () {
+                      fontWeight: FontWeight.bold
+                  )),
+              onPressed: () async {
                 print('The user input is the following: $userInput');
+
+                if ( (await game_data.gameRoom.once()).value['nextRoom'] == 0 ){
+                  // Update my Answer
+                  var user = CitronotPlayer.fromSnapshot( await game_data.player.once() );
+//                user.answer = userInput;
+                  user.start = true;
+                  game_data.player.set(user.toJson());
+                  var myAnswer = new CitronotAnswer(game_data.player.key, userInput);
+                  var answerRef = game_data.gameRoom.child('answers').push();
+                  answerRef.set(myAnswer.toJson());
+
+                  // Update Answer Count
+                  // Update Users who have answered
+                  final TransactionResult transactionResult =
+                    await game_data
+                        .gameRoom
+                        .child('answerCount')
+                        .runTransaction((transaction) async {
+                    transaction.value = (transaction.value ?? 0 ) + 1;
+                    return transaction;
+                  });
+
+                  if (transactionResult.committed )
+                    Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => WaitingRoom()));
+                }
               },
             ),
           ],

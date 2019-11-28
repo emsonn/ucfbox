@@ -16,16 +16,19 @@ class CreateRoom extends StatelessWidget {
         gameType: "citronot",
         gameRoomTemplate: {
           "noOfPlayers": 0,
+          "players:": [],
+          "answers:": [],
           "gameType": "citronot",
-          "players": [],
-          "voteCount": 0,
-          "allTopics": [],
+          "prompt": "",
+          "fact":"",
+          "nextRoom": 0,
+          "answerCount": 0
         },
       ),
 
       /// Quiplash
       GameCard(
-        label: "QUIP\nLASH",
+        label: "KNIGHT\nQUIPS",
         color: Color(0xFF3DDA03),
         gameType: "quiplash",
         gameRoomTemplate: {
