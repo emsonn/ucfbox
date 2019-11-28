@@ -3,6 +3,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:ucfbox/game_data.dart' as game_data;
+import 'package:ucfbox/home_page.dart';
 //import 'package:ucfbox/games/citronot/waiting_room.dart';
 import 'package:ucfbox/models/players/citronot_player.dart';
 import 'package:ucfbox/games/citronot/question.dart';
@@ -86,7 +87,7 @@ class _AnimatedListSampleState extends State<Leaderboard> {
                 textColor: Color(0xFFFFC904),
                 color: Colors.black,
                 child: Text(
-                  'Next Round',
+                  'End Game',
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
@@ -94,7 +95,7 @@ class _AnimatedListSampleState extends State<Leaderboard> {
                 ),
                 onPressed: () {
                   Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => Question()));
+                      MaterialPageRoute(builder: (context) => HomePage()));
                 },
               ),
             ),

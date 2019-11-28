@@ -21,37 +21,6 @@ class _ResultsState extends State<Results> {
     super.initState();
     player = new CitronotPlayer("", 0, false, "");
     playerRef = game_data.gameRoom.child('players');
-    playerRef.onChildAdded.listen(_onPlayerAdded);
-    playerRef.onChildChanged.listen(_onPlayerChanged);
-
-    // Ready
-    game_data.gameRoom.child('answerCount').onValue.listen(_onCountChanged);
-  }
-
-  _onCountChanged(Event event) async{
-    if ((await game_data.gameRoom.once()).value['answerCount'] ==
-        (await game_data.gameRoom.once()).value['noOfPlayers'])
-    {
-      Navigator.push(context,
-          MaterialPageRoute(builder: (context) => Question()));
-    }
-  }
-
-  _onPlayerAdded(Event event) {
-    setState(() {
-      playerList.add(CitronotPlayer.fromSnapshot(event.snapshot));
-      game_data.globalNumPlayers++;
-    });
-  }
-
-  _onPlayerChanged(Event event) {
-    var old = playerList.singleWhere((entry) {
-      return entry.key == event.snapshot.key;
-    });
-    setState(() {
-      playerList[playerList.indexOf(old)] =
-          CitronotPlayer.fromSnapshot(event.snapshot);
-    });
   }
 
   @override

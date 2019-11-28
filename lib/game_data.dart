@@ -8,11 +8,17 @@ enum Status {
   guest
 }
 
+enum NextRoom {
+  voting,
+  leaderboard
+}
+
 // Question/Answer
 final answer = 0;
 final question = 1;
 
 Status status;
+NextRoom nextRoom;
 DatabaseReference gameRoom;
 DatabaseReference player;
 int globalNumPlayers = 0;

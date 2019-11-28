@@ -20,6 +20,9 @@ class _AnimatedListSampleState extends State<AnimatedListSample> {
   void initState() {
     super.initState();
     answerRef = game_data.gameRoom.child('answers');
+
+    // Set next room
+    game_data.nextRoom = game_data.NextRoom.leaderboard;
   }
 
   @override
