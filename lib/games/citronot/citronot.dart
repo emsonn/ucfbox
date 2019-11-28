@@ -197,6 +197,8 @@ class _CitronotState extends State<Citronot> {
 
                     game_data.deck = new List<int>.generate(game_data.questionBank.documents.length + 1, (i) => i);
 
+                    game_data.deck.shuffle();
+
                     var prompt = game_data.questionBank.documents[game_data.question][game_data.deck.last.toString()];
                     game_data.gameRoom.child('prompt').set(prompt);
 
