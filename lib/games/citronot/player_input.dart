@@ -14,9 +14,10 @@ class PlayerInput extends StatefulWidget {
 }
 
 class _PlayerInputState extends State<PlayerInput> {
+  String userInput;
+    
   @override
   Widget build(BuildContext context) {
-    String userInput;
     return Container(
       color: Color(0xff654a07),
 
@@ -40,7 +41,7 @@ class _PlayerInputState extends State<PlayerInput> {
             ),
             SizedBox(height: 20),
 
-            /// Where the player enter there answer
+            /// Where the player enters their answer
             TextField(
               autofocus: true,
               textAlign: TextAlign.center,
