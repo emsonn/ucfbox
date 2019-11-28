@@ -6,7 +6,7 @@ import '../players/nightNightKnightro_player.dart';
 class NightNightKnightroRoom {
   String key;
   String gameType;
-  List<NightNightKnightroPlayer> players;
+  Map players;
   int alivePlayersCount;
   int voteCount;
   String killed;
@@ -17,10 +17,7 @@ class NightNightKnightroRoom {
 
   NightNightKnightroRoom.fromSnapshot(DataSnapshot snapshot)
       : key = snapshot.key,
-        players = (snapshot.value['players'] as List).map((i) {
-          return NightNightKnightroPlayer.fromJson(i);
-        }).toList(),
-        gameType = snapshot.value["gameType"],
+        players = snapshot.value["players"],
         alivePlayersCount = snapshot.value["alivePlayersCount"],
         voteCount = snapshot.value["voteCount"],
         killed = snapshot.value["killed"],
@@ -29,9 +26,7 @@ class NightNightKnightroRoom {
   toJson() {
     return {
       "gameType": gameType,
-      "players": players.map((i) {
-        return i.toJson();
-      }).toList(),
+      "players": players,
       'alivePlayersCount': alivePlayersCount,
       'voteCount': voteCount,
       'killed': killed,

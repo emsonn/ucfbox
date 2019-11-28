@@ -1,6 +1,7 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:ucfbox/models/game_rooms/nightNightKnightro_room.dart';
+import 'package:ucfbox/games/night_night_knightro/how_to_play.dart';
+import 'package:ucfbox/games/night_night_knightro/role_assignment.dart';
 import 'package:ucfbox/models/players/nightNightKnightro_player.dart';
 import 'package:ucfbox/game_data.dart' as game_data;
 
@@ -21,31 +22,46 @@ class _NightNightKnightroState extends State<NightNightKnightro> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        children: <Widget>[
-          FlatButton(
-            child: Text('push'),
-            color: Colors.white,
-            onPressed: () {
-              game_data.gameRoom.once().then((DataSnapshot snapshot) {
-                NightNightKnightroRoom room =
-                    NightNightKnightroRoom.fromSnapshot(snapshot);
-                players = room.players;
-              });
-            },
-          ),
-          FlatButton(
-            child: Text('map'),
-            color: Colors.white,
-            onPressed: () {
-              game_data.gameRoom.once().then((DataSnapshot snapshot) {
-                NightNightKnightroRoom room =
-                    NightNightKnightroRoom.fromSnapshot(snapshot);
-              });
-            },
-          )
-        ],
+    return Scaffold(
+      backgroundColor: Colors.black,
+      body: SafeArea(
+        child: Column(
+          children: <Widget>[
+            Image.asset(
+              'images/nightNightKnightroSplash.png',
+              fit: BoxFit.cover,
+            ),
+            SizedBox(
+              height: 30,
+            ),
+            FlatButton(
+              child: Text(
+                'Start',
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 15,
+                    fontFamily: 'Press Start 2P'),
+              ),
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => RoleAssignment()));
+              },
+            ),
+            FlatButton(
+              child: Text(
+                'How to Play',
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 15,
+                    fontFamily: 'Press Start 2P'),
+              ),
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => HowToPlay()));
+              },
+            )
+          ],
+        ),
       ),
     );
   }
