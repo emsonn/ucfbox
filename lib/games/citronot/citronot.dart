@@ -190,6 +190,7 @@ class _CitronotState extends State<Citronot> {
                 ),
                 onPressed: () async {
                   print('Start Game button has been pressed');
+                  game_data.citronotNumRounds = 2;
 
                   // Download Q/As
                   if ( game_data.status == game_data.Status.host ) {
