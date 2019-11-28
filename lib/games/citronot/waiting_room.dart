@@ -7,6 +7,8 @@ import 'package:ucfbox/models/players/citronot_player.dart';
 import 'package:ucfbox/my_app_bar.dart';
 import 'package:ucfbox/games/citronot/voting_animatedlist.dart';
 import 'package:ucfbox/games/citronot/results.dart';
+import 'package:ucfbox/games/citronot/question.dart';
+import 'package:ucfbox/models/answers/citronot_answer.dart';
 
 class WaitingRoom extends StatefulWidget {
   @override
@@ -15,7 +17,6 @@ class WaitingRoom extends StatefulWidget {
 
 class _WaitingState extends State<WaitingRoom> {
   List<CitronotPlayer> playerList = new List<CitronotPlayer>();
-  CitronotPlayer player;
   DatabaseReference playerRef;
   var listen1;
   var listen2;
@@ -23,13 +24,26 @@ class _WaitingState extends State<WaitingRoom> {
   @override
   void initState() {
     super.initState();
-    player = new CitronotPlayer("", 0, false, "");
-    playerRef = game_data.gameRoom.child('players');
-//    playerRef.onChildAdded.listen(_onPlayerAdded);
-    listen1 = playerRef.onChildChanged.listen(_onPlayerChanged);
 
-    // Ready
+    game_data.player.child('start').set(true);
+
+    playerRef = game_data.gameRoom.child('players');
+
+    listen1 = playerRef.onChildChanged.listen(_onPlayerChanged);
     listen2 = game_data.gameRoom.child('answerCount').onValue.listen(_onCountChanged);
+
+    // Setup next round
+    if (game_data.status == game_data.Status.host && game_data.nextRoom == game_data.NextRoom.question){
+      game_data.gameRoom.child('answers').remove();
+
+      var prompt = game_data.questionBank.documents[game_data.question][game_data.deck.last.toString()];
+      game_data.gameRoom.child('prompt').set(prompt);
+
+      var answer = game_data.questionBank.documents[game_data.answer][game_data.deck.removeLast().toString()];
+      var correctAnswer = new CitronotAnswer("", answer, correct: true);
+      var answerRef = game_data.gameRoom.child('answers').push();
+      answerRef.set(correctAnswer.toJson());
+    }
   }
 
   _onCountChanged(Event event) async{
@@ -56,6 +70,10 @@ class _WaitingState extends State<WaitingRoom> {
       else if (game_data.nextRoom == game_data.NextRoom.leaderboard){
         Navigator.push(context,
         MaterialPageRoute(builder: (context) => Results()));
+      }
+      else if( game_data.nextRoom == game_data.NextRoom.question) {
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => Question()));
       }
     }
   }

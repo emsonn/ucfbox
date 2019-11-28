@@ -3,6 +3,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:ucfbox/game_data.dart' as game_data;
+import 'package:ucfbox/games/citronot/waiting_room.dart';
 import 'package:ucfbox/home_page.dart';
 //import 'package:ucfbox/games/citronot/waiting_room.dart';
 import 'package:ucfbox/models/players/citronot_player.dart';
@@ -87,15 +88,36 @@ class _AnimatedListSampleState extends State<Leaderboard> {
                 textColor: Color(0xFFFFC904),
                 color: Colors.black,
                 child: Text(
-                  'End Game',
+                  game_data.citronotNumRounds == 0 ? 'End Game' : 'Next Round',
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => HomePage()));
+                onPressed: () async {
+
+                  if ( game_data.citronotNumRounds == 0 ) {
+                    game_data.gameRoom.remove();
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => HomePage()));
+                  }
+                  else {
+
+                    game_data.citronotNumRounds--;
+                    game_data.nextRoom = game_data.NextRoom.question;
+                    // Update Answer Count
+                    // Update Users who have answered
+                    final TransactionResult transactionResult =
+                    await game_data
+                        .gameRoom
+                        .child('answerCount')
+                        .runTransaction((transaction) async {
+                      transaction.value = (transaction.value ?? 0 ) + 1;
+                      return transaction;
+                    });
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => WaitingRoom()));
+                  }
                 },
               ),
             ),

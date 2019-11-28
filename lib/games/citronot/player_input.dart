@@ -67,10 +67,6 @@ class _PlayerInputState extends State<PlayerInput> {
 
                 if ( (await game_data.gameRoom.once()).value['nextRoom'] == 0 ){
                   // Update my Answer
-                  var user = CitronotPlayer.fromSnapshot( await game_data.player.once() );
-//                user.answer = userInput;
-                  user.start = true;
-                  game_data.player.set(user.toJson());
                   var myAnswer = new CitronotAnswer(game_data.player.key, userInput);
                   var answerRef = game_data.gameRoom.child('answers').push();
                   answerRef.set(myAnswer.toJson());

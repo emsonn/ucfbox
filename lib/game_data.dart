@@ -10,16 +10,22 @@ enum Status {
 
 enum NextRoom {
   voting,
-  leaderboard
+  leaderboard,
+  question
 }
 
 // Question/Answer
 final answer = 0;
 final question = 1;
 
+// CitroNot GameData -- Maybe moved to more General as other games progress.
 Status status;
 NextRoom nextRoom;
+List<int> deck;
+QuerySnapshot questionBank;
+int globalNumPlayers = 0;
+int citronotNumRounds = 2; // 0 inclusive
+
+// Database References
 DatabaseReference gameRoom;
 DatabaseReference player;
-int globalNumPlayers = 0;
-QuerySnapshot questionBank;

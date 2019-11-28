@@ -195,12 +195,12 @@ class _CitronotState extends State<Citronot> {
                   if ( game_data.status == game_data.Status.host ) {
                     game_data.questionBank = await Firestore.instance.collection('citronot').getDocuments();
 
-                    var choose = new Random().nextInt(game_data.questionBank.documents.length);
+                    game_data.deck = new List<int>.generate(game_data.questionBank.documents.length + 1, (i) => i);
 
-                    var prompt = game_data.questionBank.documents[game_data.question][choose.toString()];
+                    var prompt = game_data.questionBank.documents[game_data.question][game_data.deck.last.toString()];
                     game_data.gameRoom.child('prompt').set(prompt);
 
-                    var answer = game_data.questionBank.documents[game_data.answer][choose.toString()];
+                    var answer = game_data.questionBank.documents[game_data.answer][game_data.deck.removeLast().toString()];
                     var correctAnswer = new CitronotAnswer("", answer, correct: true);
                     var answerRef = game_data.gameRoom.child('answers').push();
                     answerRef.set(correctAnswer.toJson());

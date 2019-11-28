@@ -118,7 +118,6 @@ class _AnimatedListSampleState extends State<AnimatedListSample> {
                               });
 
                               if (result.committed) {
-                                game_data.player.child('start').set(true);
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
