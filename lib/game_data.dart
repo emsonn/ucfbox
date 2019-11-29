@@ -27,6 +27,9 @@ int globalNumPlayers = 0;
 int citronotNumRounds = 2; // 0 inclusive
 int numCitronotQuestions = 23; // 0-22
 
+// KnightQuips GameData
+int numKnightQuipsQuestions = 49; // 0-48
+
 // Database References
 DatabaseReference gameRoom;
 DatabaseReference player;
