@@ -14,9 +14,10 @@ class PlayerInput extends StatefulWidget {
 }
 
 class _PlayerInputState extends State<PlayerInput> {
+  String userInput;
+    
   @override
   Widget build(BuildContext context) {
-    String userInput;
     return Container(
       color: Color(0xff654a07),
 
@@ -40,7 +41,7 @@ class _PlayerInputState extends State<PlayerInput> {
             ),
             SizedBox(height: 20),
 
-            /// Where the player enter there answer
+            /// Where the player enters their answer
             TextField(
               autofocus: true,
               textAlign: TextAlign.center,
@@ -67,10 +68,6 @@ class _PlayerInputState extends State<PlayerInput> {
 
                 if ( (await game_data.gameRoom.once()).value['nextRoom'] == 0 ){
                   // Update my Answer
-                  var user = CitronotPlayer.fromSnapshot( await game_data.player.once() );
-//                user.answer = userInput;
-                  user.start = true;
-                  game_data.player.set(user.toJson());
                   var myAnswer = new CitronotAnswer(game_data.player.key, userInput);
                   var answerRef = game_data.gameRoom.child('answers').push();
                   answerRef.set(myAnswer.toJson());

@@ -101,26 +101,7 @@ class _ResultsState extends State<Results> {
                   ),
 
 
-//                  child: Text(
-//                    'Final Scores',
-//                    style: TextStyle(
-//                      fontSize: 20,
-//                      fontWeight: FontWeight.bold,
-//                    ),
-//                  ),
                   onPressed: () async {
-                    print('Start Game button has been pressed');
-
-                    // Update Player
-                    var myPlayer = CitronotPlayer.fromSnapshot(
-                        await game_data.player.once());
-                    myPlayer.start = true;
-                    game_data.player.set(myPlayer.toJson());
-
-                    // Update Users who have answered
-                    var answered = (await game_data.gameRoom.once()).value['answerCount'];
-                    game_data.gameRoom.child('answerCount').set(answered + 1);
-
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) => Leaderboard()));
                   },

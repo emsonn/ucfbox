@@ -84,7 +84,6 @@ class _AnimatedListSampleState extends State<AnimatedListSample> {
                           onTap: () async {
                             if (game_data.player.key !=
                                 snapshot.value['playerKey']) {
-                              print('HERE!!!');
 
                               if (snapshot.value['correct'] == true) {
                                 await game_data.player
@@ -118,7 +117,6 @@ class _AnimatedListSampleState extends State<AnimatedListSample> {
                               });
 
                               if (result.committed) {
-                                game_data.player.child('start').set(true);
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
