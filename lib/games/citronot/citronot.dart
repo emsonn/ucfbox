@@ -14,6 +14,8 @@ import 'package:ucfbox/models/players/citronot_player.dart';
 import 'package:ucfbox/my_app_bar.dart';
 import 'package:ucfbox/games/citronot/howtoplay.dart';
 import 'package:ucfbox/games/citronot/question.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
+
 
 class Citronot extends StatefulWidget {
   @override
@@ -88,6 +90,7 @@ class _CitronotState extends State<Citronot> {
   _onPlayerAdded(Event event) {
     setState(() {
       playerList.add(CitronotPlayer.fromSnapshot(event.snapshot));
+      // game_data.globalNumPlayers++;
     });
   }
 
@@ -189,47 +192,71 @@ class _CitronotState extends State<Citronot> {
                   ),
                 ),
                 onPressed: () async {
-                  if ()
+                  if ((playerList.length < game_data.citronotMinNumPlayers) || 
+                      (playerList.length > game_data.citronotMaxNumPlayers)) {
+                      print("sdlkjsfdljksdfljkfds ${playerList.length}");
 
-                  print('Start Game button has been pressed');
-                  game_data.citronotNumRounds = 2;
-
-                  // Download Q/As
-                  if ( game_data.status == game_data.Status.host ) {
-                    game_data.questionBank = await Firestore.instance.collection('citronot').getDocuments();
-
-                    game_data.deck = new List<int>();
-                    
-                    // Will randomly generate 3 different question indices for lookup.
-                    while (game_data.deck.length < 3) {
-                      var randomQuestionIndex = new Random();
-                      game_data.deck.add(randomQuestionIndex.nextInt((game_data.citronotNumQuestions)));
-                      game_data.deck.toSet().toList();
-                    }
-
-                    print(game_data.deck);
-                    
-                    var prompt = game_data.questionBank.documents[game_data.question][game_data.deck.last.toString()];
-
-                    game_data.gameRoom.child('prompt').set(prompt);
-
-                    var answer = game_data.questionBank.documents[game_data.answer][game_data.deck.removeLast().toString()];
-                    var correctAnswer = new CitronotAnswer("", answer, correct: true);
-                    var answerRef = game_data.gameRoom.child('answers').push();
-                    answerRef.set(correctAnswer.toJson());
+                      Alert(
+                              context: context,
+                              type: AlertType.error,
+                              title: "UCFBox Alert",
+                              desc: "${game_data.citronotMinNumPlayers} to ${game_data.citronotMaxNumPlayers} players only - sorry!",
+                              buttons: [
+                                DialogButton(
+                                  color: Color.fromRGBO(225, 202, 6, 100),
+                                  child: Text(
+                                    "CHARGE ON!",
+                                    style: TextStyle(
+                                        color: Colors.black, fontSize: 20),
+                                  ),
+                                  onPressed: () => Navigator.pop(context),
+                                  width: 120,
+                                )
+                              ],
+                            ).show();
                   }
 
-                  // Update Player
-                  var myPlayer = CitronotPlayer.fromSnapshot(
-                      await game_data.player.once());
-                  myPlayer.start = true;
-                  game_data.player.set(myPlayer.toJson());
+                  else {
+                    print('Start Game button has been pressed');
+                    game_data.citronotNumRounds = 2;
 
-                  // Update Users who have answered
-                  await game_data.gameRoom.child('answerCount').runTransaction((transaction) async {
-                    transaction.value = (transaction.value ?? 0 ) + 1;
-                    return transaction;
-                  });
+                    // Download Q/As
+                    if ( game_data.status == game_data.Status.host ) {
+                      game_data.questionBank = await Firestore.instance.collection('citronot').getDocuments();
+
+                      game_data.deck = new List<int>();
+                      
+                      // Will randomly generate 3 different question indices for lookup.
+                      while (game_data.deck.length < 3) {
+                        var randomQuestionIndex = new Random();
+                        game_data.deck.add(randomQuestionIndex.nextInt((game_data.citronotNumQuestions)));
+                        game_data.deck.toSet().toList();
+                      }
+
+                      print(game_data.deck);
+                      
+                      var prompt = game_data.questionBank.documents[game_data.question][game_data.deck.last.toString()];
+
+                      game_data.gameRoom.child('prompt').set(prompt);
+
+                      var answer = game_data.questionBank.documents[game_data.answer][game_data.deck.removeLast().toString()];
+                      var correctAnswer = new CitronotAnswer("", answer, correct: true);
+                      var answerRef = game_data.gameRoom.child('answers').push();
+                      answerRef.set(correctAnswer.toJson());
+                    }
+
+                    // Update Player
+                    var myPlayer = CitronotPlayer.fromSnapshot(
+                        await game_data.player.once());
+                    myPlayer.start = true;
+                    game_data.player.set(myPlayer.toJson());
+
+                    // Update Users who have answered
+                    await game_data.gameRoom.child('answerCount').runTransaction((transaction) async {
+                      transaction.value = (transaction.value ?? 0 ) + 1;
+                      return transaction;
+                    });
+                  } // end of else
                 },
               ),
             ),
