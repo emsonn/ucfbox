@@ -76,7 +76,7 @@ class _ResultsState extends State<Results> {
                 flex: 4,
                 child: Text(
 
-                  '\n\n\nTotal Points:',
+                  '\n\n\nTotal Points: ',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 25,
