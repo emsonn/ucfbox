@@ -189,6 +189,8 @@ class _CitronotState extends State<Citronot> {
                   ),
                 ),
                 onPressed: () async {
+                  if ()
+
                   print('Start Game button has been pressed');
                   game_data.citronotNumRounds = 2;
 
@@ -201,7 +203,7 @@ class _CitronotState extends State<Citronot> {
                     // Will randomly generate 3 different question indices for lookup.
                     while (game_data.deck.length < 3) {
                       var randomQuestionIndex = new Random();
-                      game_data.deck.add(randomQuestionIndex.nextInt((game_data.numCitronotQuestions)));
+                      game_data.deck.add(randomQuestionIndex.nextInt((game_data.citronotNumQuestions)));
                       game_data.deck.toSet().toList();
                     }
 

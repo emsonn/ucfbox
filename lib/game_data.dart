@@ -25,10 +25,14 @@ List<int> deck;
 QuerySnapshot questionBank;
 int globalNumPlayers = 0;
 int citronotNumRounds = 2; // 0 inclusive
-int numCitronotQuestions = 23; // 0-22
+int citronotNumQuestions = 23; // 0-22
+int citronotMinNumPlayers = 4;
+int citronotMaxNumPlayers = 8;
 
 // KnightQuips GameData
-int numKnightQuipsQuestions = 49; // 0-48
+int knightQuipsNumQuestions = 49; // 0-48
+int knightQuipsMinNumPlayers = 4;
+int knightQuipsMaxNumPlayers = 8;
 
 // Database References
 DatabaseReference gameRoom;
