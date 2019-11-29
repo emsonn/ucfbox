@@ -12,8 +12,8 @@ import 'package:ucfbox/models/answers/citronot_answer.dart';
 //import 'package:ucfbox/models/game_rooms/citronot_room.dart';
 import 'package:ucfbox/models/players/citronot_player.dart';
 import 'package:ucfbox/my_app_bar.dart';
- import 'package:ucfbox/games/citronot/howtoplay.dart';
- import 'package:ucfbox/games/citronot/question.dart';
+import 'package:ucfbox/games/citronot/howtoplay.dart';
+import 'package:ucfbox/games/citronot/question.dart';
 
 class Citronot extends StatefulWidget {
   @override
@@ -196,11 +196,18 @@ class _CitronotState extends State<Citronot> {
                   if ( game_data.status == game_data.Status.host ) {
                     game_data.questionBank = await Firestore.instance.collection('citronot').getDocuments();
 
-                    game_data.deck = new List<int>.generate(game_data.questionBank.documents.length + 1, (i) => i);
+                    game_data.deck = new List<int>();
+                    
+                    while (game_data.deck.length < 3) {
+                      var randomQuestionIndex = new Random();
+                      game_data.deck.add(randomQuestionIndex.nextInt((game_data.numCitronotQuestions)));
+                      game_data.deck.toSet().toList();
+                    }
 
-                    game_data.deck.shuffle();
-
+                    print(game_data.deck);
+                    
                     var prompt = game_data.questionBank.documents[game_data.question][game_data.deck.last.toString()];
+
                     game_data.gameRoom.child('prompt').set(prompt);
 
                     var answer = game_data.questionBank.documents[game_data.answer][game_data.deck.removeLast().toString()];

@@ -25,6 +25,7 @@ List<int> deck;
 QuerySnapshot questionBank;
 int globalNumPlayers = 0;
 int citronotNumRounds = 2; // 0 inclusive
+int numCitronotQuestions = 23; // 0-22
 
 // Database References
 DatabaseReference gameRoom;
