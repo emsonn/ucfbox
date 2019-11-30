@@ -138,7 +138,7 @@ class _UserNameState extends State<UserName> {
                                 'playerName': playerName,
                                 'score': 0,
                                 'answer': '',
-                                'start': false
+                                'start': false,
                               });
 
                               Navigator.push(
@@ -150,11 +150,15 @@ class _UserNameState extends State<UserName> {
                             }
 
                             /// Knightquips
-                            else if (widget.gameType == "quiplash") {
+                            else if (widget.gameType == "knightQuips") {
+                              print('We made it here');
+                              String test = "testThis";
                               game_data.player.set({
                                 'playerName': playerName,
+                                'q1': "",
+                                'q2': "",
                                 'score': 0,
-                                'start': false
+                                'start': false,
                               });
                               Navigator.push(
                                   context,

@@ -1,102 +1,129 @@
 import 'package:flutter/material.dart';
-import 'package:ucfbox/games/knightquips/cards.dart';
-import 'package:ucfbox/games/knightquips/question2.dart';
+import 'package:ucfbox/games/citronot/player_input.dart';
+//import 'package:ucfbox/games/citronot/citronot.dart' as citronot;
+import 'package:ucfbox/games/citronot/voting_animatedlist.dart';
+import 'package:firebase_database/ui/firebase_animated_list.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:ucfbox/game_data.dart' as game_data;
+import 'package:ucfbox/games/citronot/citronot.dart';
+import 'package:ucfbox/games/citronot/waiting_room.dart';
+import 'package:ucfbox/games/knightquips/player_input.dart';
 
-class QAndAScreen extends StatefulWidget {
-  static const String id = 'q_and_a';
+
+class KQuipsQuestion extends StatefulWidget {
   @override
-  _QAndAScreenState createState() => _QAndAScreenState();
+  _KQuipsQuestionState createState() => new _KQuipsQuestionState();
 }
 
-class _QAndAScreenState extends State<QAndAScreen> {
+
+class _KQuipsQuestionState extends State<KQuipsQuestion>
+{
+  String roundPrompt;
+  String qselect;
+
+  Future<String> getPrompt() async {
+    var roomRef = game_data.gameRoom.once();
+    roomRef.then((snapshot) {
+      roundPrompt = snapshot.value['prompt'];
+    }
+    );
+    print('roundPrompt: $roundPrompt');
+    return roundPrompt;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    if ( game_data.kQuipsRooms == game_data.KQuipsRooms.question1 )
+      qselect = game_data.question1;
+    else
+      qselect = game_data.question2;
+
+    game_data.nextRoom = game_data.NextRoom.voting;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
 
-      ///App bar
-//      appBar: MyAppBar(),
+      /// Container
       body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            /// Question
-            Expanded(
-              child: Container(
+        child: Container(
+          color: Colors.black,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              SizedBox(height: 30),
 
-                margin: EdgeInsets.all(15.0),
-                decoration: BoxDecoration(
-                  color: Colors.black,
-                  borderRadius: BorderRadius.circular(15.0),
-                ),
-                child: Center(
-                  /// 140 character string
-                  child: Text(
-                    'QUESTION 1',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
+              /// Question is displayed
+              Expanded(
+                flex: 1,
+                child: Container(
+                    decoration: BoxDecoration(
                       color: Color(0xFFFFC904),
-                      fontSize: 25.0,
+                      borderRadius: BorderRadius.circular(15.0),
+                    ),
+                    child: new StreamBuilder<Event>(
+                      stream: game_data.gameRoom.child('questions').child(qselect).child('prompt').onValue,
+                      builder: (BuildContext context, AsyncSnapshot<Event> event) {
+                        if (event.data.snapshot != null) {
+                      String prompt = event.data.snapshot.value;
+                      return new Center(
+                          child: Text(
+                            '$prompt',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 40.0,
+                              fontWeight: FontWeight.bold
+                            ),
+                          )
+                        );
+                      }
+                      return new Center(
+                          child: Text(
+                            'Loading...',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 40.0,
+                                fontWeight: FontWeight.bold
+                            ),
+                          )
+                        );
+                      }
+                    ),
+                ),
+              ),
+
+              SizedBox(height: 100),
+
+              /// Answer Button
+              Expanded(
+                flex: 0,
+                child: RaisedButton(
+                  color: Color(0xFFFFC904),
+                  child: Text(
+                    'Answer',
+//                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 40.0,
                       fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-
-            /// Answer for Player A
-            Expanded(
-              child: AnswerCard(
-                cardColor: Color(0xFFFFC904),
-                onPress: () {
-                  setState(() {
-                    print('PLAYER A ANSWER');
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => QAndAScreens()));
-                  });
-
-//                  Navigator.pushNamed(context, RoundWinner.id);
-                },
-                cardChild: Center(
-                  child: Text(
-                    'Player A Answer',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
                       color: Colors.black,
-                      fontSize: 25.0,
-                      fontWeight: FontWeight.w600,
                     ),
                   ),
+                  onPressed: () async {
+                    showModalBottomSheet(
+                        context: context, builder: (context) => KQuipsPlayerInput());
+                  }, // OnPressed
                 ),
               ),
-            ),
 
-            /// Answer for Player B
-            Expanded(
-              child: AnswerCard(
-                cardColor: Color(0xFFFFC904),
-                onPress: () {
-                  setState(() {
-                    print('PLAYER B ANSWER');
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => QAndAScreens()));
-//                    Navigator.pushReplacementNamed(context, RoundWinner.id);
-                  });
-                },
-                cardChild: Center(
-                  child: Text(
-                    'Player B Answer',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 25.0,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ],
+                SizedBox(height: 70),
+            ],
+          ),
         ),
       ),
     );

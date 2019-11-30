@@ -26,17 +26,19 @@ class CreateRoom extends StatelessWidget {
         },
       ),
 
-      /// Quiplash
+      /// KnightQuips
       GameCard(
         label: "KNIGHT\nQUIPS",
         color: Color(0xFF3DDA03),
-        gameType: "quiplash",
+        gameType: "knightQuips",
         gameRoomTemplate: {
+          "gameType": "knightQuips",
+          "setup": false,
           "noOfPlayers": 0,
-          "gameType": "quiplash",
-          "players": [],
-          "currentFact": "",
+          "nextRoom": 0,
           "answerCount": 0,
+          "players":[],
+          "questions":[]
         },
       ),
 
