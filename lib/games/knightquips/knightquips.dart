@@ -1,4 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_database/ui/firebase_list.dart';
 import 'package:flutter/material.dart';
+import 'package:ucfbox/games/knightquips/question.dart';
+import 'package:ucfbox/models/game_rooms/knightquips_room.dart';
 import 'package:ucfbox/models/players/knightquips_player.dart';
 import 'package:ucfbox/my_app_bar.dart';
 import 'package:ucfbox/games/knightquips/howtoplay.dart';
@@ -21,32 +25,157 @@ class _KQState extends State<KnightQuips> {
   KnightQuipsPlayer player;
   DatabaseReference playerRef;
 
+  var listen1;
+  var listen2;
+  var startListener;
+  var beginSetup;
+  var nextRoomListener;
+
   @override
   void initState() {
     super.initState();
-    player = new KnightQuipsPlayer("", 0, false);
     playerRef = game_data.gameRoom.child('players');
-    playerRef.onChildAdded.listen(_onPlayerAdded);
-    playerRef.onChildChanged.listen(_onPlayerChanged);
+    listen1 = playerRef.onChildAdded.listen(_onPlayerAdded);
+    listen2 = playerRef.onChildChanged.listen(_onPlayerChanged);
+    startListener = game_data.gameRoom.onChildChanged.listen(_startGame);
+
+    // Setup Gamewide Game leave room listern for host, DO NOT DISPOSE!!!
+    // This should probably be set up elsewhere when we have time
+    if (game_data.status == game_data.Status.host){
+      nextRoomListener = game_data.gameRoom.child('nextRoom').onValue.listen(_onNext);
+      // Ready
+      beginSetup = game_data.gameRoom.child('answerCount').onValue.listen(_onCountChanged);
+    }
+
   }
 
-  _onPlayerAdded(Event event) {
-    setState(() {
-      playerList.add(KnightQuipsPlayer.fromSnapshot(event.snapshot));
-    });
+  _onNext(Event event) async {
+    if ((await game_data.gameRoom.once()).value['noOfPlayers'] ==
+        (await game_data.gameRoom.once()).value['nextRoom']){
+      game_data.gameRoom.child('nextRoom').set(0);
+      game_data.gameRoom.child('answerCount').set(0);
+    }
   }
 
-  _onPlayerChanged(Event event) {
-    var old = playerList.singleWhere((entry) {
-      return entry.key == event.snapshot.key;
+  _startGame(Event event) async {
+    if ((await game_data.gameRoom.once()).value['setup'] == true){
+    game_data.globalNumPlayers =
+      (await game_data.gameRoom.once()).value['noOfPlayers'];
+
+    final TransactionResult result =
+    await game_data.gameRoom.child('nextRoom').runTransaction((
+        transaction) async {
+      transaction.value = (transaction.value ?? 0) + 1;
+      return transaction;
     });
-    setState(() {
-      playerList[playerList.indexOf(old)] =
-          KnightQuipsPlayer.fromSnapshot(event.snapshot);
-    });
+
+    if (result.committed) {
+      listen1.cancel();
+      listen2.cancel();
+      startListener.cancel();
+
+      if (game_data.status == game_data.Status.host)
+        beginSetup.cancel();
+
+      // Set var back to false
+      var myPlayer = KnightQuipsPlayer.fromSnapshot(
+          await game_data.player.once());
+      myPlayer.start = false;
+      game_data.question1 = myPlayer.question1;
+      game_data.question2 = myPlayer.question2;
+      game_data.player.set(myPlayer.toJson());
+
+      // start question1
+      game_data.kQuipsRooms = game_data.KQuipsRooms.question1;
+
+      // Continue
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => KQuipsQuestion()));
+    }
+    }
   }
 
-  Color getColor(bool state) {}
+  _onCountChanged(Event event) async {
+    game_data.globalNumPlayers =
+      (await game_data.gameRoom.once()).value['noOfPlayers'];
+
+    if ((await game_data.gameRoom.once()).value['answerCount'] ==
+        game_data.globalNumPlayers && game_data.globalNumPlayers > 0) {
+
+      // Get Questions from Firestore
+      game_data.questionBank = await Firestore.instance.collection('knightquips').getDocuments();
+
+      // Generate List of Topics
+      List<int> allQuestions = new List<int>.generate((game_data.numKQuipsQuestions), (i) => i);
+      allQuestions.shuffle();
+
+      // Select Questions to use
+      game_data.questionList = new List();
+      for(int i = 0; i < game_data.globalNumPlayers; i++)
+        game_data.questionList.add(allQuestions.removeLast());
+
+      // Push Questions to the Database
+      List<DatabaseReference> questionKeys = new List<DatabaseReference>();
+      game_data.questionList.forEach((i) {
+        questionKeys.add( game_data.gameRoom.child('questions').push());
+        questionKeys.last.set({
+          'prompt': game_data.questionBank.documents[game_data.topics][i.toString()],
+          'answers': []
+        }
+        );
+      }
+      );
+      
+      // Implementing sliding window in a terrible way
+      var roomModel = KQuipsRoom.fromSnapshot(await game_data.gameRoom.once());
+
+      print(roomModel.toJson());
+
+      // Assign first question
+      var slidingWindowKeys = new List<DatabaseReference>();
+      questionKeys.forEach((i) {
+        slidingWindowKeys.add(i);
+      });
+
+      // Move last item to first for second question
+      questionKeys.insert(0, questionKeys.removeLast());
+
+      // Assign second question
+      var index = 0;
+      questionKeys.forEach((i) {
+        slidingWindowKeys.insert(index, i);
+        index += 2;
+      });
+
+      roomModel.players.forEach((key, value) async {
+        var snap = await playerRef.child(key).once();
+        print('key pushing to ${snap.value}');
+        print('lastval: ${slidingWindowKeys.last.key}');
+        playerRef.child(key).child('q1').set(slidingWindowKeys.removeLast().key);
+        playerRef.child(key).child('q2').set(slidingWindowKeys.removeLast().key);
+      });
+      
+      // Alert other users game is ready to begin
+      game_data.gameRoom.child('setup').set(true);
+      game_data.gameRoom.child('answerCount').set(0);
+    }
+  }
+
+    _onPlayerAdded(Event event) {
+      setState(() {
+        playerList.add(KnightQuipsPlayer.fromSnapshot(event.snapshot));
+      });
+    }
+
+    _onPlayerChanged(Event event) {
+      var old = playerList.singleWhere((entry) {
+        return entry.key == event.snapshot.key;
+      });
+      setState(() {
+        playerList[playerList.indexOf(old)] =
+            KnightQuipsPlayer.fromSnapshot(event.snapshot);
+      });
+    }
 
   @override
   Widget build(BuildContext context) {
@@ -127,8 +256,20 @@ class _KQState extends State<KnightQuips> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                onPressed: () {
+                onPressed: () async {
                   print('Start Game button has been pressed');
+
+                  // Update Player
+                  var myPlayer = KnightQuipsPlayer.fromSnapshot(
+                      await game_data.player.once());
+                  myPlayer.start = true;
+                  game_data.player.set(myPlayer.toJson());
+
+                  // Update Users who have answered
+                  await game_data.gameRoom.child('answerCount').runTransaction((transaction) async {
+                    transaction.value = (transaction.value ?? 0 ) + 1;
+                    return transaction;
+                  });
                 },
               ),
             ),
@@ -141,99 +282,3 @@ class _KQState extends State<KnightQuips> {
     );
   }
 }
-
-//void Quiplash() => runApp(KnightQuips());
-
-//class KnightQuips extends StatelessWidget {
-//  @override
-//  Widget build(BuildContext context) {
-//    return new MaterialApp(
-//        home: KnightQuipsHomeScreen());
-//  }
-//}
-
-//class KnightQuipsHomeScreen extends StatelessWidget {
-//  @override
-//  Widget build(BuildContext context) {
-//    return new Scaffold(
-//      backgroundColor: Color(0xFFFFC904),
-//      appBar: MyAppBar(),
-////
-////        )),
-//      body: Center(
-//        child: Column(
-//
-//          children: <Widget>[
-//            Expanded(
-//              flex: 3,
-//              child: Image.asset(
-//                'images/knightquips.png',
-//              ),
-//            ),
-//
-//            Expanded(
-//              flex:3,
-//              child: Text(
-//                'PLAYERS',
-//                textAlign: TextAlign.center,
-//                style: TextStyle(
-//                  fontSize: 25,
-//                  fontWeight: FontWeight.bold,
-//                ),
-//              ),
-//            ),
-//
-//            SizedBox(
-//              height: 60,
-//            ),
-//            Expanded(
-//              flex: 0,
-//              child: RaisedButton(
-//                textColor: Color(0xFFFFC904),
-//                color: Colors.black,
-//                child: Text(
-//                  'How to Play',
-//                  style: TextStyle(
-//                    fontSize: 20,
-//                    fontWeight: FontWeight.bold,
-//                  ),
-//                ),
-//                onPressed: () {
-//                  Navigator.push(context,
-//                      MaterialPageRoute(builder: (context) => HowToPlay()));
-//                },
-//              ),
-//            ),
-//            SizedBox(
-//              height: 10,
-//            ),
-//
-//            Expanded(
-//              flex: 0,
-//              child: RaisedButton(
-//                textColor: Color(0xFFFFC904),
-//
-//                color: Colors.black,
-//                child: Text(
-//                  'Start Game',
-//                  style: TextStyle(
-//                    fontSize: 20,
-//                    fontWeight: FontWeight.bold,
-//                  ),
-//                ),
-//                onPressed: () {
-//                  print('Start Game button has been pressed');
-//                  Navigator.push(context,
-//                      MaterialPageRoute(builder: (context) => QAndAScreen()));
-//                },
-//              ),
-//            ),
-//            SizedBox(
-//              height: 30,
-//            ),
-//          ],
-//        ),
-//      ),
-//    );
-//  }
-//}

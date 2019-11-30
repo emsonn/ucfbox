@@ -14,18 +14,35 @@ enum NextRoom {
   question
 }
 
+enum KQuipsRooms {
+  question1,
+  question2,
+  voting,
+  leaderboard
+}
+
 // Question/Answer
 final answer = 0;
 final question = 1;
+final topics = 0;
 
 // CitroNot GameData -- Maybe moved to more General as other games progress.
 Status status;
 NextRoom nextRoom;
 List<int> deck;
+List<int> questionList;
 QuerySnapshot questionBank;
 int globalNumPlayers = 0;
 int citronotNumRounds = 2; // 0 inclusive
 int numCitronotQuestions = 23; // 0-22
+
+// Knight Quips GameData
+int numKQuipsQuestions = 48;  // 0-48
+String question1;
+String question2;
+KQuipsRooms kQuipsRooms;
+List<String> needToVoteFor;
+
 
 // Database References
 DatabaseReference gameRoom;
