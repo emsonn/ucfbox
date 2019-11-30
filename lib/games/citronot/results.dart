@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:ucfbox/game_data.dart' as game_data;
 import 'package:ucfbox/models/players/citronot_player.dart';
-import 'package:ucfbox/my_app_bar.dart';
 //import 'package:ucfbox/games/citronot/question.dart';
 import 'package:ucfbox/games/citronot/leaderboard.dart';
 //import 'package:firebase_database/ui/firebase_animated_list.dart';
@@ -27,7 +26,6 @@ class _ResultsState extends State<Results> {
   Widget build(BuildContext context) {
     return new Scaffold(
       backgroundColor: Color(0xFFFFC904),
-      appBar: MyAppBar(),
 
       body: Center(
         child: SafeArea(

@@ -2,9 +2,7 @@ import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:ucfbox/game_data.dart' as game_data;
-import 'package:ucfbox/games/citronot/howtoplay.dart';
 import 'package:ucfbox/models/players/citronot_player.dart';
-import 'package:ucfbox/my_app_bar.dart';
 import 'package:ucfbox/games/citronot/voting_animatedlist.dart';
 import 'package:ucfbox/games/citronot/results.dart';
 import 'package:ucfbox/games/citronot/question.dart';
@@ -92,8 +90,6 @@ class _WaitingState extends State<WaitingRoom> {
   Widget build(BuildContext context) {
     return new Scaffold(
       backgroundColor: Color(0xFFFFC904),
-      appBar: MyAppBar(),
-
       body: SafeArea(
         child: Column(
           children: <Widget>[
