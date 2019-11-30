@@ -29,159 +29,7 @@ class _UserNameState extends State<UserName> {
         '\n User Name Page\nThe gameRoomCode being passed is: ${widget.gameRoomCode}');
   }
 
-//   @override
-//   Widget build(BuildContext context) {
-//     /// Put one widget on top of another
-//     return Stack(
-//       children: <Widget>[
-//         Image.asset('images/classroom.png', fit: BoxFit.cover),
-//         Scaffold(
-//           resizeToAvoidBottomInset: false,
-//           backgroundColor: Colors.transparent,
-//           appBar: MyAppBar(),
-//           body: SafeArea(
-//             child: Padding(
-//               padding: EdgeInsets.fromLTRB(50, 50, 50, 100),
-//               child: Card(
-//                 color: Color(0xFFFFC904),
-//                 child: Padding(
-//                   padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
-
-//                   /// Organize things on a vertical orientation
-//                   child: Column(
-//                     mainAxisAlignment: MainAxisAlignment.center,
-//                     crossAxisAlignment: CrossAxisAlignment.stretch,
-//                     children: <Widget>[
-//                       Padding(
-//                         padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
-
-//                         /// Player enter name
-//                         child: Text(
-//                           "ENTER\nYOUR\nUSER NAME",
-//                           style: TextStyle(
-//                               fontSize: 30, fontWeight: FontWeight.bold),
-//                         ),
-//                       ),
-
-//                       /// Player enter the name
-//                       TextField(
-//                         autocorrect: false,
-//                         onChanged: (text) {
-//                           playerName = text;
-//                         },
-                        
-//                         inputFormatters: [
-//                           LengthLimitingTextInputFormatter(12),
-//                           WhitelistingTextInputFormatter(RegExp("[a-zA-Z0-9]")),
-//                         ],
-
-//                         decoration: InputDecoration(
-//                             border: OutlineInputBorder(
-//                               borderSide:
-//                                   BorderSide(color: Colors.white, width: 2.5),
-//                             ),
-//                             hintText: "1-12 characters"),
-//                       ),
-
-//                       ///  I added the Navigator.push()
-                      // FlatButton(
-                      //   onPressed: () {
-                          
-                      //     print(
-                      //         'FlatButton gameRoomCode is ${widget.gameRoomCode}');
-                      //     print('FlatButton playerName is $playerName');
-
-                      //     game_data.player = FirebaseDatabase
-                      //         .instance
-                      //         .reference()
-                      //         .child(widget.gameRoomCode)
-                      //         .child('players')
-                      //         .push();
-
-                      //     DatabaseReference noOfPlayers = FirebaseDatabase
-                      //         .instance
-                      //         .reference()
-                      //         .child(widget.gameRoomCode)
-                      //         .child('noOfPlayers');
-
-                      //     game_data.gameRoom = FirebaseDatabase
-                      //         .instance
-                      //         .reference()
-                      //         .child(widget.gameRoomCode);
-
-                      //     noOfPlayers.once().then((DataSnapshot snapshot) {
-                      //       noOfPlayers.set(snapshot.value + 1);
-                      //     });
-
-                      //     /// Citronot
-                      //     if (widget.gameType == "citronot") {
-                      //       game_data.player.set({
-                      //         'playerName': playerName,
-                      //         'score': 0,
-                      //         'answer': '',
-                      //         'start': false
-                      //       });
-                      //       Navigator.push(
-                      //         context,
-                      //         MaterialPageRoute(
-                      //           builder: (context) => Citronot(),
-                      //         ),
-                      //       );
-                      //     }
-
-                      //     /// Knightquips
-                      //     else if (widget.gameType == "quiplash") {
-                      //       game_data.player.set({
-                      //         'playerName': playerName,
-                      //         'score': 0,
-                      //         'start': false
-                      //       });
-                      //       Navigator.push(
-                      //           context,
-                      //           MaterialPageRoute(
-                      //               builder: (context) => KnightQuips()));
-                      //     }
-
-                      //     /// NNN_Knightro
-                      //     else if (widget.gameType == "nightNightKnightro") {
-                      //       game_data.player.set({
-                      //         'playerName': playerName,
-                      //         'alive': true,
-                      //         'role': '',
-                      //         'votes': 0,
-                      //         'start': false
-                      //       });
-                      //       Navigator.push(
-                      //           context,
-                      //           MaterialPageRoute(
-                      //               builder: (context) =>
-                      //                   NightNightKnightro()));
-                      //     }
-
-                      //     /// You suck
-                      //     else {
-                      //       print('you failed');
-                      //     }
-                      //   },
-                      //   color: Colors.black,
-                      //   child: Text(
-                      //     "CHARGE ON!",
-                      //     style: TextStyle(color: Colors.white),
-                      //   ),
-//                       ),
-//                     ],
-//                   ),
-//                 ),
-//               ),
-//             ),
-//           ),
-//         ),
-//       ],
-//     );
-//   }
-// }
-
- @override
+  @override
   Widget build(BuildContext context) {
     return Stack(
       children: <Widget>[
@@ -208,9 +56,9 @@ class _UserNameState extends State<UserName> {
                         child: Text(
                           "ENTER\nYOUR\nUSER NAME",
                           style: TextStyle(
-                            fontSize: 30, fontWeight: FontWeight.bold),
+                              fontSize: 30, fontWeight: FontWeight.bold),
                         ),
-                      ),   
+                      ),
 
                       /// Box for entering message
                       TextField(
@@ -218,7 +66,7 @@ class _UserNameState extends State<UserName> {
                         onChanged: (text) {
                           playerName = text;
                         },
-                        
+
                         inputFormatters: [
                           LengthLimitingTextInputFormatter(12),
                           WhitelistingTextInputFormatter(RegExp("[a-zA-Z0-9]")),
@@ -234,12 +82,13 @@ class _UserNameState extends State<UserName> {
 
                         /// Input playerName is empty.
                         onSubmitted: (gameCode) async {
-                          if (playerName.length ==  0) {
+                          if (playerName.length == 0) {
                             Alert(
                               context: context,
                               type: AlertType.error,
                               title: "UCFBox Alert",
-                              desc: "Please enter in 1-12 characters for your username.",
+                              desc:
+                                  "Please enter in 1-12 characters for your username.",
                               buttons: [
                                 DialogButton(
                                   color: Color.fromRGBO(225, 202, 6, 100),
@@ -256,29 +105,28 @@ class _UserNameState extends State<UserName> {
                           }
 
                           // Add in case to check for duplicate names.
-                         
+
                           /// Input playerName is valid
                           else {
-                            print('FlatButton gameRoomCode is ${widget.gameRoomCode}');
+                            print(
+                                'FlatButton gameRoomCode is ${widget.gameRoomCode}');
                             print('FlatButton playerName is $playerName');
 
-                            game_data.player = FirebaseDatabase
-                              .instance
-                              .reference()
-                              .child(widget.gameRoomCode)
-                              .child('players')
-                              .push();
+                            game_data.player = FirebaseDatabase.instance
+                                .reference()
+                                .child(widget.gameRoomCode)
+                                .child('players')
+                                .push();
 
                             DatabaseReference noOfPlayers = FirebaseDatabase
-                              .instance
-                              .reference()
-                              .child(widget.gameRoomCode)
-                              .child('noOfPlayers');
+                                .instance
+                                .reference()
+                                .child(widget.gameRoomCode)
+                                .child('noOfPlayers');
 
-                            game_data.gameRoom = FirebaseDatabase
-                              .instance
-                              .reference()
-                              .child(widget.gameRoomCode);
+                            game_data.gameRoom = FirebaseDatabase.instance
+                                .reference()
+                                .child(widget.gameRoomCode);
 
                             noOfPlayers.once().then((DataSnapshot snapshot) {
                               noOfPlayers.set(snapshot.value + 1);
@@ -292,7 +140,7 @@ class _UserNameState extends State<UserName> {
                                 'answer': '',
                                 'start': false,
                               });
-                            
+
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
@@ -328,10 +176,10 @@ class _UserNameState extends State<UserName> {
                                 'start': false
                               });
                               Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                    NightNightKnightro()));
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          NightNightKnightro()));
                             }
 
                             /// Failure condition
@@ -340,6 +188,108 @@ class _UserNameState extends State<UserName> {
                             }
                           }
                         },
+                      ),
+
+                      FlatButton(
+                        onPressed: () async {
+                          if (playerName.length == 0) {
+                            Alert(
+                              context: context,
+                              type: AlertType.error,
+                              title: "UCFBox Alert",
+                              desc:
+                                  "Please enter in 1-12 characters for your username.",
+                              buttons: [
+                                DialogButton(
+                                  color: Color.fromRGBO(225, 202, 6, 100),
+                                  child: Text(
+                                    "CHARGE ON!",
+                                    style: TextStyle(
+                                        color: Colors.black, fontSize: 20),
+                                  ),
+                                  onPressed: () => Navigator.pop(context),
+                                  width: 120,
+                                )
+                              ],
+                            ).show();
+                          } else {
+                            print(
+                                'FlatButton gameRoomCode is ${widget.gameRoomCode}');
+                            print('FlatButton playerName is $playerName');
+
+                            game_data.player = FirebaseDatabase.instance
+                                .reference()
+                                .child(widget.gameRoomCode)
+                                .child('players')
+                                .push();
+
+                            DatabaseReference noOfPlayers = FirebaseDatabase
+                                .instance
+                                .reference()
+                                .child(widget.gameRoomCode)
+                                .child('noOfPlayers');
+
+                            game_data.gameRoom = FirebaseDatabase.instance
+                                .reference()
+                                .child(widget.gameRoomCode);
+
+                            noOfPlayers.once().then((DataSnapshot snapshot) {
+                              noOfPlayers.set(snapshot.value + 1);
+                            });
+
+                            /// Citronot
+                            if (widget.gameType == "citronot") {
+                              game_data.player.set({
+                                'playerName': playerName,
+                                'score': 0,
+                                'answer': '',
+                                'start': false
+                              });
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => Citronot(),
+                                ),
+                              );
+                            }
+
+                            /// Knightquips
+                            else if (widget.gameType == "quiplash") {
+                              game_data.player.set({
+                                'playerName': playerName,
+                                'score': 0,
+                                'start': false
+                              });
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => KnightQuips()));
+                            }
+
+                            /// NNN_Knightro
+                            else if (widget.gameType == "nightNightKnightro") {
+                              game_data.player.set({
+                                'playerName': playerName,
+                                'alive': true,
+                                'role': '',
+                                'votes': 0,
+                                'start': false
+                              });
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          NightNightKnightro()));
+                            } else {
+                              print('you failed');
+                            }
+                          } // on pressed ends
+                        },
+                        color: Colors.black,
+                        child: Text(
+                          "CHARGE ON!",
+                          style: TextStyle(color: Colors.white),
+                        ),
                       ),
                     ],
                   ),
