@@ -2,11 +2,9 @@ import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:ucfbox/game_data.dart' as game_data;
-import 'package:ucfbox/games/citronot/howtoplay.dart';
 import 'package:ucfbox/models/players/citronot_player.dart';
-import 'package:ucfbox/my_app_bar.dart';
 import 'package:ucfbox/games/citronot/voting_animatedlist.dart';
-import 'package:ucfbox/games/citronot/results.dart';
+import 'package:ucfbox/games/citronot/leaderboard.dart';
 import 'package:ucfbox/games/citronot/question.dart';
 import 'package:ucfbox/models/answers/citronot_answer.dart';
 
@@ -67,9 +65,11 @@ class _WaitingState extends State<WaitingRoom> {
           Navigator.push(context,
               MaterialPageRoute(builder: (context) => AnimatedListSample()));
         }
+
+      /// This used to be results
       else if (game_data.nextRoom == game_data.NextRoom.leaderboard){
         Navigator.push(context,
-        MaterialPageRoute(builder: (context) => Results()));
+        MaterialPageRoute(builder: (context) => Leaderboard()));
       }
       else if( game_data.nextRoom == game_data.NextRoom.question) {
         Navigator.push(context,
@@ -92,8 +92,6 @@ class _WaitingState extends State<WaitingRoom> {
   Widget build(BuildContext context) {
     return new Scaffold(
       backgroundColor: Color(0xFFFFC904),
-      appBar: MyAppBar(),
-
       body: SafeArea(
         child: Column(
           children: <Widget>[

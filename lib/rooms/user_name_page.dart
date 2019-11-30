@@ -1,7 +1,7 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:ucfbox/games/citronot/citronot.dart';
-import 'package:ucfbox/models/game_rooms/citronot_room.dart' as citronot_room;
+//import 'package:ucfbox/models/game_rooms/citronot_room.dart' as citronot_room;
 import 'package:ucfbox/games/night_night_knightro/night_night_knightro.dart';
 import 'package:ucfbox/games/knightquips/knightquips.dart';
 import 'package:ucfbox/game_data.dart' as game_data;
@@ -152,7 +152,7 @@ class _UserNameState extends State<UserName> {
                             /// Knightquips
                             else if (widget.gameType == "knightQuips") {
                               print('We made it here');
-                              String test = "testThis";
+//                              String test = "testThis";
                               game_data.player.set({
                                 'playerName': playerName,
                                 'q1': "",
@@ -254,7 +254,7 @@ class _UserNameState extends State<UserName> {
                             }
 
                             /// Knightquips
-                            else if (widget.gameType == "quiplash") {
+                            else if (widget.gameType == "knightQuips") {
                               game_data.player.set({
                                 'playerName': playerName,
                                 'score': 0,
