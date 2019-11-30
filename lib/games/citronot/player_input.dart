@@ -1,12 +1,12 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:ucfbox/game_data.dart';
-import 'package:ucfbox/games/citronot/voting_animatedlist.dart';
+//import 'package:ucfbox/games/citronot/voting_animatedlist.dart';
 import 'package:ucfbox/models/answers/citronot_answer.dart';
-import 'package:ucfbox/models/players/citronot_player.dart';
+//import 'package:ucfbox/models/players/citronot_player.dart';
 import 'package:ucfbox/game_data.dart' as game_data;
 import 'package:ucfbox/games/citronot/waiting_room.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 class PlayerInput extends StatefulWidget {
   @override
@@ -15,7 +15,7 @@ class PlayerInput extends StatefulWidget {
 
 class _PlayerInputState extends State<PlayerInput> {
   String userInput;
-    
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -46,7 +46,9 @@ class _PlayerInputState extends State<PlayerInput> {
               autofocus: true,
               textAlign: TextAlign.center,
               maxLength: 140,
-              inputFormatters: [LengthLimitingTextInputFormatter(140),],
+              inputFormatters: [
+                LengthLimitingTextInputFormatter(140),
+              ],
               onChanged: (input) {
                 print('$input');
                 userInput = input;
@@ -61,31 +63,50 @@ class _PlayerInputState extends State<PlayerInput> {
                   style: TextStyle(
                       color: Color(0xFFFFC904),
                       fontSize: 25.0,
-                      fontWeight: FontWeight.bold
-                  )),
+                      fontWeight: FontWeight.bold)),
               onPressed: () async {
                 print('The user input is the following: $userInput');
 
-                if ( (await game_data.gameRoom.once()).value['nextRoom'] == 0 ){
+                if (userInput.length == 0) {
+                  Alert(
+                    context: context,
+                    type: AlertType.error,
+                    title: "UCFBox Alert",
+                    desc: "Cannot enter a blank answer. Please try again.",
+                    buttons: [
+                      DialogButton(
+                        color: Color.fromRGBO(225, 202, 6, 100),
+                        child: Text(
+                          "CHARGE ON!",
+                          style: TextStyle(color: Colors.black, fontSize: 20),
+                        ),
+                        onPressed: () => Navigator.pop(context),
+                        width: 120,
+                      )
+                    ],
+                  ).show();
+                }
+
+                else if ((await game_data.gameRoom.once()).value['nextRoom'] == 0) {
                   // Update my Answer
-                  var myAnswer = new CitronotAnswer(game_data.player.key, userInput);
+                  var myAnswer =
+                  new CitronotAnswer(game_data.player.key, userInput);
                   var answerRef = game_data.gameRoom.child('answers').push();
                   answerRef.set(myAnswer.toJson());
 
                   // Update Answer Count
                   // Update Users who have answered
-                  final TransactionResult transactionResult =
-                    await game_data
-                        .gameRoom
-                        .child('answerCount')
-                        .runTransaction((transaction) async {
-                    transaction.value = (transaction.value ?? 0 ) + 1;
+                  final TransactionResult transactionResult = await game_data
+                      .gameRoom
+                      .child('answerCount')
+                      .runTransaction((transaction) async {
+                    transaction.value = (transaction.value ?? 0) + 1;
                     return transaction;
                   });
 
-                  if (transactionResult.committed )
+                  if (transactionResult.committed)
                     Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => WaitingRoom()));
+                        MaterialPageRoute(builder: (context) => WaitingRoom()));
                 }
               },
             ),
