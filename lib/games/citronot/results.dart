@@ -3,7 +3,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:ucfbox/game_data.dart' as game_data;
 import 'package:ucfbox/models/players/citronot_player.dart';
 import 'package:ucfbox/my_app_bar.dart';
-import 'package:ucfbox/games/citronot/question.dart';
+//import 'package:ucfbox/games/citronot/question.dart';
 import 'package:ucfbox/games/citronot/leaderboard.dart';
 //import 'package:firebase_database/ui/firebase_animated_list.dart';
 class Results extends StatefulWidget {
@@ -35,7 +35,7 @@ class _ResultsState extends State<Results> {
             children: <Widget>[
               Expanded(
 
-                child: Text('POINTS RESULTS:',
+                child: Text('RESULTS',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 35,
@@ -57,33 +57,18 @@ class _ResultsState extends State<Results> {
 
               /// Need an if statement seeing if they chose correct answer or not
 
-
-              Expanded(
-                flex: 2,
-                child: Text(
-
-                  '\n\nBased on if players chose your lie:',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 25,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-
-
-              Expanded(
-                flex: 4,
-                child: Text(
-
-                  '\n\n\nTotal Points: ',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 25,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
+//              Expanded(
+//                flex: 2,
+//                child: Text(
+//
+//                  '\n\nBased on if players chose your lie:',
+//                  textAlign: TextAlign.center,
+//                  style: TextStyle(
+//                    fontSize: 25,
+//                    fontWeight: FontWeight.bold,
+//                  ),
+//                ),
+//              ),
 
               Expanded(
                 flex: 0,
@@ -93,7 +78,7 @@ class _ResultsState extends State<Results> {
 
                   /// IF STATEMENT SEEING IF THIS IS THE FINAL ROUND OR NOT
                   child: Text(
-                    'Current Round Leaderboard',
+                    '\nCurrent Round Leaderboard\n',
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
