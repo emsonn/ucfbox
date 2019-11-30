@@ -1,6 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:ucfbox/models/players/nightNightKnightro_player.dart';
+import 'package:ucfbox/game_data.dart' as game_data;
 
-class RoleAssignment extends StatelessWidget {
+class RoleAssignment extends StatefulWidget {
+  @override
+  _RoleAssignmentState createState() => _RoleAssignmentState();
+}
+
+class _RoleAssignmentState extends State<RoleAssignment> {
+  NightNightKnightroPlayer player;
+  Map<String, NightNightKnightroPlayer> players;
+
+  @override
+  void initState() {
+    super.initState();
+    players = new Map();
+    game_data.player.once().then((DataSnapshot snapshot) {
+      player = NightNightKnightroPlayer.fromSnapshot(snapshot);
+    });
+//    game_data.gameRoom.child('players').onChildAdded.listen(_onPlayerAdded);
+//    game_data.gameRoom.child('players').onChildChanged.listen(_onPlayersUpdate);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

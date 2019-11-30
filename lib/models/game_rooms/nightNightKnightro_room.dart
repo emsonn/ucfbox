@@ -7,6 +7,7 @@ class NightNightKnightroRoom {
   String key;
   String gameType;
   Map players;
+  List randomRoles;
   int alivePlayersCount;
   int voteCount;
   String killed;
@@ -17,11 +18,23 @@ class NightNightKnightroRoom {
 
   NightNightKnightroRoom.fromSnapshot(DataSnapshot snapshot)
       : key = snapshot.key,
-        players = snapshot.value["players"],
+        players = playersMap(snapshot),
+        randomRoles = snapshot.value["randomRoles"],
         alivePlayersCount = snapshot.value["alivePlayersCount"],
         voteCount = snapshot.value["voteCount"],
         killed = snapshot.value["killed"],
         isDaytime = snapshot.value["isDaytime"];
+
+  static Map playersMap(DataSnapshot snapshot) {
+    Map<String, NightNightKnightroPlayer> players = Map();
+    snapshot.value["players"].forEach((k, v) => {
+          players.putIfAbsent(k, () {
+            return NightNightKnightroPlayer.fromJson(v);
+          })
+        });
+
+    return players;
+  }
 
   toJson() {
     return {

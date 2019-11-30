@@ -11,14 +11,59 @@ class NightNightKnightro extends StatefulWidget {
 }
 
 class _NightNightKnightroState extends State<NightNightKnightro> {
-  List<NightNightKnightroPlayer> players;
+  NightNightKnightroPlayer player;
+  Map<String, NightNightKnightroPlayer> players;
+  int randomSeed;
+
   @override
   void initState() {
     super.initState();
-    game_data.gameRoom.child('players').onChildAdded.listen(_onEntryAdded);
+    players = new Map();
+    game_data.player.once().then((DataSnapshot snapshot) {
+      player = NightNightKnightroPlayer.fromSnapshot(snapshot);
+    });
+    randomSeed = players.length - 1;
+    game_data.gameRoom.child('players').onChildAdded.listen(_onPlayerAdded);
+    game_data.gameRoom.child('players').onChildChanged.listen(_onPlayersUpdate);
   }
 
-  _onEntryAdded(Event event) {}
+  _onPlayerAdded(Event event) {
+    print('onPlayerAdded');
+    if (players != null) {
+      players.putIfAbsent(event.snapshot.key, () {
+        return NightNightKnightroPlayer.fromSnapshot(event.snapshot);
+      });
+      setState(() {
+        players = players;
+      });
+    }
+  }
+
+  _onPlayersUpdate(Event event) {
+    setState(() {
+      players[event.snapshot.key].start = !players[event.snapshot.key].start;
+    });
+    var starts = 0;
+    players.forEach((k, v) => {v.start ? starts++ : null});
+    if (starts == players.length) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => RoleAssignment()),
+      );
+    }
+  }
+
+  _onPlayerStart(Event event) {}
+
+  handleStart() {
+    game_data.player.update({'start': !player.start});
+    setState(() {
+      player.start = !player.start;
+    });
+//    game_data.player.once().then((DataSnapshot snapshot) {
+//      print(snapshot.value);
+//    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,8 +76,54 @@ class _NightNightKnightroState extends State<NightNightKnightro> {
               'images/nightNightKnightroSplash.png',
               fit: BoxFit.cover,
             ),
-            SizedBox(
-              height: 30,
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
+              child: Text(
+                'game code: ${game_data.gameRoom.key}',
+                style: TextStyle(
+                    color: Colors.white, fontFamily: 'Press Start 2P'),
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.fromLTRB(0, 0, 0, 30),
+              padding: const EdgeInsets.all(8.0),
+              decoration: BoxDecoration(
+                  border: Border.all(color: Colors.white, width: 1)),
+              width: 300,
+              height: 60,
+              child: GridView.count(
+                  childAspectRatio: 7 / 1,
+                  crossAxisCount: 2,
+                  children: List.generate(players.length, (index) {
+                    return Row(
+                      children: <Widget>[
+                        Container(
+                          child: Text(
+                              '${index + 1}. ${players[players.keys.toList()[index]].playerName}',
+                              softWrap: false,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontFamily: 'Press Start 2P',
+                                  fontSize: 8)),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                          child: players[players.keys.toList()[index]].start
+                              ? Icon(
+                                  Icons.check,
+                                  color: Colors.white,
+                                  size: 8,
+                                )
+                              : Icon(
+                                  Icons.close,
+                                  color: Colors.white,
+                                  size: 8,
+                                ),
+                        ),
+                      ],
+                    );
+                  })),
             ),
             FlatButton(
               child: Text(
@@ -43,8 +134,7 @@ class _NightNightKnightroState extends State<NightNightKnightro> {
                     fontFamily: 'Press Start 2P'),
               ),
               onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => RoleAssignment()));
+                handleStart();
               },
             ),
             FlatButton(
