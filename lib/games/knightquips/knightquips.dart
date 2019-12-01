@@ -1,18 +1,18 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_database/ui/firebase_list.dart';
 import 'package:flutter/material.dart';
 import 'package:ucfbox/games/knightquips/question.dart';
 import 'package:ucfbox/models/game_rooms/knightquips_room.dart';
 import 'package:ucfbox/models/players/knightquips_player.dart';
-import 'package:ucfbox/my_app_bar.dart';
 import 'package:ucfbox/games/knightquips/howtoplay.dart';
-//import 'package:ucfbox/games/knightquips/question.dart';
-
 import 'package:firebase_database/ui/firebase_animated_list.dart';
-//import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:ucfbox/game_data.dart' as game_data;
+import 'package:ucfbox/home_page.dart';
 
+//import 'package:firebase_database/ui/firebase_list.dart';
+//import 'package:ucfbox/my_app_bar.dart';
+//import 'package:flutter/material.dart';
+//import 'package:ucfbox/games/knightquips/question.dart';
 //import 'package:ucfbox/models/game_rooms/knightquips_room.dart';
 
 class KnightQuips extends StatefulWidget {
@@ -125,7 +125,7 @@ class _KQState extends State<KnightQuips> {
         );
       }
       );
-      
+
       // Implementing sliding window in a terrible way
       var roomModel = KQuipsRoom.fromSnapshot(await game_data.gameRoom.once());
 
@@ -154,7 +154,7 @@ class _KQState extends State<KnightQuips> {
         playerRef.child(key).child('q1').set(slidingWindowKeys.removeLast().key);
         playerRef.child(key).child('q2').set(slidingWindowKeys.removeLast().key);
       });
-      
+
       // Alert other users game is ready to begin
       game_data.gameRoom.child('setup').set(true);
       game_data.gameRoom.child('answerCount').set(0);
@@ -181,23 +181,52 @@ class _KQState extends State<KnightQuips> {
   Widget build(BuildContext context) {
     return new Scaffold(
       backgroundColor: Color(0xFFFFC904),
-      appBar: MyAppBar(),
+      appBar: AppBar(
+
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        actions: <Widget>[
+
+          IconButton(
+              icon: Icon(Icons.home),
+              onPressed: () {
+
+                playerList.length--;
+                print('${playerList.length}');
+                Navigator.popUntil(
+                    context, ModalRoute.withName(Navigator.defaultRouteName));
+
+
+                if(playerList.length == 0)
+                {
+                  game_data.gameRoom.remove();
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => HomePage()));
+                }
+              })
+        ],
+
+      leading: new Container(),
+      ),
+
       body: SafeArea(
         child: Column(
           children: <Widget>[
             Expanded(
-                flex: 1,
-                child: Text(
-                  '${game_data.gameRoom.key}',
-                  style: TextStyle(
-                    fontSize: 25,
-                    fontWeight: FontWeight.bold,
-                  ),
-                )),
-            Expanded(
-              flex: 8,
+              flex: 9,
               child: Image.asset(
                 'images/knightquips.png',
+              ),
+            ),
+            Expanded(
+              flex: 4,
+
+              child: Text('Game Room Code:\n ${game_data.gameRoom.key}',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 23,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
             Expanded(
@@ -212,7 +241,7 @@ class _KQState extends State<KnightQuips> {
               ),
             ),
             Flexible(
-              flex: 7,
+              flex: 8,
               child: new FirebaseAnimatedList(
                   query: playerRef,
                   itemBuilder: (_, DataSnapshot snapshot,
@@ -223,8 +252,10 @@ class _KQState extends State<KnightQuips> {
                             : Colors.white,
                         child: ListTile(
                           title: new Text(snapshot.value['playerName']),
-                        ));
-                  }),
+                        )
+                    );
+                  }
+              ),
             ),
             Expanded(
               flex: 0,
@@ -239,6 +270,8 @@ class _KQState extends State<KnightQuips> {
                   ),
                 ),
                 onPressed: () {
+
+                  /// Change this back to How to Play!!!
                   Navigator.push(context,
                       MaterialPageRoute(builder: (context) => HowToPlay()));
                 },
@@ -275,7 +308,10 @@ class _KQState extends State<KnightQuips> {
             ),
             SizedBox(
               height: 30,
+
+
             ),
+
           ],
         ),
       ),

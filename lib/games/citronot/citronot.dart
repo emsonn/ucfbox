@@ -1,20 +1,15 @@
-//import 'dart:async';
 import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
-//import 'package:firebase_database/ui/utils/stream_subscriber_mixin.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:ucfbox/game_data.dart' as game_data;
-//import 'package:ucfbox/games/citronot/leaderboard.dart';
 import 'package:ucfbox/models/answers/citronot_answer.dart';
-//import 'package:ucfbox/models/game_rooms/citronot_room.dart';
 import 'package:ucfbox/models/players/citronot_player.dart';
-import 'package:ucfbox/my_app_bar.dart';
 import 'package:ucfbox/games/citronot/howtoplay.dart';
 import 'package:ucfbox/games/citronot/question.dart';
+import 'package:ucfbox/home_page.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
-
 
 class Citronot extends StatefulWidget {
   @override
@@ -89,6 +84,7 @@ class _CitronotState extends State<Citronot> {
   _onPlayerAdded(Event event) {
     setState(() {
       playerList.add(CitronotPlayer.fromSnapshot(event.snapshot));
+      print('${playerList.length}');
     });
   }
 
@@ -104,9 +100,48 @@ class _CitronotState extends State<Citronot> {
 
   @override
   Widget build(BuildContext context) {
+
     return new Scaffold(
       backgroundColor: Color(0xFFFFC904),
-      appBar: MyAppBar(),
+      appBar: AppBar(
+
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        actions: <Widget>[
+
+          IconButton(
+              icon: Icon(Icons.home),
+              onPressed: () async {
+
+                // setState(() {
+                //   playerList.remove(CitronotPlayer.fromSnapshot(event.snapshot));
+                //   print('${playerList.length}');
+                // });
+
+                // playerList.remove(game_data.player);
+                // playerList.length--;
+                // print('${playerList.length}');
+                game_data.player.remove();
+                var result = await game_data.gameRoom.child('noOfPlayers').runTransaction((transaction) async {
+                  transaction.value = (transaction.value ?? 0 ) - 1;
+                  return transaction;
+                });
+                Navigator.popUntil(
+                    context, ModalRoute.withName(Navigator.defaultRouteName));
+
+                playerList.length = result.dataSnapshot.value;
+                if(playerList.length == 0)
+                {
+                  game_data.gameRoom.remove();
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => HomePage()));
+                }
+              })
+        ],
+
+      leading: new Container(),
+
+      ),
 
       body: SafeArea(
         child: Column(
