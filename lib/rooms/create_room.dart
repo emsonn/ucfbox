@@ -12,7 +12,8 @@ class CreateRoom extends StatelessWidget {
       /// Citronot
       GameCard(
         label: "CITRO\nNOT",
-        color: Color(0xFFF10429),
+        color: Color(0xFFFFA726),
+        image: 'images/citro.png',
         gameType: "citronot",
         gameRoomTemplate: {
           "noOfPlayers": 0,
@@ -29,7 +30,8 @@ class CreateRoom extends StatelessWidget {
       /// KnightQuips
       GameCard(
         label: "KNIGHT\nQUIPS",
-        color: Color(0xFF3DDA03),
+        color: Color(0xFF757575),
+        image: 'images/kq.png',
         gameType: "knightQuips",
         gameRoomTemplate: {
           "gameType": "knightQuips",
@@ -45,7 +47,8 @@ class CreateRoom extends StatelessWidget {
       /// NNN Knightro
       GameCard(
         label: "NIGHT\nNIGHT\nKNIGHTRO",
-        color: Color(0xFFBE038B),
+        color: Color(0xFF1565C0),
+        image: 'images/nightnightknightro.png',
         gameType: "nightNightKnightro",
         gameRoomTemplate: {
           "noOfPlayers": 0,

@@ -11,7 +11,6 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
       elevation: 0,
       backgroundColor: Colors.transparent,
       actions: <Widget>[
-
         IconButton(
             icon: Icon(Icons.home),
             onPressed: () {
@@ -19,9 +18,7 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
                   context, ModalRoute.withName(Navigator.defaultRouteName));
             })
       ],
-
-//      leading: new Container(),
-
+      leading: new Container(),
     );
   }
 

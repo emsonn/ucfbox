@@ -5,11 +5,12 @@ import '../rooms/user_name_page.dart';
 import 'package:ucfbox/game_data.dart' as game_data;
 
 class GameCard extends StatelessWidget {
-  GameCard({this.label, this.color, this.gameRoomTemplate, this.gameType});
+  GameCard({this.label, this.color, this.gameRoomTemplate, this.gameType,this.image});
   final label;
   final color;
   final gameRoomTemplate;
   final gameType;
+  final image;
 
   final gameRoomCode = generateCode();
 
@@ -38,12 +39,8 @@ class GameCard extends StatelessWidget {
               children: <Widget>[
                 Padding(
                   padding: EdgeInsets.all(15.0),
-                  child: Text(
-                    label,
-                    style: TextStyle(
-                      fontSize: 50,
-                      fontWeight: FontWeight.bold,
-                    ),
+                  child: Image.asset(
+                    '$image',
                   ),
                 ),
               ],

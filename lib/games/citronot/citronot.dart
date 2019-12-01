@@ -219,7 +219,6 @@ class _CitronotState extends State<Citronot> {
                 onPressed: () async {
                   if ((playerList.length < game_data.citronotMinNumPlayers) || 
                       (playerList.length > game_data.citronotMaxNumPlayers)) {
-
                       Alert(
                               context: context,
                               type: AlertType.error,
