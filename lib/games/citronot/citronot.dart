@@ -112,15 +112,7 @@ class _CitronotState extends State<Citronot> {
           IconButton(
               icon: Icon(Icons.home),
               onPressed: () async {
-
-                // setState(() {
-                //   playerList.remove(CitronotPlayer.fromSnapshot(event.snapshot));
-                //   print('${playerList.length}');
-                // });
-
-                // playerList.remove(game_data.player);
                 // playerList.length--;
-                // print('${playerList.length}');
                 game_data.player.remove();
                 var result = await game_data.gameRoom.child('noOfPlayers').runTransaction((transaction) async {
                   transaction.value = (transaction.value ?? 0 ) - 1;
@@ -228,31 +220,30 @@ class _CitronotState extends State<Citronot> {
                   ),
                 ),
                 onPressed: () async {
-                  // if ((playerList.length < game_data.citronotMinNumPlayers) || 
-                  //     (playerList.length > game_data.citronotMaxNumPlayers)) {
-                  //     print("sdlkjsfdljksdfljkfds ${playerList.length}");
+                  if ((playerList.length < game_data.citronotMinNumPlayers) || 
+                      (playerList.length > game_data.citronotMaxNumPlayers)) {
 
-                  //     Alert(
-                  //             context: context,
-                  //             type: AlertType.error,
-                  //             title: "UCFBox Alert",
-                  //             desc: "${game_data.citronotMinNumPlayers} to ${game_data.citronotMaxNumPlayers} players only - sorry!",
-                  //             buttons: [
-                  //               DialogButton(
-                  //                 color: Color.fromRGBO(225, 202, 6, 100),
-                  //                 child: Text(
-                  //                   "CHARGE ON!",
-                  //                   style: TextStyle(
-                  //                       color: Colors.black, fontSize: 20),
-                  //                 ),
-                  //                 onPressed: () => Navigator.pop(context),
-                  //                 width: 120,
-                  //               )
-                  //             ],
-                  //           ).show();
-                  // }
+                      Alert(
+                              context: context,
+                              type: AlertType.error,
+                              title: "UCFBox Alert",
+                              desc: "${game_data.citronotMinNumPlayers} to ${game_data.citronotMaxNumPlayers} players required - sorry!",
+                              buttons: [
+                                DialogButton(
+                                  color: Color.fromRGBO(225, 202, 6, 100),
+                                  child: Text(
+                                    "CHARGE ON!",
+                                    style: TextStyle(
+                                        color: Colors.black, fontSize: 20),
+                                  ),
+                                  onPressed: () => Navigator.pop(context),
+                                  width: 120,
+                                )
+                              ],
+                            ).show();
+                  }
 
-                  // else {
+                  else {
                     print('Start Game button has been pressed');
                     game_data.citronotNumRounds = 2;
 
@@ -279,24 +270,9 @@ class _CitronotState extends State<Citronot> {
                       var correctAnswer = new CitronotAnswer("", answer, correct: true);
                       
                       game_data.gameRoom.child('fact').set(answer.toString());
-                      
-                      print("sdfljsdfkldsf PLAYER-INPUT ANSWER??? $answer");
-                      // print("sdfljsdfkldsf PLAYER-INPUT ANSWER??? ${answer.toString()}");
-
-                      print("sdfljsdfkldsf CORRECTANSWER2??? ${game_data.gameRoom.child('fact')}");
-                      // print("sdfljsdfkldsf CORRECTANSWER2??? ${correctAnswer.toString()}");
-                      // print("sdfljsdfkldsf CORRECTANSWER28787??? ${correctAnswer.answer.toString()}");
 
                       var answerRef = game_data.gameRoom.child('answers').push();
                       answerRef.set(correctAnswer.toJson());
-
-                      print("sdfljsdfkldsf PLAYER-INPUT ANSWER??? $answerRef");
-                      print("sdfljsdfkldsf PLAYER-INPUT ANSWER??? ${answerRef.toString()}");
-                      print("sdfljsdfkldsf PLAYER-INPUT ANSWER??? ${answerRef.child('answers')}");
-                      print("sdfljsdfkldsf PLAYER-INPUT ANSWER??? ${answerRef.child('answers').toString()}\n\n");
-
-
-
                     }
 
                     // Update Player
@@ -310,7 +286,7 @@ class _CitronotState extends State<Citronot> {
                       transaction.value = (transaction.value ?? 0 ) + 1;
                       return transaction;
                     });
-                  // } // end of else
+                  } // end of else
                 },
               ),
             ),
