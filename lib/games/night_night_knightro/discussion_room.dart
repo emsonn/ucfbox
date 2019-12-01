@@ -15,7 +15,7 @@ class _DiscussionRoomState extends State<DiscussionRoom> {
       body: SafeArea(
         child: Column(
           children: <Widget>[
-//            RoleAssignment(),
+            RoleAssignment(),
             SizedBox(
               height: 30,
             ),

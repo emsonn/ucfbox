@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:ucfbox/games/night_night_knightro/special_role.dart';
@@ -11,20 +13,38 @@ class VotingRoom extends StatefulWidget {
 
 class _VotingRoomState extends State<VotingRoom> {
   bool buttonDisabled = false;
+  StreamSubscription listener;
 
   @override
   void initState() {
     super.initState();
 
-    game_data.gameRoom.onValue.listen(_onRoomUpdate);
+    listener = game_data.gameRoom.onValue.listen(_onRoomUpdate);
   }
 
   _onRoomUpdate(Event event) {
     if (event.snapshot.value['voteCount'] ==
         event.snapshot.value['players'].length) {
+      int highest = 0;
+      String killed;
+      event.snapshot.value['players'].forEach((k, v) {
+        if (v['votes'] > highest) {
+          killed = k;
+          highest = v['votes'];
+        }
+      });
+
+      game_data.gameRoom.update({'killed': killed});
+
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => SpecialRole()));
     }
+  }
+
+  @override
+  void dispose() {
+    listener.cancel();
+    super.dispose();
   }
 
   @override

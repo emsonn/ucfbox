@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_database/firebase_database.dart';
-import 'package:ucfbox/games/night_night_knightro/discussion_timer.dart';
 import 'package:ucfbox/models/game_rooms/nightNightKnightro_room.dart';
 import 'package:ucfbox/models/players/nightNightKnightro_player.dart';
 import 'package:ucfbox/game_data.dart' as game_data;
@@ -32,6 +30,16 @@ class _RoleAssignmentState extends State<RoleAssignment> {
                 snap.data.value['players'][game_data.player.key]);
           }
           if (player != null) {
+            if (player.role == 'student') {
+              image = 'images/studentIcon.png';
+            } else if (player.role == 'knightro') {
+              image = 'images/knightroIcon.png';
+            } else if (player.role == 'professor') {
+              image = 'images/professorIcon.png';
+            } else if (player.role == 'security') {
+              image = 'images/securityIcon.png';
+            }
+
             return GestureDetector(
               onTapUp: (_) {
                 setState(() {
