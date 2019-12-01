@@ -23,6 +23,7 @@ class _NightNightKnightroState extends State<NightNightKnightro> {
   @override
   void initState() {
     super.initState();
+    print(game_data.player.key);
     game_data.player.once().then((DataSnapshot snapshot) {
       player = NightNightKnightroPlayer.fromSnapshot(snapshot);
     });
@@ -30,7 +31,8 @@ class _NightNightKnightroState extends State<NightNightKnightro> {
     game_data.gameRoom.once().then((DataSnapshot snapshot) {
       room = NightNightKnightroRoom.fromSnapshot(snapshot);
       print('no of players ${snapshot.value["noOfPlayers"]}');
-      roleSeed = snapshot.value["noOfPlayers"] - 1;
+      roleSeed = snapshot.value["noOfPlayers"];
+      print(roleSeed);
     });
     listener = game_data.gameRoom.onValue.listen(_onPlayersUpdate);
   }
@@ -40,8 +42,10 @@ class _NightNightKnightroState extends State<NightNightKnightro> {
     var starts = 0;
     event.snapshot.value['players']
         .forEach((k, v) => {v['start'] ? starts++ : null});
+    print(event.snapshot.value['players'].length);
     if (starts == event.snapshot.value['players'].length &&
         event.snapshot.value['players'].length >= 4) {
+      print('enter');
       game_data.player.update({'role': room.randomRoles[roleSeed]});
       Navigator.pushReplacement(
         context,

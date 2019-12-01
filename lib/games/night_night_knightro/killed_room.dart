@@ -34,8 +34,6 @@ class _KilledRoomState extends State<KilledRoom> {
                       .child('players')
                       .child(room.killed)
                       .update({'alive': false});
-                  game_data.gameRoom
-                      .update({'noOfPlayers': room.noOfPlayers - 1});
 
                   return Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -67,9 +65,13 @@ class _KilledRoomState extends State<KilledRoom> {
                             Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => snapshot.value < 3
-                                        ? LoseRoom()
-                                        : VotingRoom()));
+                                    builder: (context) =>
+                                        room.players[room.killed].role ==
+                                                'knightro'
+                                            ? WinRoom()
+                                            : snapshot.value < 3
+                                                ? LoseRoom()
+                                                : VotingRoom()));
                           });
                         },
                         padding: EdgeInsets.all(0),
