@@ -1,28 +1,103 @@
 import 'package:flutter/material.dart';
+import 'package:ucfbox/models/game_rooms/nightNightKnightro_room.dart';
+import 'package:ucfbox/models/players/nightNightKnightro_player.dart';
+import 'package:ucfbox/game_data.dart' as game_data;
 
-class RoleAssignment extends StatelessWidget {
+class RoleAssignment extends StatefulWidget {
+  @override
+  _RoleAssignmentState createState() => _RoleAssignmentState();
+}
+
+class _RoleAssignmentState extends State<RoleAssignment> {
+  NightNightKnightroPlayer player;
+  NightNightKnightroRoom room;
+  String image;
+  bool showRole = false;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.black,
-      body: SafeArea(
-        child: Column(
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.fromLTRB(30, 50, 30, 20),
-              child: Image.asset('images/studentIcon.png'),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Text(
-              'You are Security',
-              style:
-                  TextStyle(fontFamily: 'Press Start 2P', color: Colors.white),
-            )
-          ],
-        ),
-      ),
-    );
+    return FutureBuilder(
+        future: game_data.gameRoom.once(),
+        builder: (context, snap) {
+          if (snap.data != null) {
+            room = NightNightKnightroRoom.fromSnapshot(snap.data);
+            player = NightNightKnightroPlayer.fromJson(
+                snap.data.value['players'][game_data.player.key]);
+          }
+          if (player != null) {
+            if (player.role == 'student') {
+              image = 'images/studentIcon.png';
+            } else if (player.role == 'knightro') {
+              image = 'images/knightroIcon.png';
+            } else if (player.role == 'professor') {
+              image = 'images/professorIcon.png';
+            } else if (player.role == 'security') {
+              image = 'images/securityIcon.png';
+            }
+
+            return GestureDetector(
+              onTapUp: (_) {
+                setState(() {
+                  showRole = false;
+                });
+              },
+              onTapDown: (_) {
+                setState(() {
+                  showRole = true;
+                });
+              },
+              child: Column(
+                children: <Widget>[
+                  Stack(
+                    children: <Widget>[
+                      showRole
+                          ? Column(
+                              children: <Widget>[
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(30, 50, 30, 20),
+                                  child: Image.asset(image),
+                                ),
+                                SizedBox(
+                                  height: 20,
+                                ),
+                                Text(
+                                  'You are ${player.role == 'knightro' || player.role == 'security' ? player.role : 'a ' + player.role}',
+                                  style: TextStyle(
+                                      fontFamily: 'Press Start 2P',
+                                      color: Colors.white),
+                                ),
+                              ],
+                            )
+                          : Container(),
+                      showRole
+                          ? Container()
+                          : Padding(
+                              padding:
+                                  const EdgeInsets.fromLTRB(30, 50, 30, 20),
+                              child: Container(
+                                width: 351,
+                                height: 385,
+                                child: Center(
+                                  child: Image.asset(
+                                    'images/lightbulb.png',
+                                    scale: 5,
+                                  ),
+                                ),
+                              ),
+                            ),
+                    ],
+                  ),
+                ],
+              ),
+            );
+          }
+          return Container();
+        });
   }
 }

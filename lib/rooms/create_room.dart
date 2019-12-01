@@ -21,7 +21,7 @@ class CreateRoom extends StatelessWidget {
           "answers:": [],
           "gameType": "citronot",
           "prompt": "",
-          "fact":"",
+          "fact": "",
           "nextRoom": 0,
           "answerCount": 0
         },
@@ -54,6 +54,7 @@ class CreateRoom extends StatelessWidget {
           "noOfPlayers": 0,
           "gameType": "nightNightKnightro",
           "players": [],
+          "randomRoles": ["knightro", "security", "student", "professor"],
           "alivePlayersCount": 0,
           "voteCount": 0,
           "killed": "",
