@@ -8,12 +8,7 @@ import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:ucfbox/game_data.dart' as game_data;
 import 'package:ucfbox/home_page.dart';
-
-//import 'package:firebase_database/ui/firebase_list.dart';
-//import 'package:ucfbox/my_app_bar.dart';
-//import 'package:flutter/material.dart';
-//import 'package:ucfbox/games/knightquips/question.dart';
-//import 'package:ucfbox/models/game_rooms/knightquips_room.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 class KnightQuips extends StatefulWidget {
   @override
@@ -129,8 +124,6 @@ class _KQState extends State<KnightQuips> {
       // Implementing sliding window in a terrible way
       var roomModel = KQuipsRoom.fromSnapshot(await game_data.gameRoom.once());
 
-      print(roomModel.toJson());
-
       // Assign first question
       var slidingWindowKeys = new List<DatabaseReference>();
       questionKeys.forEach((i) {
@@ -149,8 +142,6 @@ class _KQState extends State<KnightQuips> {
 
       roomModel.players.forEach((key, value) async {
         var snap = await playerRef.child(key).once();
-        print('key pushing to ${snap.value}');
-        print('lastval: ${slidingWindowKeys.last.key}');
         playerRef.child(key).child('q1').set(slidingWindowKeys.removeLast().key);
         playerRef.child(key).child('q2').set(slidingWindowKeys.removeLast().key);
       });
@@ -189,14 +180,16 @@ class _KQState extends State<KnightQuips> {
 
           IconButton(
               icon: Icon(Icons.home),
-              onPressed: () {
-
-                playerList.length--;
-                print('${playerList.length}');
+              onPressed: () async {
+                game_data.player.remove();
+                var result = await game_data.gameRoom.child('noOfPlayers').runTransaction((transaction) async {
+                  transaction.value = (transaction.value ?? 0 ) - 1;
+                  return transaction;
+                });
                 Navigator.popUntil(
                     context, ModalRoute.withName(Navigator.defaultRouteName));
 
-
+                playerList.length = result.dataSnapshot.value;
                 if(playerList.length == 0)
                 {
                   game_data.gameRoom.remove();
@@ -270,8 +263,6 @@ class _KQState extends State<KnightQuips> {
                   ),
                 ),
                 onPressed: () {
-
-                  /// Change this back to How to Play!!!
                   Navigator.push(context,
                       MaterialPageRoute(builder: (context) => HowToPlay()));
                 },
@@ -290,28 +281,47 @@ class _KQState extends State<KnightQuips> {
                   ),
                 ),
                 onPressed: () async {
-                  print('Start Game button has been pressed');
+                  if ((playerList.length < game_data.citronotMinNumPlayers) || 
+                      (playerList.length > game_data.citronotMaxNumPlayers)) {
+                      Alert(
+                              context: context,
+                              type: AlertType.error,
+                              title: "UCFBox Alert",
+                              desc: "${game_data.citronotMinNumPlayers} to ${game_data.citronotMaxNumPlayers} players required - sorry!",
+                              buttons: [
+                                DialogButton(
+                                  color: Color.fromRGBO(225, 202, 6, 100),
+                                  child: Text(
+                                    "CHARGE ON!",
+                                    style: TextStyle(
+                                        color: Colors.black, fontSize: 20),
+                                  ),
+                                  onPressed: () => Navigator.pop(context),
+                                  width: 120,
+                                )
+                              ],
+                            ).show();
+                  }
 
-                  // Update Player
-                  var myPlayer = KnightQuipsPlayer.fromSnapshot(
-                      await game_data.player.once());
-                  myPlayer.start = true;
-                  game_data.player.set(myPlayer.toJson());
+                  else {
+                    // Update Player
+                    var myPlayer = KnightQuipsPlayer.fromSnapshot(
+                        await game_data.player.once());
+                    myPlayer.start = true;
+                    game_data.player.set(myPlayer.toJson());
 
-                  // Update Users who have answered
-                  await game_data.gameRoom.child('answerCount').runTransaction((transaction) async {
-                    transaction.value = (transaction.value ?? 0 ) + 1;
-                    return transaction;
-                  });
-                },
+                    // Update Users who have answered
+                    await game_data.gameRoom.child('answerCount').runTransaction((transaction) async {
+                      transaction.value = (transaction.value ?? 0 ) + 1;
+                      return transaction;
+                    });
+                  }
+                }
               ),
             ),
             SizedBox(
               height: 30,
-
-
             ),
-
           ],
         ),
       ),
