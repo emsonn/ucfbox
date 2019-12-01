@@ -2,18 +2,23 @@ import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:ucfbox/game_data.dart' as game_data;
+import 'package:ucfbox/games/knightquips/leaderboard.dart';
+import 'package:ucfbox/games/knightquips/voting_animatedlist.dart';
+import 'package:ucfbox/models/game_rooms/knightquips_room.dart';
 import 'package:ucfbox/models/players/citronot_player.dart';
-import 'package:ucfbox/games/citronot/voting_animatedlist.dart';
-import 'package:ucfbox/games/citronot/leaderboard.dart';
-import 'package:ucfbox/games/citronot/question.dart';
-import 'package:ucfbox/models/answers/citronot_answer.dart';
 
-class WaitingRoom extends StatefulWidget {
+//import 'package:ucfbox/games/citronot/howtoplay.dart';
+//import 'package:ucfbox/my_app_bar.dart';
+//import 'package:ucfbox/games/citronot/voting_animatedlist.dart';
+//import 'package:ucfbox/games/citronot/question.dart';
+//import 'package:ucfbox/models/answers/citronot_answer.dart';
+
+class KQuipsWaitingRoom extends StatefulWidget {
   @override
-  _WaitingState createState() => new _WaitingState();
+  _KQuipsWaitingState createState() => new _KQuipsWaitingState();
 }
 
-class _WaitingState extends State<WaitingRoom> {
+class _KQuipsWaitingState extends State<KQuipsWaitingRoom> {
   List<CitronotPlayer> playerList = new List<CitronotPlayer>();
   DatabaseReference playerRef;
   var listen1;
@@ -29,26 +34,13 @@ class _WaitingState extends State<WaitingRoom> {
 
     listen1 = playerRef.onChildChanged.listen(_onPlayerChanged);
     listen2 = game_data.gameRoom.child('answerCount').onValue.listen(_onCountChanged);
-
-    // Setup next round
-    if (game_data.status == game_data.Status.host && game_data.nextRoom == game_data.NextRoom.question){
-      game_data.gameRoom.child('answers').remove();
-
-      var prompt = game_data.questionBank.documents[game_data.question][game_data.deck.last.toString()];
-      game_data.gameRoom.child('prompt').set(prompt);
-                      
-      var answer = game_data.questionBank.documents[game_data.answer][game_data.deck.removeLast().toString()];
-      game_data.gameRoom.child('fact').set(answer.toString());
-
-      var correctAnswer = new CitronotAnswer("", answer, correct: true);
-      var answerRef = game_data.gameRoom.child('answers').push();
-      answerRef.set(correctAnswer.toJson());
-    }
   }
 
   _onCountChanged(Event event) async{
+    var val = (await game_data.gameRoom.once()).value['answerCount'];
+    print('answerCount $val');
     if ((await game_data.gameRoom.once()).value['answerCount'] ==
-        (await game_data.gameRoom.once()).value['noOfPlayers'])
+        game_data.globalNumPlayers )
     {
 
       listen1.cancel();
@@ -63,19 +55,22 @@ class _WaitingState extends State<WaitingRoom> {
         return transaction;
       });
 
-      if (game_data.nextRoom == game_data.NextRoom.voting) {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => AnimatedListSample()));
-        }
+      if (game_data.kQuipsRooms == game_data.KQuipsRooms.voting) {
+        // Generate who I need to vote for
+        var roomModel = KQuipsRoom.fromSnapshot(await game_data.gameRoom.once());
+        game_data.needToVoteFor = new List<String>();
 
-      /// This used to be results
-      else if (game_data.nextRoom == game_data.NextRoom.leaderboard){
+        // Set Questions I need to vote for
+        roomModel.questions.forEach((key, value) {
+          if ( key != game_data.question1 && key != game_data.question2)
+            game_data.needToVoteFor.add(key);
+        });
+
         Navigator.push(context,
-        MaterialPageRoute(builder: (context) => Leaderboard()));
+            MaterialPageRoute(builder: (context) => KQuipsVoting()));
       }
-      else if( game_data.nextRoom == game_data.NextRoom.question) {
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => Question()));
+      else if ( game_data.kQuipsRooms == game_data.KQuipsRooms.leaderboard) {
+        Navigator.push(context, MaterialPageRoute( builder: (context) => KQuipsLeaderboard()));
       }
     }
   }
@@ -101,7 +96,7 @@ class _WaitingState extends State<WaitingRoom> {
             Expanded(
               flex: 3,
               child: Image.asset(
-                'images/citronot.png',
+                'images/knightquips.png',
               ),
             ),
 

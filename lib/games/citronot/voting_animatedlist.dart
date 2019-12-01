@@ -3,9 +3,10 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:ucfbox/game_data.dart' as game_data;
-import 'package:ucfbox/games/citronot/leaderboard.dart';
+//import 'package:ucfbox/games/citronot/leaderboard.dart';
 import 'package:ucfbox/games/citronot/waiting_room.dart';
 import 'package:ucfbox/models/players/citronot_player.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 class AnimatedListSample extends StatefulWidget {
   @override
@@ -15,11 +16,14 @@ class AnimatedListSample extends StatefulWidget {
 class _AnimatedListSampleState extends State<AnimatedListSample> {
   CitronotPlayer player;
   DatabaseReference answerRef;
+  DatabaseReference fact;
+  int flag = 0;
 
   @override
   void initState() {
     super.initState();
     answerRef = game_data.gameRoom.child('answers');
+    fact = game_data.gameRoom.child('fact');
 
     // Set next room
     game_data.nextRoom = game_data.NextRoom.leaderboard;
@@ -86,6 +90,43 @@ class _AnimatedListSampleState extends State<AnimatedListSample> {
                                 snapshot.value['playerKey']) {
 
                               if (snapshot.value['correct'] == true) {
+
+                                flag = 1;
+                                Alert(
+                                  closeFunction: () =>
+                                    Navigator
+                                      .push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => WaitingRoom())),
+                                  context: context,
+                                  type: AlertType.success,
+                                  title: "Good job!",
+                                  desc:
+                                  "You chose the correct answer!",
+                                  buttons: [
+                                    DialogButton(
+                                      color: Color.fromRGBO(225, 202, 6, 100),
+                                      child: Text(
+                                        "CHARGE ON!",
+                                        style: TextStyle(
+                                            color: Colors.black, fontSize: 20),
+                                      ),
+//                                      onPressed: () => Navigator.pop(context),
+//                                      width: 120,
+
+                                        onPressed: () =>
+                                          Navigator
+                                              .push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) => WaitingRoom())),
+
+
+                                    )
+                                  ],
+                                ).show();
+
                                 await game_data.player
                                     .child('score')
                                     .runTransaction((transaction) async {
@@ -93,7 +134,40 @@ class _AnimatedListSampleState extends State<AnimatedListSample> {
                                       (transaction.value ?? 0) + 20;
                                   return transaction;
                                 });
-                              } else {
+                              }
+
+
+                              else {
+                                flag = 1;
+                                Alert(
+                                  context: context,
+                                  type: AlertType.error,
+                                  title: "Oh no!",
+                                  desc:
+                                  "You chose the wrong answer, better luck next time!",
+                                  buttons: [
+                                    DialogButton(
+                                      color: Color.fromRGBO(225, 202, 6, 100),
+                                      child: Text(
+                                        "CHARGE ON!",
+                                        style: TextStyle(
+                                            color: Colors.black, fontSize: 20),
+                                      ),
+//                                      onPressed: () => Navigator.pop(context),
+//                                        width: 120,
+                                    onPressed: () =>
+                                      Navigator
+                                    .push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => WaitingRoom())),
+
+                                    )
+
+
+                                  ],
+                                ).show();
+
                                 await game_data.gameRoom
                                     .child('players')
                                     .child(snapshot.value['playerKey'])
@@ -117,10 +191,15 @@ class _AnimatedListSampleState extends State<AnimatedListSample> {
                               });
 
                               if (result.committed) {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => WaitingRoom()));
+
+                                if (flag == 0)
+                                {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => WaitingRoom()));
+                                }
+
                               }
                             }
                           },

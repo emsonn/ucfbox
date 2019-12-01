@@ -8,18 +8,15 @@ class GameLobby extends StatelessWidget {
   List<GameCard> games = [
     GameCard(
       label: "CITRO\nNOT",
-      color: Color(0xFFF10429),
-      //   route: Citronot(),
+      color: Color(0xFFFFA726),
     ),
     GameCard(
       label: "KNIGHT\nQUIPS",
-      color: Color(0xFF3DDA03),
-      //   route: Quiplash(),
+      color: Color(0xFFF48FB1),
     ),
     GameCard(
       label: "NIGHT\nNIGHT\nKNIGHTRO",
-      color: Color(0xFFBE038B),
-      //   route: NightNightKnightro(),
+      color: Color(0xFFBA68C8),
     ),
   ];
 

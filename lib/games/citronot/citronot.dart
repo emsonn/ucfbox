@@ -1,19 +1,15 @@
-//import 'dart:async';
 import 'dart:math';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
-//import 'package:firebase_database/ui/utils/stream_subscriber_mixin.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:ucfbox/game_data.dart' as game_data;
-//import 'package:ucfbox/games/citronot/leaderboard.dart';
 import 'package:ucfbox/models/answers/citronot_answer.dart';
-//import 'package:ucfbox/models/game_rooms/citronot_room.dart';
 import 'package:ucfbox/models/players/citronot_player.dart';
-import 'package:ucfbox/my_app_bar.dart';
 import 'package:ucfbox/games/citronot/howtoplay.dart';
 import 'package:ucfbox/games/citronot/question.dart';
+import 'package:ucfbox/home_page.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 class Citronot extends StatefulWidget {
   @override
@@ -81,7 +77,6 @@ class _CitronotState extends State<Citronot> {
           Navigator.push(context,
               MaterialPageRoute(builder: (context) => Question()));
         }
-        print("Error!!!");
       }
   }
 
@@ -103,9 +98,39 @@ class _CitronotState extends State<Citronot> {
 
   @override
   Widget build(BuildContext context) {
+
     return new Scaffold(
       backgroundColor: Color(0xFFFFC904),
-      appBar: MyAppBar(),
+      appBar: AppBar(
+
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        actions: <Widget>[
+
+          IconButton(
+              icon: Icon(Icons.home),
+              onPressed: () async {
+                game_data.player.remove();
+                var result = await game_data.gameRoom.child('noOfPlayers').runTransaction((transaction) async {
+                  transaction.value = (transaction.value ?? 0 ) - 1;
+                  return transaction;
+                });
+                Navigator.popUntil(
+                    context, ModalRoute.withName(Navigator.defaultRouteName));
+
+                playerList.length = result.dataSnapshot.value;
+                if(playerList.length == 0)
+                {
+                  game_data.gameRoom.remove();
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => HomePage()));
+                }
+              })
+        ],
+
+      leading: new Container(),
+
+      ),
 
       body: SafeArea(
         child: Column(
@@ -145,6 +170,9 @@ class _CitronotState extends State<Citronot> {
                   query: playerRef,
                   itemBuilder: (_, DataSnapshot snapshot,
                       Animation<double> animation, int index) {
+                    if (snapshot == null ) {
+                      return SizedBox(height: 10,);
+                    }
                     return new Material(
                         color: snapshot.value['start'] == true
                             ? Colors.green
@@ -189,45 +217,69 @@ class _CitronotState extends State<Citronot> {
                   ),
                 ),
                 onPressed: () async {
-                  print('Start Game button has been pressed');
-                  game_data.citronotNumRounds = 2;
-
-                  // Download Q/As
-                  if ( game_data.status == game_data.Status.host ) {
-                    game_data.questionBank = await Firestore.instance.collection('citronot').getDocuments();
-
-                    game_data.deck = new List<int>();
-                    
-                    // Will randomly generate 3 different question indices for lookup.
-                    while (game_data.deck.length < 3) {
-                      var randomQuestionIndex = new Random();
-                      game_data.deck.add(randomQuestionIndex.nextInt((game_data.numCitronotQuestions)));
-                      game_data.deck.toSet().toList();
-                    }
-
-                    print(game_data.deck);
-                    
-                    var prompt = game_data.questionBank.documents[game_data.question][game_data.deck.last.toString()];
-
-                    game_data.gameRoom.child('prompt').set(prompt);
-
-                    var answer = game_data.questionBank.documents[game_data.answer][game_data.deck.removeLast().toString()];
-                    var correctAnswer = new CitronotAnswer("", answer, correct: true);
-                    var answerRef = game_data.gameRoom.child('answers').push();
-                    answerRef.set(correctAnswer.toJson());
+                  if ((playerList.length < game_data.citronotMinNumPlayers) || 
+                      (playerList.length > game_data.citronotMaxNumPlayers)) {
+                      Alert(
+                              context: context,
+                              type: AlertType.error,
+                              title: "UCFBox Alert",
+                              desc: "${game_data.citronotMinNumPlayers} to ${game_data.citronotMaxNumPlayers} players required - sorry!",
+                              buttons: [
+                                DialogButton(
+                                  color: Color.fromRGBO(225, 202, 6, 100),
+                                  child: Text(
+                                    "CHARGE ON!",
+                                    style: TextStyle(
+                                        color: Colors.black, fontSize: 20),
+                                  ),
+                                  onPressed: () => Navigator.pop(context),
+                                  width: 120,
+                                )
+                              ],
+                            ).show();
                   }
 
-                  // Update Player
-                  var myPlayer = CitronotPlayer.fromSnapshot(
-                      await game_data.player.once());
-                  myPlayer.start = true;
-                  game_data.player.set(myPlayer.toJson());
+                  else {
+                    game_data.citronotNumRounds = 2;
 
-                  // Update Users who have answered
-                  await game_data.gameRoom.child('answerCount').runTransaction((transaction) async {
-                    transaction.value = (transaction.value ?? 0 ) + 1;
-                    return transaction;
-                  });
+                    // Download Q/As
+                    if ( game_data.status == game_data.Status.host ) {
+                      game_data.questionBank = await Firestore.instance.collection('citronot').getDocuments();
+
+                      game_data.deck = new List<int>();
+                      
+                      // Will randomly generate 3 different question indices for lookup.
+                      while (game_data.deck.length < 3) {
+                        var randomQuestionIndex = new Random();
+                        game_data.deck.add(randomQuestionIndex.nextInt((game_data.citronotNumQuestions)));
+                        game_data.deck.toSet().toList();
+                      }
+                      
+                      var prompt = game_data.questionBank.documents[game_data.question][game_data.deck.last.toString()];
+
+                      game_data.gameRoom.child('prompt').set(prompt);
+
+                      var answer = game_data.questionBank.documents[game_data.answer][game_data.deck.removeLast().toString()];
+                      var correctAnswer = new CitronotAnswer("", answer, correct: true);
+                      
+                      game_data.gameRoom.child('fact').set(answer.toString());
+
+                      var answerRef = game_data.gameRoom.child('answers').push();
+                      answerRef.set(correctAnswer.toJson());
+                    }
+
+                    // Update Player
+                    var myPlayer = CitronotPlayer.fromSnapshot(
+                        await game_data.player.once());
+                    myPlayer.start = true;
+                    game_data.player.set(myPlayer.toJson());
+
+                    // Update Users who have answered
+                    await game_data.gameRoom.child('answerCount').runTransaction((transaction) async {
+                      transaction.value = (transaction.value ?? 0 ) + 1;
+                      return transaction;
+                    });
+                  } // end of else
                 },
               ),
             ),

@@ -9,7 +9,11 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xFFFFC904),
-      appBar: MyAppBar(),
+      appBar: AppBar(
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        leading: new Container(),
+      ),
       body: SafeArea(
         child: Center(
           child: Padding(
@@ -34,11 +38,12 @@ class HomePage extends StatelessWidget {
                   child: Text("CREATE ROOM",
                       style: TextStyle(color: Colors.white)),
                 ),
-                FlatButton(
+                OutlineButton(
                   onPressed: () {
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) => JoinRoom()));
                   },
+                  borderSide: BorderSide(color: Colors.white, width: 2.5),
                   child:
                       Text("JOIN ROOM", style: TextStyle(color: Colors.white)),
                 ),

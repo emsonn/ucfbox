@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+//import 'package:ucfbox/game_data.dart' as game_data;
+//import 'package:ucfbox/games/citronot/citronot.dart';
+//import 'package:ucfbox/games/knightquips/knightquips.dart';
+//import 'package:ucfbox/games/night_night_knightro/night_night_knightro.dart';
 
 class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
@@ -14,6 +18,7 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
                   context, ModalRoute.withName(Navigator.defaultRouteName));
             })
       ],
+      leading: new Container(),
     );
   }
 
