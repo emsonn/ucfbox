@@ -145,6 +145,9 @@ class _CitronotState extends State<Citronot> {
                   query: playerRef,
                   itemBuilder: (_, DataSnapshot snapshot,
                       Animation<double> animation, int index) {
+                    if (snapshot == null ) {
+                      return SizedBox(height: 10,);
+                    }
                     return new Material(
                         color: snapshot.value['start'] == true
                             ? Colors.green
