@@ -8,21 +8,21 @@ class NightNightKnightroRoom {
   String gameType;
   Map players;
   List randomRoles;
-  int alivePlayersCount;
   int voteCount;
   String killed;
+  int noOfPlayers;
   bool isDaytime;
 
-  NightNightKnightroRoom(this.gameType, this.players, this.alivePlayersCount,
+  NightNightKnightroRoom(this.gameType, this.players, this.noOfPlayers,
       this.isDaytime, this.killed, this.voteCount);
 
   NightNightKnightroRoom.fromSnapshot(DataSnapshot snapshot)
       : key = snapshot.key,
         players = playersMap(snapshot),
         randomRoles = snapshot.value["randomRoles"],
-        alivePlayersCount = snapshot.value["alivePlayersCount"],
         voteCount = snapshot.value["voteCount"],
         killed = snapshot.value["killed"],
+        noOfPlayers = snapshot.value["noOfPlayers"],
         isDaytime = snapshot.value["isDaytime"];
 
   static Map playersMap(DataSnapshot snapshot) {
@@ -40,9 +40,9 @@ class NightNightKnightroRoom {
     return {
       "gameType": gameType,
       "players": players,
-      'alivePlayersCount': alivePlayersCount,
       'voteCount': voteCount,
       'killed': killed,
+      'noOfPlayers': noOfPlayers,
       'isDaytime': isDaytime
     };
   }
