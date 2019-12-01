@@ -2,15 +2,11 @@ import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:ucfbox/game_data.dart' as game_data;
-//import 'package:ucfbox/games/citronot/howtoplay.dart';
 import 'package:ucfbox/games/knightquips/leaderboard.dart';
 import 'package:ucfbox/games/knightquips/voting_animatedlist.dart';
 import 'package:ucfbox/models/game_rooms/knightquips_room.dart';
 import 'package:ucfbox/models/players/citronot_player.dart';
 import 'package:ucfbox/my_app_bar.dart';
-import 'package:ucfbox/games/citronot/voting_animatedlist.dart';
-import 'package:ucfbox/games/citronot/question.dart';
-import 'package:ucfbox/models/answers/citronot_answer.dart';
 import 'package:ucfbox/internert_check/network_sensitive.dart';
 
 class KQuipsWaitingRoom extends StatefulWidget {
@@ -39,14 +35,12 @@ class _KQuipsWaitingState extends State<KQuipsWaitingRoom> {
 
   _onCountChanged(Event event) async {
     var val = (await game_data.gameRoom.once()).value['answerCount'];
-    print('answerCount $val');
     if ((await game_data.gameRoom.once()).value['answerCount'] ==
         game_data.globalNumPlayers) {
       listen1.cancel();
       listen2.cancel();
 
       /// Make a Results.Dart
-
       game_data.player.child('start').set(false);
 
       // Update Users who have answered

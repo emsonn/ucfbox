@@ -1,4 +1,3 @@
-// import 'dart:core' as prefix0;
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -13,29 +12,23 @@ class JoinRoom extends StatelessWidget {
 
   /// Checks to see if the room exits
   Future<bool> gameRoomExists(String gameCode) async {
-    //database reference.
-    // print('code pass to gameRoomExists function: $gameCode');
     return FirebaseDatabase.instance
         .reference()
         .child(gameCode)
         .once()
         .then((DataSnapshot data) {
-      // print('gameRoomExists: ${data.key.isNotEmpty && data.value != null}\n');
       return data.key.isNotEmpty && data.value != null;
     });
   }
 
   /// Return the game type that was choosen
   Future<String> getGameType(String gameCode) async {
-    //database reference.
-    // print('code pass to getGameType function: $gameCode');
     return FirebaseDatabase.instance
         .reference()
         .child(gameCode)
         .child('gameType')
         .once()
         .then((DataSnapshot data) {
-      // print('getGameType data: ${data.value}\n');
       return data.value;
     });
   }

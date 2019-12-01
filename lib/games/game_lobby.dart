@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
 import '../my_app_bar.dart';
 
 class GameLobby extends StatelessWidget {
@@ -73,9 +72,7 @@ class GameLobby extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                onPressed: () {
-                  print('Start Game button has been pressed');
-                },
+                onPressed: () {},
               ),
             ),
             SizedBox(

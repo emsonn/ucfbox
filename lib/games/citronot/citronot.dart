@@ -9,7 +9,6 @@ import 'package:ucfbox/models/players/citronot_player.dart';
 import 'package:ucfbox/games/citronot/howtoplay.dart';
 import 'package:ucfbox/games/citronot/question.dart';
 import 'package:ucfbox/home_page.dart';
-import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:ucfbox/internert_check/network_sensitive.dart';
 
 class Citronot extends StatefulWidget {
@@ -81,14 +80,12 @@ class _CitronotState extends State<Citronot> {
         Navigator.push(
             context, MaterialPageRoute(builder: (context) => Question()));
       }
-      print("Error!!!");
     }
   }
 
   _onPlayerAdded(Event event) {
     setState(() {
       playerList.add(CitronotPlayer.fromSnapshot(event.snapshot));
-      print('${playerList.length}');
     });
   }
 
@@ -114,14 +111,6 @@ class _CitronotState extends State<Citronot> {
             IconButton(
                 icon: Icon(Icons.home),
                 onPressed: () async {
-                  // setState(() {
-                  //   playerList.remove(CitronotPlayer.fromSnapshot(event.snapshot));
-                  //   print('${playerList.length}');
-                  // });
-
-                  // playerList.remove(game_data.player);
-                  // playerList.length--;
-                  // print('${playerList.length}');
                   game_data.player.remove();
                   var result = await game_data.gameRoom
                       .child('noOfPlayers')
@@ -225,32 +214,8 @@ class _CitronotState extends State<Citronot> {
                     ),
                   ),
                   onPressed: () async {
-                    // if ((playerList.length < game_data.citronotMinNumPlayers) ||
-                    //     (playerList.length > game_data.citronotMaxNumPlayers)) {
-                    //     print("sdlkjsfdljksdfljkfds ${playerList.length}");
-
-                    //     Alert(
-                    //             context: context,
-                    //             type: AlertType.error,
-                    //             title: "UCFBox Alert",
-                    //             desc: "${game_data.citronotMinNumPlayers} to ${game_data.citronotMaxNumPlayers} players only - sorry!",
-                    //             buttons: [
-                    //               DialogButton(
-                    //                 color: Color.fromRGBO(225, 202, 6, 100),
-                    //                 child: Text(
-                    //                   "CHARGE ON!",
-                    //                   style: TextStyle(
-                    //                       color: Colors.black, fontSize: 20),
-                    //                 ),
-                    //                 onPressed: () => Navigator.pop(context),
-                    //                 width: 120,
-                    //               )
-                    //             ],
-                    //           ).show();
-                    // }
-
                     // else {
-                    print('Start Game button has been pressed');
+
                     game_data.citronotNumRounds = 2;
 
                     // Download Q/As
@@ -269,8 +234,6 @@ class _CitronotState extends State<Citronot> {
                         game_data.deck.toSet().toList();
                       }
 
-                      print(game_data.deck);
-
                       var prompt =
                           game_data.questionBank.documents[game_data.question]
                               [game_data.deck.last.toString()];
@@ -285,25 +248,9 @@ class _CitronotState extends State<Citronot> {
 
                       game_data.gameRoom.child('fact').set(answer.toString());
 
-                      print("sdfljsdfkldsf PLAYER-INPUT ANSWER??? $answer");
-                      // print("sdfljsdfkldsf PLAYER-INPUT ANSWER??? ${answer.toString()}");
-
-                      print(
-                          "sdfljsdfkldsf CORRECTANSWER2??? ${game_data.gameRoom.child('fact')}");
-                      // print("sdfljsdfkldsf CORRECTANSWER2??? ${correctAnswer.toString()}");
-                      // print("sdfljsdfkldsf CORRECTANSWER28787??? ${correctAnswer.answer.toString()}");
-
                       var answerRef =
                           game_data.gameRoom.child('answers').push();
                       answerRef.set(correctAnswer.toJson());
-
-                      print("sdfljsdfkldsf PLAYER-INPUT ANSWER??? $answerRef");
-                      print(
-                          "sdfljsdfkldsf PLAYER-INPUT ANSWER??? ${answerRef.toString()}");
-                      print(
-                          "sdfljsdfkldsf PLAYER-INPUT ANSWER??? ${answerRef.child('answers')}");
-                      print(
-                          "sdfljsdfkldsf PLAYER-INPUT ANSWER??? ${answerRef.child('answers').toString()}\n\n");
                     }
 
                     // Update Player

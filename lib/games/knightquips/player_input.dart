@@ -1,13 +1,9 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:ucfbox/game_data.dart';
-import 'package:ucfbox/games/citronot/voting_animatedlist.dart';
 import 'package:ucfbox/games/knightquips/waiting_room.dart';
 import 'package:ucfbox/models/answers/citronot_answer.dart';
-import 'package:ucfbox/models/players/citronot_player.dart';
 import 'package:ucfbox/game_data.dart' as game_data;
-import 'package:ucfbox/games/citronot/waiting_room.dart';
 import 'package:ucfbox/games/knightquips/question.dart';
 import 'package:ucfbox/internert_check/network_sensitive.dart';
 
@@ -54,7 +50,6 @@ class _KQuipsPlayerInputState extends State<KQuipsPlayerInput> {
                   LengthLimitingTextInputFormatter(140),
                 ],
                 onChanged: (input) {
-                  print('$input');
                   userInput = input;
                 },
               ),
@@ -69,8 +64,6 @@ class _KQuipsPlayerInputState extends State<KQuipsPlayerInput> {
                         fontSize: 25.0,
                         fontWeight: FontWeight.bold)),
                 onPressed: () async {
-                  print('The user input is the following: $userInput');
-
                   // Update my Answer
                   var myAnswer =
                       new CitronotAnswer(game_data.player.key, userInput);

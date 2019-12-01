@@ -1,8 +1,6 @@
 /// THE TYPES OF LIST HAVE TO CHANGE FOR
 /// ALLTOPICS AND ANSWER
 import 'package:firebase_database/firebase_database.dart';
-import 'package:ucfbox/games/knightquips/knightquips.dart';
-import 'package:ucfbox/models/players/knightquips_player.dart';
 
 class KQuipsRoom {
   String key;

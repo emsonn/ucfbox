@@ -2,10 +2,9 @@ import 'dart:async';
 import 'package:connectivity/connectivity.dart';
 import 'connectivity_status.dart';
 
-
 class ConnectivityService {
-
-  StreamController<ConnectivityStatus> connectionStatusController = StreamController<ConnectivityStatus>();
+  StreamController<ConnectivityStatus> connectionStatusController =
+      StreamController<ConnectivityStatus>();
 
   ConnectivityService() {
     Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {

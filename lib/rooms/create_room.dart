@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
-
 import '../my_app_bar.dart';
 import '../menu_of_games/game_card.dart';
 import 'package:ucfbox/internert_check/network_sensitive.dart';

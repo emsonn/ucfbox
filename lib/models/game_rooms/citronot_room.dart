@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:firebase_database/firebase_database.dart';
 import '../players/citronot_player.dart';
 
@@ -12,8 +10,8 @@ class CitronotRoom {
   String fact;
   int answerCount;
 
-  CitronotRoom(this.gameType, this.players, this.prompt,
-      this.fact, this.answerCount);
+  CitronotRoom(
+      this.gameType, this.players, this.prompt, this.fact, this.answerCount);
 
   CitronotRoom.fromSnapshot(DataSnapshot snapshot)
       : key = snapshot.key,

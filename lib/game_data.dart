@@ -3,23 +3,11 @@ library game_data;
 import 'package:firebase_database/firebase_database.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-enum Status {
-  host,
-  guest
-}
+enum Status { host, guest }
 
-enum NextRoom {
-  voting,
-  leaderboard,
-  question
-}
+enum NextRoom { voting, leaderboard, question }
 
-enum KQuipsRooms {
-  question1,
-  question2,
-  voting,
-  leaderboard
-}
+enum KQuipsRooms { question1, question2, voting, leaderboard }
 
 // Question/Answer
 final answer = 0;
@@ -44,12 +32,11 @@ int knightQuipsMinNumPlayers = 4;
 int knightQuipsMaxNumPlayers = 8;
 
 // Knight Quips GameData
-int numKQuipsQuestions = 48;  // 0-48
+int numKQuipsQuestions = 48; // 0-48
 String question1;
 String question2;
 KQuipsRooms kQuipsRooms;
 List<String> needToVoteFor;
-
 
 // Database References
 DatabaseReference gameRoom;

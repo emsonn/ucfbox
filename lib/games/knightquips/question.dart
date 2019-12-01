@@ -1,12 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:ucfbox/games/citronot/player_input.dart';
-//import 'package:ucfbox/games/citronot/citronot.dart' as citronot;
-import 'package:ucfbox/games/citronot/voting_animatedlist.dart';
-import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:ucfbox/game_data.dart' as game_data;
-import 'package:ucfbox/games/citronot/citronot.dart';
-import 'package:ucfbox/games/citronot/waiting_room.dart';
 import 'package:ucfbox/games/knightquips/player_input.dart';
 import 'package:ucfbox/internert_check/network_sensitive.dart';
 
@@ -24,7 +18,7 @@ class _KQuipsQuestionState extends State<KQuipsQuestion> {
     roomRef.then((snapshot) {
       roundPrompt = snapshot.value['prompt'];
     });
-    print('roundPrompt: $roundPrompt');
+
     return roundPrompt;
   }
 

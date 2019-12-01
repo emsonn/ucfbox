@@ -9,11 +9,6 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:ucfbox/game_data.dart' as game_data;
 import 'package:ucfbox/home_page.dart';
 import 'package:ucfbox/internert_check/network_sensitive.dart';
-//import 'package:firebase_database/ui/firebase_list.dart';
-//import 'package:ucfbox/my_app_bar.dart';
-//import 'package:flutter/material.dart';
-//import 'package:ucfbox/games/knightquips/question.dart';
-//import 'package:ucfbox/models/game_rooms/knightquips_room.dart';
 
 class KnightQuips extends StatefulWidget {
   @override
@@ -132,8 +127,6 @@ class _KQState extends State<KnightQuips> {
       // Implementing sliding window in a terrible way
       var roomModel = KQuipsRoom.fromSnapshot(await game_data.gameRoom.once());
 
-      print(roomModel.toJson());
-
       // Assign first question
       var slidingWindowKeys = new List<DatabaseReference>();
       questionKeys.forEach((i) {
@@ -152,8 +145,7 @@ class _KQState extends State<KnightQuips> {
 
       roomModel.players.forEach((key, value) async {
         var snap = await playerRef.child(key).once();
-        print('key pushing to ${snap.value}');
-        print('lastval: ${slidingWindowKeys.last.key}');
+
         playerRef
             .child(key)
             .child('q1')
@@ -199,7 +191,7 @@ class _KQState extends State<KnightQuips> {
                 icon: Icon(Icons.home),
                 onPressed: () {
                   playerList.length--;
-                  print('${playerList.length}');
+
                   Navigator.popUntil(
                       context, ModalRoute.withName(Navigator.defaultRouteName));
 
@@ -290,8 +282,6 @@ class _KQState extends State<KnightQuips> {
                     ),
                   ),
                   onPressed: () async {
-                    print('Start Game button has been pressed');
-
                     // Update Player
                     var myPlayer = KnightQuipsPlayer.fromSnapshot(
                         await game_data.player.once());

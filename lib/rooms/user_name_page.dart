@@ -1,7 +1,6 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:ucfbox/games/citronot/citronot.dart';
-//import 'package:ucfbox/models/game_rooms/citronot_room.dart' as citronot_room;
 import 'package:ucfbox/games/night_night_knightro/night_night_knightro.dart';
 import 'package:ucfbox/games/knightquips/knightquips.dart';
 import 'package:ucfbox/game_data.dart' as game_data;
@@ -26,14 +25,12 @@ class _UserNameState extends State<UserName> {
   @override
   void initState() {
     super.initState();
-    print(
-        '\n User Name Page\nThe gameRoomCode being passed is: ${widget.gameRoomCode}');
   }
 
   @override
   Widget build(BuildContext context) {
     return NetworkSensitive(
-          child: Stack(
+      child: Stack(
         children: <Widget>[
           Image.asset('images/classroom.png', fit: BoxFit.cover),
           Scaffold(
@@ -71,7 +68,8 @@ class _UserNameState extends State<UserName> {
 
                           inputFormatters: [
                             LengthLimitingTextInputFormatter(12),
-                            WhitelistingTextInputFormatter(RegExp("[a-zA-Z0-9]")),
+                            WhitelistingTextInputFormatter(
+                                RegExp("[a-zA-Z0-9]")),
                           ],
 
                           /// Decoration for text box
@@ -106,13 +104,9 @@ class _UserNameState extends State<UserName> {
                               ).show();
                             }
 
-                            // Add in case to check for duplicate names.
-
                             /// Input playerName is valid
                             else {
-                              print(
-                                  'FlatButton gameRoomCode is ${widget.gameRoomCode}');
-                              print('FlatButton playerName is $playerName');
+                              
 
                               game_data.player = FirebaseDatabase.instance
                                   .reference()
@@ -153,7 +147,7 @@ class _UserNameState extends State<UserName> {
 
                               /// Knightquips
                               else if (widget.gameType == "knightQuips") {
-                                print('We made it here');
+                                
 //                              String test = "testThis";
                                 game_data.player.set({
                                   'playerName': playerName,
@@ -169,7 +163,8 @@ class _UserNameState extends State<UserName> {
                               }
 
                               /// NNN_Knightro
-                              else if (widget.gameType == "nightNightKnightro") {
+                              else if (widget.gameType ==
+                                  "nightNightKnightro") {
                                 game_data.player.set({
                                   'playerName': playerName,
                                   'alive': true,
@@ -215,9 +210,7 @@ class _UserNameState extends State<UserName> {
                                 ],
                               ).show();
                             } else {
-                              print(
-                                  'FlatButton gameRoomCode is ${widget.gameRoomCode}');
-                              print('FlatButton playerName is $playerName');
+                              
 
                               game_data.player = FirebaseDatabase.instance
                                   .reference()
@@ -269,7 +262,8 @@ class _UserNameState extends State<UserName> {
                               }
 
                               /// NNN_Knightro
-                              else if (widget.gameType == "nightNightKnightro") {
+                              else if (widget.gameType ==
+                                  "nightNightKnightro") {
                                 game_data.player.set({
                                   'playerName': playerName,
                                   'alive': true,

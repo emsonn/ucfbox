@@ -1,9 +1,7 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-//import 'package:ucfbox/games/citronot/voting_animatedlist.dart';
 import 'package:ucfbox/models/answers/citronot_answer.dart';
-//import 'package:ucfbox/models/players/citronot_player.dart';
 import 'package:ucfbox/game_data.dart' as game_data;
 import 'package:ucfbox/games/citronot/waiting_room.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
@@ -52,7 +50,6 @@ class _PlayerInputState extends State<PlayerInput> {
                   LengthLimitingTextInputFormatter(140),
                 ],
                 onChanged: (input) {
-                  print('$input');
                   userInput = input;
                 },
               ),
@@ -67,10 +64,8 @@ class _PlayerInputState extends State<PlayerInput> {
                         fontSize: 25.0,
                         fontWeight: FontWeight.bold)),
                 onPressed: () async {
-                  print('The user input is the following: $userInput');
                   String roundActualAnswer =
                       (await game_data.gameRoom.once()).value['fact'];
-                  print("Correct answer? $roundActualAnswer");
 
                   if (userInput.length == 0) {
                     Alert(

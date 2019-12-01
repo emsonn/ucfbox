@@ -6,11 +6,7 @@ class CitronotAnswer {
   String answer;
   bool correct;
 
-  CitronotAnswer(
-      this.playerKey,
-      this.answer,
-      { this.correct = false }
-      );
+  CitronotAnswer(this.playerKey, this.answer, {this.correct = false});
 
   CitronotAnswer.fromSnapshot(DataSnapshot snapshot)
       : key = snapshot.key,
@@ -24,10 +20,6 @@ class CitronotAnswer {
         correct = snapshot.value["correct"];
 
   toJson() {
-    return {
-      "playerKey": playerKey,
-      "answer": answer,
-      "correct": correct
-    };
+    return {"playerKey": playerKey, "answer": answer, "correct": correct};
   }
 }

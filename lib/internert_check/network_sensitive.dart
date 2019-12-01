@@ -17,7 +17,7 @@ class NetworkSensitive extends StatelessWidget {
         connectionStatus == null) {
       return child;
     }
-    print('The connection status is ==> ${connectionStatus.toString()}');
+
     return AlertDialog(
       title: Text('Connection Problem'),
       content: Text('Please reconnect to a network.'),
