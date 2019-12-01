@@ -195,7 +195,6 @@ class _CitronotState extends State<Citronot> {
                     ),
                   ),
                   onPressed: () {
-                    /// Change this back to How to Play!!!
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) => HowToPlay()));
                   },
@@ -213,9 +212,32 @@ class _CitronotState extends State<Citronot> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  onPressed: () async {
-                    // else {
+                  
+                onPressed: () async {
+                  if ((playerList.length < game_data.citronotMinNumPlayers) || 
+                      (playerList.length > game_data.citronotMaxNumPlayers)) {
 
+                      Alert(
+                              context: context,
+                              type: AlertType.error,
+                              title: "UCFBox Alert",
+                              desc: "${game_data.citronotMinNumPlayers} to ${game_data.citronotMaxNumPlayers} players required - sorry!",
+                              buttons: [
+                                DialogButton(
+                                  color: Color.fromRGBO(225, 202, 6, 100),
+                                  child: Text(
+                                    "CHARGE ON!",
+                                    style: TextStyle(
+                                        color: Colors.black, fontSize: 20),
+                                  ),
+                                  onPressed: () => Navigator.pop(context),
+                                  width: 120,
+                                )
+                              ],
+                            ).show();
+                  }
+
+                  else {
                     game_data.citronotNumRounds = 2;
 
                     // Download Q/As
@@ -266,9 +288,8 @@ class _CitronotState extends State<Citronot> {
                       transaction.value = (transaction.value ?? 0) + 1;
                       return transaction;
                     });
-                    // } // end of else
-                  },
-                ),
+                  } // end of else
+                },
               ),
               SizedBox(
                 height: 30,

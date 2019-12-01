@@ -65,47 +65,64 @@ class _AnimatedListSampleState extends State<AnimatedListSample> {
                             fontSize: 40.0,
                             fontWeight: FontWeight.bold),
                       ));
-                    }),
-              ),
-              Expanded(
-                flex: 3,
-                child: FirebaseAnimatedList(
-                    sort: (a, b) {
-                      return a.value['answer']
-                          .toString()
-                          .toLowerCase()
-                          .compareTo(
-                              b.value['answer'].toString().toLowerCase());
-                    },
-                    query: answerRef,
-                    itemBuilder: (_, DataSnapshot snapshot,
-                        Animation<double> animation, int index) {
-                      return Padding(
-                        padding: const EdgeInsets.all(2.0),
-                        child: SizeTransition(
-                          axis: Axis.vertical,
-                          sizeFactor: animation,
-                          child: GestureDetector(
-                            behavior: HitTestBehavior.opaque,
-                            onTap: () async {
-                              if (game_data.player.key !=
-                                  snapshot.value['playerKey']) {
-                                if (snapshot.value['correct'] == true) {
-                                  flag = 1;
-                                  Alert(
-                                    context: context,
-                                    type: AlertType.success,
-                                    title: "Good job!",
-                                    desc: "You chose the correct answer!",
-                                    buttons: [
-                                      DialogButton(
-                                        color: Color.fromRGBO(225, 202, 6, 100),
-                                        child: Text(
-                                          "CHARGE ON!",
-                                          style: TextStyle(
-                                              color: Colors.black,
-                                              fontSize: 20),
-                                        ),
+                    }
+                    return new Center(
+                        child: Text(
+                      'Loading...',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 40.0,
+                          fontWeight: FontWeight.bold),
+                    ));
+                  }),
+            ),
+            Expanded(
+              flex: 3,
+              child: FirebaseAnimatedList(
+                  sort: (a, b) {
+                    return a.value['answer']
+                        .toString()
+                        .toLowerCase()
+                        .compareTo(b.value['answer'].toString().toLowerCase());
+                  },
+                  query: answerRef,
+                  itemBuilder: (_, DataSnapshot snapshot,
+                      Animation<double> animation, int index) {
+                    return Padding(
+                      padding: const EdgeInsets.all(2.0),
+                      child: SizeTransition(
+                        axis: Axis.vertical,
+                        sizeFactor: animation,
+                        child: GestureDetector(
+                          behavior: HitTestBehavior.opaque,
+                          onTap: () async {
+                            if (game_data.player.key !=
+                                snapshot.value['playerKey']) {
+
+                              if (snapshot.value['correct'] == true) {
+
+                                flag = 1;
+                                Alert(
+                                  closeFunction: () =>
+                                    Navigator
+                                      .push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => WaitingRoom())),
+                                  context: context,
+                                  type: AlertType.success,
+                                  title: "Good job!",
+                                  desc:
+                                  "You chose the correct answer!",
+                                  buttons: [
+                                    DialogButton(
+                                      color: Color.fromRGBO(225, 202, 6, 100),
+                                      child: Text(
+                                        "CHARGE ON!",
+                                        style: TextStyle(
+                                            color: Colors.black, fontSize: 20),
+                                      ),
 //                                      onPressed: () => Navigator.pop(context),
 //                                      width: 120,
 
