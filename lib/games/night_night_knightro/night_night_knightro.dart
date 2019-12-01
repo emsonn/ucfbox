@@ -1,7 +1,11 @@
+import 'dart:async';
+
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:ucfbox/games/night_night_knightro/how_to_play.dart';
-import 'package:ucfbox/games/night_night_knightro/role_assignment.dart';
+import 'package:ucfbox/games/night_night_knightro/discussion_room.dart';
+import 'package:ucfbox/games/night_night_knightro/start_status_box.dart';
+import 'package:ucfbox/models/game_rooms/nightNightKnightro_room.dart';
 import 'package:ucfbox/models/players/nightNightKnightro_player.dart';
 import 'package:ucfbox/game_data.dart' as game_data;
 
@@ -12,57 +16,51 @@ class NightNightKnightro extends StatefulWidget {
 
 class _NightNightKnightroState extends State<NightNightKnightro> {
   NightNightKnightroPlayer player;
-  Map<String, NightNightKnightroPlayer> players;
-  int randomSeed;
+  NightNightKnightroRoom room;
+  int roleSeed;
+  StreamSubscription listener;
 
   @override
   void initState() {
     super.initState();
-    players = new Map();
     game_data.player.once().then((DataSnapshot snapshot) {
       player = NightNightKnightroPlayer.fromSnapshot(snapshot);
     });
-    randomSeed = players.length - 1;
-    game_data.gameRoom.child('players').onChildAdded.listen(_onPlayerAdded);
-    game_data.gameRoom.child('players').onChildChanged.listen(_onPlayersUpdate);
-  }
 
-  _onPlayerAdded(Event event) {
-    print('onPlayerAdded');
-    if (players != null) {
-      players.putIfAbsent(event.snapshot.key, () {
-        return NightNightKnightroPlayer.fromSnapshot(event.snapshot);
-      });
-      setState(() {
-        players = players;
-      });
-    }
+    game_data.gameRoom.once().then((DataSnapshot snapshot) {
+      room = NightNightKnightroRoom.fromSnapshot(snapshot);
+      print('no of players ${snapshot.value["noOfPlayers"]}');
+      roleSeed = snapshot.value["noOfPlayers"] - 1;
+    });
+    listener = game_data.gameRoom.onValue.listen(_onPlayersUpdate);
   }
 
   _onPlayersUpdate(Event event) {
-    setState(() {
-      players[event.snapshot.key].start = !players[event.snapshot.key].start;
-    });
+    print('updated');
     var starts = 0;
-    players.forEach((k, v) => {v.start ? starts++ : null});
-    if (starts == players.length) {
-      Navigator.push(
+    event.snapshot.value['players']
+        .forEach((k, v) => {v['start'] ? starts++ : null});
+    if (starts == event.snapshot.value['players'].length &&
+        event.snapshot.value['players'].length >= 4) {
+      game_data.player.update({'role': room.randomRoles[roleSeed]});
+      Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => RoleAssignment()),
+        MaterialPageRoute(builder: (context) => DiscussionRoom()),
       );
     }
   }
 
-  _onPlayerStart(Event event) {}
+  @override
+  void dispose() {
+    listener.cancel();
+    super.dispose();
+  }
 
   handleStart() {
     game_data.player.update({'start': !player.start});
     setState(() {
       player.start = !player.start;
     });
-//    game_data.player.once().then((DataSnapshot snapshot) {
-//      print(snapshot.value);
-//    });
   }
 
   @override
@@ -84,47 +82,7 @@ class _NightNightKnightroState extends State<NightNightKnightro> {
                     color: Colors.white, fontFamily: 'Press Start 2P'),
               ),
             ),
-            Container(
-              margin: EdgeInsets.fromLTRB(0, 0, 0, 30),
-              padding: const EdgeInsets.all(8.0),
-              decoration: BoxDecoration(
-                  border: Border.all(color: Colors.white, width: 1)),
-              width: 300,
-              height: 60,
-              child: GridView.count(
-                  childAspectRatio: 7 / 1,
-                  crossAxisCount: 2,
-                  children: List.generate(players.length, (index) {
-                    return Row(
-                      children: <Widget>[
-                        Container(
-                          child: Text(
-                              '${index + 1}. ${players[players.keys.toList()[index]].playerName}',
-                              softWrap: false,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontFamily: 'Press Start 2P',
-                                  fontSize: 8)),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
-                          child: players[players.keys.toList()[index]].start
-                              ? Icon(
-                                  Icons.check,
-                                  color: Colors.white,
-                                  size: 8,
-                                )
-                              : Icon(
-                                  Icons.close,
-                                  color: Colors.white,
-                                  size: 8,
-                                ),
-                        ),
-                      ],
-                    );
-                  })),
-            ),
+            StartStatusBox(),
             FlatButton(
               child: Text(
                 'Start',
