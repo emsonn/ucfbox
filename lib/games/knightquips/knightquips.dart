@@ -1,18 +1,18 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-//import 'package:firebase_database/ui/firebase_list.dart';
 import 'package:flutter/material.dart';
 import 'package:ucfbox/games/knightquips/question.dart';
 import 'package:ucfbox/models/game_rooms/knightquips_room.dart';
 import 'package:ucfbox/models/players/knightquips_player.dart';
-import 'package:ucfbox/my_app_bar.dart';
 import 'package:ucfbox/games/knightquips/howtoplay.dart';
-//import 'package:ucfbox/games/knightquips/question.dart';
-
 import 'package:firebase_database/ui/firebase_animated_list.dart';
-//import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:ucfbox/game_data.dart' as game_data;
+import 'package:ucfbox/home_page.dart';
 
+//import 'package:firebase_database/ui/firebase_list.dart';
+//import 'package:ucfbox/my_app_bar.dart';
+//import 'package:flutter/material.dart';
+//import 'package:ucfbox/games/knightquips/question.dart';
 //import 'package:ucfbox/models/game_rooms/knightquips_room.dart';
 
 class KnightQuips extends StatefulWidget {
@@ -181,7 +181,33 @@ class _KQState extends State<KnightQuips> {
   Widget build(BuildContext context) {
     return new Scaffold(
       backgroundColor: Color(0xFFFFC904),
-      appBar: MyAppBar(),
+      appBar: AppBar(
+
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        actions: <Widget>[
+
+          IconButton(
+              icon: Icon(Icons.home),
+              onPressed: () {
+
+                playerList.length--;
+                print('${playerList.length}');
+                Navigator.popUntil(
+                    context, ModalRoute.withName(Navigator.defaultRouteName));
+
+
+                if(playerList.length == 0)
+                {
+                  game_data.gameRoom.remove();
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => HomePage()));
+                }
+              })
+        ],
+
+      leading: new Container(),
+      ),
 
       body: SafeArea(
         child: Column(
@@ -282,7 +308,10 @@ class _KQState extends State<KnightQuips> {
             ),
             SizedBox(
               height: 30,
+
+
             ),
+
           ],
         ),
       ),
