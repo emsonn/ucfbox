@@ -46,7 +46,8 @@ class _NightNightKnightroState extends State<NightNightKnightro> {
     if (starts == event.snapshot.value['players'].length &&
         event.snapshot.value['players'].length >= 4) {
       print('enter');
-      game_data.player.update({'role': room.randomRoles[roleSeed]});
+      game_data.player
+          .update({'role': event.snapshot.value['randomRoles'][roleSeed]});
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => DiscussionRoom()),
