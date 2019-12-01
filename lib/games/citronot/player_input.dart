@@ -65,9 +65,7 @@ class _PlayerInputState extends State<PlayerInput> {
                       fontSize: 25.0,
                       fontWeight: FontWeight.bold)),
               onPressed: () async {
-                print('The user input is the following: $userInput');
                 String roundActualAnswer = (await game_data.gameRoom.once()).value['fact'];
-                print("Correct answer? $roundActualAnswer");
 
                 if (userInput.length == 0) {
                     Alert(
