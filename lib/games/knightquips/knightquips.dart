@@ -281,13 +281,13 @@ class _KQState extends State<KnightQuips> {
                   ),
                 ),
                 onPressed: () async {
-                  if ((playerList.length < game_data.citronotMinNumPlayers) || 
-                      (playerList.length > game_data.citronotMaxNumPlayers)) {
+                  if ((playerList.length < game_data.knightQuipsMinNumPlayers) || 
+                      (playerList.length > game_data.knightQuipsMaxNumPlayers)) {
                       Alert(
                               context: context,
                               type: AlertType.error,
                               title: "UCFBox Alert",
-                              desc: "${game_data.citronotMinNumPlayers} to ${game_data.citronotMaxNumPlayers} players required - sorry!",
+                              desc: "${game_data.knightQuipsMinNumPlayers} to ${game_data.knightQuipsMaxNumPlayers} players required - sorry!",
                               buttons: [
                                 DialogButton(
                                   color: Color.fromRGBO(225, 202, 6, 100),
