@@ -175,6 +175,19 @@ class _UserNameState extends State<UserName> {
                                 'votes': 0,
                                 'start': false
                               });
+                              game_data.gameRoom
+                                  .once()
+                                  .then((DataSnapshot snapshot) {
+                                var roles =
+                                    snapshot.value["randomRoles"].toList();
+                                roles.shuffle();
+                                if (snapshot.value["players"].length > 4) {
+                                  roles.add("student");
+                                }
+                                game_data.gameRoom
+                                    .child('randomRoles')
+                                    .set(roles);
+                              });
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
