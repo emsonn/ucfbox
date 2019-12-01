@@ -93,7 +93,12 @@ class _AnimatedListSampleState extends State<AnimatedListSample> {
 
                                 flag = 1;
                                 Alert(
-
+                                  closeFunction: () =>
+                                    Navigator
+                                      .push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => WaitingRoom())),
                                   context: context,
                                   type: AlertType.success,
                                   title: "Good job!",
