@@ -25,7 +25,7 @@ List<int> deck;
 QuerySnapshot questionBank;
 int globalNumPlayers = 0;
 int citronotNumRounds = 2; // 0 inclusive
-int citronotNumQuestions = 23; // 0-22
+int citronotNumQuestions = 24; // 0-23
 int citronotMinNumPlayers = 4;
 int citronotMaxNumPlayers = 8;
 

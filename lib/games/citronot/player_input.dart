@@ -65,6 +65,15 @@ class _PlayerInputState extends State<PlayerInput> {
                   )),
               onPressed: () async {
                 print('The user input is the following: $userInput');
+                String roundActualAnswer = (await game_data.gameRoom.once()).value['fact'];
+                print("Correct answer? $roundActualAnswer");
+
+                
+                if (userInput.toLowerCase() == roundActualAnswer.toLowerCase()) {
+                  // Same answer condition, add an alert
+                }
+
+
 
                 if ( (await game_data.gameRoom.once()).value['nextRoom'] == 0 ){
                   // Update my Answer
