@@ -10,6 +10,7 @@ import 'package:ucfbox/games/citronot/howtoplay.dart';
 import 'package:ucfbox/games/citronot/question.dart';
 import 'package:ucfbox/home_page.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
+import 'package:ucfbox/internert_check/network_sensitive.dart';
 
 class Citronot extends StatefulWidget {
   @override
@@ -34,51 +35,54 @@ class _CitronotState extends State<Citronot> {
     listen2 = playerRef.onChildChanged.listen(_onPlayerChanged);
 
     // Ready
-    listen3 = game_data.gameRoom.child('answerCount').onValue.listen(_onCountChanged);
+    listen3 =
+        game_data.gameRoom.child('answerCount').onValue.listen(_onCountChanged);
 
     // Setup Gamewide Game leave room listern for host, DO NOT DISPOSE!!!
     // This should probably be set up elsewhere when we have time
     if (game_data.status == game_data.Status.host)
-      nextRoomListener = game_data.gameRoom.child('nextRoom').onValue.listen(_onNext);
+      nextRoomListener =
+          game_data.gameRoom.child('nextRoom').onValue.listen(_onNext);
   }
 
   _onNext(Event event) async {
     if ((await game_data.gameRoom.once()).value['noOfPlayers'] ==
-        (await game_data.gameRoom.once()).value['nextRoom']){
+        (await game_data.gameRoom.once()).value['nextRoom']) {
       game_data.gameRoom.child('nextRoom').set(0);
       game_data.gameRoom.child('answerCount').set(0);
     }
   }
 
-  _onCountChanged(Event event) async{
+  _onCountChanged(Event event) async {
     if ((await game_data.gameRoom.once()).value['answerCount'] ==
-        (await game_data.gameRoom.once()).value['noOfPlayers'])
-      {
-        game_data.globalNumPlayers = ( await game_data.gameRoom.once()).value['noOfPlayers'];
+        (await game_data.gameRoom.once()).value['noOfPlayers']) {
+      game_data.globalNumPlayers =
+          (await game_data.gameRoom.once()).value['noOfPlayers'];
 
-        final TransactionResult result =
-          await game_data.gameRoom.child('nextRoom').runTransaction((transaction) async {
-            transaction.value = (transaction.value ?? 0 ) + 1;
-            return transaction;
-          });
+      final TransactionResult result = await game_data.gameRoom
+          .child('nextRoom')
+          .runTransaction((transaction) async {
+        transaction.value = (transaction.value ?? 0) + 1;
+        return transaction;
+      });
 
-        if (result.committed) {
-          listen1.cancel();
-          listen2.cancel();
-          listen3.cancel();
+      if (result.committed) {
+        listen1.cancel();
+        listen2.cancel();
+        listen3.cancel();
 
-          // Set var back to false
-          var myPlayer = CitronotPlayer.fromSnapshot(
-              await game_data.player.once());
-          myPlayer.start = false;
-          game_data.player.set(myPlayer.toJson());
+        // Set var back to false
+        var myPlayer =
+            CitronotPlayer.fromSnapshot(await game_data.player.once());
+        myPlayer.start = false;
+        game_data.player.set(myPlayer.toJson());
 
-          // Continue
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => Question()));
-        }
-        print("Error!!!");
+        // Continue
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => Question()));
       }
+      print("Error!!!");
+    }
   }
 
   _onPlayerAdded(Event event) {
@@ -100,203 +104,206 @@ class _CitronotState extends State<Citronot> {
 
   @override
   Widget build(BuildContext context) {
-
-    return new Scaffold(
-      backgroundColor: Color(0xFFFFC904),
-      appBar: AppBar(
-
-        elevation: 0,
-        backgroundColor: Colors.transparent,
-        actions: <Widget>[
-
-          IconButton(
-              icon: Icon(Icons.home),
-              onPressed: () async {
-
-                // setState(() {
-                //   playerList.remove(CitronotPlayer.fromSnapshot(event.snapshot));
-                //   print('${playerList.length}');
-                // });
-
-                // playerList.remove(game_data.player);
-                // playerList.length--;
-                // print('${playerList.length}');
-                game_data.player.remove();
-                var result = await game_data.gameRoom.child('noOfPlayers').runTransaction((transaction) async {
-                  transaction.value = (transaction.value ?? 0 ) - 1;
-                  return transaction;
-                });
-                Navigator.popUntil(
-                    context, ModalRoute.withName(Navigator.defaultRouteName));
-
-                playerList.length = result.dataSnapshot.value;
-                if(playerList.length == 0)
-                {
-                  game_data.gameRoom.remove();
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => HomePage()));
-                }
-              })
-        ],
-
-      leading: new Container(),
-
-      ),
-
-      body: SafeArea(
-        child: Column(
-          children: <Widget>[
-
-            Expanded(
-              flex: 3,
-              child: Image.asset(
-                'images/citronot.png',
-              ),
-            ),
-            Expanded(
-              flex: 4,
-
-              child: Text('Game Room Code:\n ${game_data.gameRoom.key}',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 25,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-            Expanded(
-              flex: 3,
-              child: Text(
-                'PLAYERS',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 25,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-            Flexible(
-              flex: 8,
-              child: new FirebaseAnimatedList(
-                  query: playerRef,
-                  itemBuilder: (_, DataSnapshot snapshot,
-                      Animation<double> animation, int index) {
-                    if (snapshot == null ) {
-                      return SizedBox(height: 10,);
-                    }
-                    return new Material(
-                        color: snapshot.value['start'] == true
-                            ? Colors.green
-                            : Colors.white,
-                        child: ListTile(
-                          title: new Text(snapshot.value['playerName']),
-                        )
-                    );
-                  }
-              ),
-            ),
-            Expanded(
-              flex: 0,
-              child: RaisedButton(
-                textColor: Color(0xFFFFC904),
-                color: Colors.black,
-                child: Text(
-                  'How to Play',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                onPressed: () {
-
-                  /// Change this back to How to Play!!!
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => HowToPlay()));
-                },
-              ),
-            ),
-            Expanded(
-              flex: 0,
-              child: RaisedButton(
-                textColor: Color(0xFFFFC904),
-                color: Colors.black,
-                child: Text(
-                  'Start Game',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
+    return NetworkSensitive(
+      child: new Scaffold(
+        backgroundColor: Color(0xFFFFC904),
+        appBar: AppBar(
+          elevation: 0,
+          backgroundColor: Colors.transparent,
+          actions: <Widget>[
+            IconButton(
+                icon: Icon(Icons.home),
                 onPressed: () async {
-                  // if ((playerList.length < game_data.citronotMinNumPlayers) || 
-                  //     (playerList.length > game_data.citronotMaxNumPlayers)) {
-                  //     print("sdlkjsfdljksdfljkfds ${playerList.length}");
+                  // setState(() {
+                  //   playerList.remove(CitronotPlayer.fromSnapshot(event.snapshot));
+                  //   print('${playerList.length}');
+                  // });
 
-                  //     Alert(
-                  //             context: context,
-                  //             type: AlertType.error,
-                  //             title: "UCFBox Alert",
-                  //             desc: "${game_data.citronotMinNumPlayers} to ${game_data.citronotMaxNumPlayers} players only - sorry!",
-                  //             buttons: [
-                  //               DialogButton(
-                  //                 color: Color.fromRGBO(225, 202, 6, 100),
-                  //                 child: Text(
-                  //                   "CHARGE ON!",
-                  //                   style: TextStyle(
-                  //                       color: Colors.black, fontSize: 20),
-                  //                 ),
-                  //                 onPressed: () => Navigator.pop(context),
-                  //                 width: 120,
-                  //               )
-                  //             ],
-                  //           ).show();
-                  // }
+                  // playerList.remove(game_data.player);
+                  // playerList.length--;
+                  // print('${playerList.length}');
+                  game_data.player.remove();
+                  var result = await game_data.gameRoom
+                      .child('noOfPlayers')
+                      .runTransaction((transaction) async {
+                    transaction.value = (transaction.value ?? 0) - 1;
+                    return transaction;
+                  });
+                  Navigator.popUntil(
+                      context, ModalRoute.withName(Navigator.defaultRouteName));
 
-                  // else {
+                  playerList.length = result.dataSnapshot.value;
+                  if (playerList.length == 0) {
+                    game_data.gameRoom.remove();
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => HomePage()));
+                  }
+                })
+          ],
+          leading: new Container(),
+        ),
+        body: SafeArea(
+          child: Column(
+            children: <Widget>[
+              Expanded(
+                flex: 3,
+                child: Image.asset(
+                  'images/citronot.png',
+                ),
+              ),
+              Expanded(
+                flex: 4,
+                child: Text(
+                  'Game Room Code:\n ${game_data.gameRoom.key}',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 25,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              Expanded(
+                flex: 3,
+                child: Text(
+                  'PLAYERS',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 25,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              Flexible(
+                flex: 8,
+                child: new FirebaseAnimatedList(
+                    query: playerRef,
+                    itemBuilder: (_, DataSnapshot snapshot,
+                        Animation<double> animation, int index) {
+                      if (snapshot == null) {
+                        return SizedBox(
+                          height: 10,
+                        );
+                      }
+                      return new Material(
+                          color: snapshot.value['start'] == true
+                              ? Colors.green
+                              : Colors.white,
+                          child: ListTile(
+                            title: new Text(snapshot.value['playerName']),
+                          ));
+                    }),
+              ),
+              Expanded(
+                flex: 0,
+                child: RaisedButton(
+                  textColor: Color(0xFFFFC904),
+                  color: Colors.black,
+                  child: Text(
+                    'How to Play',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  onPressed: () {
+                    /// Change this back to How to Play!!!
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => HowToPlay()));
+                  },
+                ),
+              ),
+              Expanded(
+                flex: 0,
+                child: RaisedButton(
+                  textColor: Color(0xFFFFC904),
+                  color: Colors.black,
+                  child: Text(
+                    'Start Game',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  onPressed: () async {
+                    // if ((playerList.length < game_data.citronotMinNumPlayers) ||
+                    //     (playerList.length > game_data.citronotMaxNumPlayers)) {
+                    //     print("sdlkjsfdljksdfljkfds ${playerList.length}");
+
+                    //     Alert(
+                    //             context: context,
+                    //             type: AlertType.error,
+                    //             title: "UCFBox Alert",
+                    //             desc: "${game_data.citronotMinNumPlayers} to ${game_data.citronotMaxNumPlayers} players only - sorry!",
+                    //             buttons: [
+                    //               DialogButton(
+                    //                 color: Color.fromRGBO(225, 202, 6, 100),
+                    //                 child: Text(
+                    //                   "CHARGE ON!",
+                    //                   style: TextStyle(
+                    //                       color: Colors.black, fontSize: 20),
+                    //                 ),
+                    //                 onPressed: () => Navigator.pop(context),
+                    //                 width: 120,
+                    //               )
+                    //             ],
+                    //           ).show();
+                    // }
+
+                    // else {
                     print('Start Game button has been pressed');
                     game_data.citronotNumRounds = 2;
 
                     // Download Q/As
-                    if ( game_data.status == game_data.Status.host ) {
-                      game_data.questionBank = await Firestore.instance.collection('citronot').getDocuments();
+                    if (game_data.status == game_data.Status.host) {
+                      game_data.questionBank = await Firestore.instance
+                          .collection('citronot')
+                          .getDocuments();
 
                       game_data.deck = new List<int>();
-                      
+
                       // Will randomly generate 3 different question indices for lookup.
                       while (game_data.deck.length < 3) {
                         var randomQuestionIndex = new Random();
-                        game_data.deck.add(randomQuestionIndex.nextInt((game_data.citronotNumQuestions)));
+                        game_data.deck.add(randomQuestionIndex
+                            .nextInt((game_data.citronotNumQuestions)));
                         game_data.deck.toSet().toList();
                       }
 
                       print(game_data.deck);
-                      
-                      var prompt = game_data.questionBank.documents[game_data.question][game_data.deck.last.toString()];
+
+                      var prompt =
+                          game_data.questionBank.documents[game_data.question]
+                              [game_data.deck.last.toString()];
 
                       game_data.gameRoom.child('prompt').set(prompt);
 
-                      var answer = game_data.questionBank.documents[game_data.answer][game_data.deck.removeLast().toString()];
-                      var correctAnswer = new CitronotAnswer("", answer, correct: true);
-                      
+                      var answer =
+                          game_data.questionBank.documents[game_data.answer]
+                              [game_data.deck.removeLast().toString()];
+                      var correctAnswer =
+                          new CitronotAnswer("", answer, correct: true);
+
                       game_data.gameRoom.child('fact').set(answer.toString());
-                      
+
                       print("sdfljsdfkldsf PLAYER-INPUT ANSWER??? $answer");
                       // print("sdfljsdfkldsf PLAYER-INPUT ANSWER??? ${answer.toString()}");
 
-                      print("sdfljsdfkldsf CORRECTANSWER2??? ${game_data.gameRoom.child('fact')}");
+                      print(
+                          "sdfljsdfkldsf CORRECTANSWER2??? ${game_data.gameRoom.child('fact')}");
                       // print("sdfljsdfkldsf CORRECTANSWER2??? ${correctAnswer.toString()}");
                       // print("sdfljsdfkldsf CORRECTANSWER28787??? ${correctAnswer.answer.toString()}");
 
-                      var answerRef = game_data.gameRoom.child('answers').push();
+                      var answerRef =
+                          game_data.gameRoom.child('answers').push();
                       answerRef.set(correctAnswer.toJson());
 
                       print("sdfljsdfkldsf PLAYER-INPUT ANSWER??? $answerRef");
-                      print("sdfljsdfkldsf PLAYER-INPUT ANSWER??? ${answerRef.toString()}");
-                      print("sdfljsdfkldsf PLAYER-INPUT ANSWER??? ${answerRef.child('answers')}");
-                      print("sdfljsdfkldsf PLAYER-INPUT ANSWER??? ${answerRef.child('answers').toString()}\n\n");
-
-
-
+                      print(
+                          "sdfljsdfkldsf PLAYER-INPUT ANSWER??? ${answerRef.toString()}");
+                      print(
+                          "sdfljsdfkldsf PLAYER-INPUT ANSWER??? ${answerRef.child('answers')}");
+                      print(
+                          "sdfljsdfkldsf PLAYER-INPUT ANSWER??? ${answerRef.child('answers').toString()}\n\n");
                     }
 
                     // Update Player
@@ -306,18 +313,21 @@ class _CitronotState extends State<Citronot> {
                     game_data.player.set(myPlayer.toJson());
 
                     // Update Users who have answered
-                    await game_data.gameRoom.child('answerCount').runTransaction((transaction) async {
-                      transaction.value = (transaction.value ?? 0 ) + 1;
+                    await game_data.gameRoom
+                        .child('answerCount')
+                        .runTransaction((transaction) async {
+                      transaction.value = (transaction.value ?? 0) + 1;
                       return transaction;
                     });
-                  // } // end of else
-                },
+                    // } // end of else
+                  },
+                ),
               ),
-            ),
-            SizedBox(
-              height: 30,
-            ),
-          ],
+              SizedBox(
+                height: 30,
+              ),
+            ],
+          ),
         ),
       ),
     );

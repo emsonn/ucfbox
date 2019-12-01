@@ -3,6 +3,7 @@ import 'package:flutter_swiper/flutter_swiper.dart';
 
 import '../my_app_bar.dart';
 import '../menu_of_games/game_card.dart';
+import 'package:ucfbox/internert_check/network_sensitive.dart';
 
 class CreateRoom extends StatelessWidget {
   @override
@@ -20,7 +21,7 @@ class CreateRoom extends StatelessWidget {
           "answers:": [],
           "gameType": "citronot",
           "prompt": "",
-          "fact":"",
+          "fact": "",
           "nextRoom": 0,
           "answerCount": 0
         },
@@ -37,8 +38,8 @@ class CreateRoom extends StatelessWidget {
           "noOfPlayers": 0,
           "nextRoom": 0,
           "answerCount": 0,
-          "players":[],
-          "questions":[]
+          "players": [],
+          "questions": []
         },
       ),
 
@@ -60,23 +61,25 @@ class CreateRoom extends StatelessWidget {
     ];
 
     /// Stack puts one card ontop of another
-    return Stack(
-      children: <Widget>[
-        Scaffold(
-          backgroundColor: Colors.black,
-          appBar: MyAppBar(),
-          body: SafeArea(
-            /// Swiper gives the cards a horizontal movement
-            child: Swiper(
-              itemBuilder: (BuildContext context, int index) {
-                print('\n\n${games[index].toStringDeep()}\n\n');
-                return games[index];
-              },
-              itemCount: 3,
+    return NetworkSensitive(
+      child: Stack(
+        children: <Widget>[
+          Scaffold(
+            backgroundColor: Colors.black,
+            appBar: MyAppBar(),
+            body: SafeArea(
+              /// Swiper gives the cards a horizontal movement
+              child: Swiper(
+                itemBuilder: (BuildContext context, int index) {
+                  print('\n\n${games[index].toStringDeep()}\n\n');
+                  return games[index];
+                },
+                itemCount: 3,
+              ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

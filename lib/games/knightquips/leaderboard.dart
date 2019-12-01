@@ -8,6 +8,7 @@ import 'package:ucfbox/home_page.dart';
 //import 'package:ucfbox/games/citronot/waiting_room.dart';
 import 'package:ucfbox/models/players/citronot_player.dart';
 import 'package:ucfbox/games/citronot/question.dart';
+import 'package:ucfbox/internert_check/network_sensitive.dart';
 
 class KQuipsLeaderboard extends StatefulWidget {
   @override
@@ -26,82 +27,83 @@ class _AnimatedListSampleState extends State<KQuipsLeaderboard> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        backgroundColor: Color(0xFFFFC904),
-        body: SafeArea(
-          child: Column(children: <Widget>[
-            SizedBox(
-              height: 50,
-            ),
-            Expanded(
-                child: Text(
-              'LEADERBOARD',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 40.0,
-                  fontWeight: FontWeight.bold),
-            )),
-            Expanded(
-              flex: 9,
-              child: FirebaseAnimatedList(
-                  sort: (a, b) {
-                    return a.value['score'].compareTo(b.value['score']);
-                  },
-                  query: playerRef,
-                  itemBuilder: (_, DataSnapshot snapshot,
-                      Animation<double> animation, int index) {
-                    return Padding(
-                      padding: const EdgeInsets.all(2.0),
-                      child: SizeTransition(
-                        axis: Axis.vertical,
-                        sizeFactor: animation,
-                        child: GestureDetector(
-                          behavior: HitTestBehavior.opaque,
-                          child: SizedBox(
-                            height: 128.0,
-                            child: Card(
-                              color: Colors.black,
-                              child: Center(
-                                child: Text(
-                                  "${snapshot.value['playerName']}   Score:${snapshot.value['score']}",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    color: Color(0xFFFFC904),
-                                    fontSize: 25.0,
-                                    fontWeight: FontWeight.bold,
+    return NetworkSensitive(
+      child: MaterialApp(
+        home: Scaffold(
+          backgroundColor: Color(0xFFFFC904),
+          body: SafeArea(
+            child: Column(children: <Widget>[
+              SizedBox(
+                height: 50,
+              ),
+              Expanded(
+                  child: Text(
+                'LEADERBOARD',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 40.0,
+                    fontWeight: FontWeight.bold),
+              )),
+              Expanded(
+                flex: 9,
+                child: FirebaseAnimatedList(
+                    sort: (a, b) {
+                      return a.value['score'].compareTo(b.value['score']);
+                    },
+                    query: playerRef,
+                    itemBuilder: (_, DataSnapshot snapshot,
+                        Animation<double> animation, int index) {
+                      return Padding(
+                        padding: const EdgeInsets.all(2.0),
+                        child: SizeTransition(
+                          axis: Axis.vertical,
+                          sizeFactor: animation,
+                          child: GestureDetector(
+                            behavior: HitTestBehavior.opaque,
+                            child: SizedBox(
+                              height: 128.0,
+                              child: Card(
+                                color: Colors.black,
+                                child: Center(
+                                  child: Text(
+                                    "${snapshot.value['playerName']}   Score:${snapshot.value['score']}",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      color: Color(0xFFFFC904),
+                                      fontSize: 25.0,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                    );
-                  }),
-            ),
-
-            Expanded(
-              flex: 0,
-              child: RaisedButton(
-                textColor: Color(0xFFFFC904),
-                color: Colors.black,
-                child: Text(
-                  'End Game',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                onPressed: () async {
-                  game_data.gameRoom.remove();
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => HomePage()));
-                },
+                      );
+                    }),
               ),
-            ),
-          ]),
+              Expanded(
+                flex: 0,
+                child: RaisedButton(
+                  textColor: Color(0xFFFFC904),
+                  color: Colors.black,
+                  child: Text(
+                    'End Game',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  onPressed: () async {
+                    game_data.gameRoom.remove();
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => HomePage()));
+                  },
+                ),
+              ),
+            ]),
+          ),
         ),
       ),
     );

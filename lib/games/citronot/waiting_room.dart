@@ -7,6 +7,7 @@ import 'package:ucfbox/games/citronot/voting_animatedlist.dart';
 import 'package:ucfbox/games/citronot/leaderboard.dart';
 import 'package:ucfbox/games/citronot/question.dart';
 import 'package:ucfbox/models/answers/citronot_answer.dart';
+import 'package:ucfbox/internert_check/network_sensitive.dart';
 
 class WaitingRoom extends StatefulWidget {
   @override
@@ -28,16 +29,20 @@ class _WaitingState extends State<WaitingRoom> {
     playerRef = game_data.gameRoom.child('players');
 
     listen1 = playerRef.onChildChanged.listen(_onPlayerChanged);
-    listen2 = game_data.gameRoom.child('answerCount').onValue.listen(_onCountChanged);
+    listen2 =
+        game_data.gameRoom.child('answerCount').onValue.listen(_onCountChanged);
 
     // Setup next round
-    if (game_data.status == game_data.Status.host && game_data.nextRoom == game_data.NextRoom.question){
+    if (game_data.status == game_data.Status.host &&
+        game_data.nextRoom == game_data.NextRoom.question) {
       game_data.gameRoom.child('answers').remove();
 
-      var prompt = game_data.questionBank.documents[game_data.question][game_data.deck.last.toString()];
+      var prompt = game_data.questionBank.documents[game_data.question]
+          [game_data.deck.last.toString()];
       game_data.gameRoom.child('prompt').set(prompt);
-                      
-      var answer = game_data.questionBank.documents[game_data.answer][game_data.deck.removeLast().toString()];
+
+      var answer = game_data.questionBank.documents[game_data.answer]
+          [game_data.deck.removeLast().toString()];
       game_data.gameRoom.child('fact').set(answer.toString());
 
       var correctAnswer = new CitronotAnswer("", answer, correct: true);
@@ -46,36 +51,36 @@ class _WaitingState extends State<WaitingRoom> {
     }
   }
 
-  _onCountChanged(Event event) async{
+  _onCountChanged(Event event) async {
     if ((await game_data.gameRoom.once()).value['answerCount'] ==
-        (await game_data.gameRoom.once()).value['noOfPlayers'])
-    {
-
+        (await game_data.gameRoom.once()).value['noOfPlayers']) {
       listen1.cancel();
       listen2.cancel();
+
       /// Make a Results.Dart
 
       game_data.player.child('start').set(false);
 
       // Update Users who have answered
-      await game_data.gameRoom.child('nextRoom').runTransaction((transaction) async {
+      await game_data.gameRoom
+          .child('nextRoom')
+          .runTransaction((transaction) async {
         transaction.value = (transaction.value ?? 0) + 1;
         return transaction;
       });
 
       if (game_data.nextRoom == game_data.NextRoom.voting) {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => AnimatedListSample()));
-        }
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => AnimatedListSample()));
+      }
 
       /// This used to be results
-      else if (game_data.nextRoom == game_data.NextRoom.leaderboard){
-        Navigator.push(context,
-        MaterialPageRoute(builder: (context) => Leaderboard()));
-      }
-      else if( game_data.nextRoom == game_data.NextRoom.question) {
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => Question()));
+      else if (game_data.nextRoom == game_data.NextRoom.leaderboard) {
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => Leaderboard()));
+      } else if (game_data.nextRoom == game_data.NextRoom.question) {
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => Question()));
       }
     }
   }
@@ -92,50 +97,47 @@ class _WaitingState extends State<WaitingRoom> {
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-      backgroundColor: Color(0xFFFFC904),
-      body: SafeArea(
-        child: Column(
-          children: <Widget>[
-
-            Expanded(
-              flex: 3,
-              child: Image.asset(
-                'images/citronot.png',
-              ),
-            ),
-
-            Expanded(
-              flex: 2,
-              child: Text(
-                'Waiting on these Players...',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 25,
-                  fontWeight: FontWeight.bold,
+    return NetworkSensitive(
+      child: new Scaffold(
+        backgroundColor: Color(0xFFFFC904),
+        body: SafeArea(
+          child: Column(
+            children: <Widget>[
+              Expanded(
+                flex: 3,
+                child: Image.asset(
+                  'images/citronot.png',
                 ),
               ),
-            ),
-
-            Flexible(
-              flex: 8,
-              child: new FirebaseAnimatedList(
-                  query: playerRef,
-                  itemBuilder: (_, DataSnapshot snapshot,
-                      Animation<double> animation, int index) {
-                    return new Material(
+              Expanded(
+                flex: 2,
+                child: Text(
+                  'Waiting on these Players...',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 25,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              Flexible(
+                flex: 8,
+                child: new FirebaseAnimatedList(
+                    query: playerRef,
+                    itemBuilder: (_, DataSnapshot snapshot,
+                        Animation<double> animation, int index) {
+                      return new Material(
                         color: snapshot.value['start'] == true
                             ? Colors.green
                             : Colors.red,
                         child: ListTile(
                           title: new Text(snapshot.value['playerName']),
-
                         ),
-                    );
-                  }
+                      );
+                    }),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

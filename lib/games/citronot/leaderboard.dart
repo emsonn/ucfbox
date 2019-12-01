@@ -8,6 +8,7 @@ import 'package:ucfbox/home_page.dart';
 //import 'package:ucfbox/games/citronot/waiting_room.dart';
 import 'package:ucfbox/models/players/citronot_player.dart';
 import 'package:ucfbox/games/citronot/question.dart';
+import 'package:ucfbox/internert_check/network_sensitive.dart';
 
 class Leaderboard extends StatefulWidget {
   @override
@@ -26,104 +27,106 @@ class _AnimatedListSampleState extends State<Leaderboard> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        backgroundColor: Color(0xFFFFC904),
-        body: SafeArea(
-          child: Column(children: <Widget>[
-            SizedBox(
-              height: 50,
-            ),
-            Expanded(
-                child: Text(
-              'LEADERBOARD',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 40.0,
-                  fontWeight: FontWeight.bold),
-            )),
-            Expanded(
-              flex: 9,
-              child: FirebaseAnimatedList(
-                  sort: (a, b) {
-                    return a.value['score'].compareTo(b.value['score']);
-                  },
-                  query: playerRef,
-                  itemBuilder: (_, DataSnapshot snapshot,
-                      Animation<double> animation, int index) {
-                    return Padding(
-                      padding: const EdgeInsets.all(2.0),
-                      child: SizeTransition(
-                        axis: Axis.vertical,
-                        sizeFactor: animation,
-                        child: GestureDetector(
-                          behavior: HitTestBehavior.opaque,
-                          child: SizedBox(
-                            height: 128.0,
-                            child: Card(
-                              color: Colors.black,
-                              child: Center(
-                                child: Text(
-                                  "${snapshot.value['playerName']}   Score:${snapshot.value['score']}",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    color: Color(0xFFFFC904),
-                                    fontSize: 25.0,
-                                    fontWeight: FontWeight.bold,
+    return NetworkSensitive(
+          child: MaterialApp(
+        home: Scaffold(
+          backgroundColor: Color(0xFFFFC904),
+          body: SafeArea(
+            child: Column(children: <Widget>[
+              SizedBox(
+                height: 50,
+              ),
+              Expanded(
+                  child: Text(
+                'LEADERBOARD',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 40.0,
+                    fontWeight: FontWeight.bold),
+              )),
+              Expanded(
+                flex: 9,
+                child: FirebaseAnimatedList(
+                    sort: (a, b) {
+                      return a.value['score'].compareTo(b.value['score']);
+                    },
+                    query: playerRef,
+                    itemBuilder: (_, DataSnapshot snapshot,
+                        Animation<double> animation, int index) {
+                      return Padding(
+                        padding: const EdgeInsets.all(2.0),
+                        child: SizeTransition(
+                          axis: Axis.vertical,
+                          sizeFactor: animation,
+                          child: GestureDetector(
+                            behavior: HitTestBehavior.opaque,
+                            child: SizedBox(
+                              height: 128.0,
+                              child: Card(
+                                color: Colors.black,
+                                child: Center(
+                                  child: Text(
+                                    "${snapshot.value['playerName']}   Score:${snapshot.value['score']}",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      color: Color(0xFFFFC904),
+                                      fontSize: 25.0,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                    );
-                  }),
-            ),
-
-            Expanded(
-              flex: 0,
-              child: RaisedButton(
-                textColor: Color(0xFFFFC904),
-                color: Colors.black,
-                child: Text(
-                  game_data.citronotNumRounds == 0 ? 'End Game' : 'Next Round',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                onPressed: () async {
-
-                  if ( game_data.citronotNumRounds == 0 ) {
-                    game_data.gameRoom.remove();
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => HomePage()));
-                  }
-                  else {
-
-                    game_data.citronotNumRounds--;
-                    game_data.nextRoom = game_data.NextRoom.question;
-                    // Update Answer Count
-                    // Update Users who have answered
-                    final TransactionResult transactionResult =
-                    await game_data
-                        .gameRoom
-                        .child('answerCount')
-                        .runTransaction((transaction) async {
-                      transaction.value = (transaction.value ?? 0 ) + 1;
-                      return transaction;
-                    });
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => WaitingRoom()));
-                  }
-                },
+                      );
+                    }),
               ),
-            ),
+
+              Expanded(
+                flex: 0,
+                child: RaisedButton(
+                  textColor: Color(0xFFFFC904),
+                  color: Colors.black,
+                  child: Text(
+                    game_data.citronotNumRounds == 0 ? 'End Game' : 'Next Round',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  onPressed: () async {
+
+                    if ( game_data.citronotNumRounds == 0 ) {
+                      game_data.gameRoom.remove();
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => HomePage()));
+                    }
+                    else {
+
+                      game_data.citronotNumRounds--;
+                      game_data.nextRoom = game_data.NextRoom.question;
+                      // Update Answer Count
+                      // Update Users who have answered
+                      final TransactionResult transactionResult =
+                      await game_data
+                          .gameRoom
+                          .child('answerCount')
+                          .runTransaction((transaction) async {
+                        transaction.value = (transaction.value ?? 0 ) + 1;
+                        return transaction;
+                      });
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => WaitingRoom()));
+                    }
+                  },
+                ),
+              ),
 
 
-          ]),
+            ]),
+          ),
         ),
       ),
     );
