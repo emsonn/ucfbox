@@ -116,14 +116,25 @@ class _CitronotState extends State<Citronot> {
 
           IconButton(
               icon: Icon(Icons.home),
-              onPressed: () {
+              onPressed: () async {
 
-                playerList.length--;
-                print('${playerList.length}');
+                // setState(() {
+                //   playerList.remove(CitronotPlayer.fromSnapshot(event.snapshot));
+                //   print('${playerList.length}');
+                // });
+
+                // playerList.remove(game_data.player);
+                // playerList.length--;
+                // print('${playerList.length}');
+                game_data.player.remove();
+                var result = await game_data.gameRoom.child('noOfPlayers').runTransaction((transaction) async {
+                  transaction.value = (transaction.value ?? 0 ) - 1;
+                  return transaction;
+                });
                 Navigator.popUntil(
                     context, ModalRoute.withName(Navigator.defaultRouteName));
 
-
+                playerList.length = result.dataSnapshot.value;
                 if(playerList.length == 0)
                 {
                   game_data.gameRoom.remove();
