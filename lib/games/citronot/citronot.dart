@@ -1,6 +1,5 @@
 //import 'dart:async';
 import 'dart:math';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
 //import 'package:firebase_database/ui/utils/stream_subscriber_mixin.dart';
@@ -14,6 +13,8 @@ import 'package:ucfbox/models/players/citronot_player.dart';
 import 'package:ucfbox/my_app_bar.dart';
 import 'package:ucfbox/games/citronot/howtoplay.dart';
 import 'package:ucfbox/games/citronot/question.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
+
 
 class Citronot extends StatefulWidget {
   @override
@@ -192,45 +193,89 @@ class _CitronotState extends State<Citronot> {
                   ),
                 ),
                 onPressed: () async {
-                  print('Start Game button has been pressed');
-                  game_data.citronotNumRounds = 2;
+                  // if ((playerList.length < game_data.citronotMinNumPlayers) || 
+                  //     (playerList.length > game_data.citronotMaxNumPlayers)) {
+                  //     print("sdlkjsfdljksdfljkfds ${playerList.length}");
 
-                  // Download Q/As
-                  if ( game_data.status == game_data.Status.host ) {
-                    game_data.questionBank = await Firestore.instance.collection('citronot').getDocuments();
+                  //     Alert(
+                  //             context: context,
+                  //             type: AlertType.error,
+                  //             title: "UCFBox Alert",
+                  //             desc: "${game_data.citronotMinNumPlayers} to ${game_data.citronotMaxNumPlayers} players only - sorry!",
+                  //             buttons: [
+                  //               DialogButton(
+                  //                 color: Color.fromRGBO(225, 202, 6, 100),
+                  //                 child: Text(
+                  //                   "CHARGE ON!",
+                  //                   style: TextStyle(
+                  //                       color: Colors.black, fontSize: 20),
+                  //                 ),
+                  //                 onPressed: () => Navigator.pop(context),
+                  //                 width: 120,
+                  //               )
+                  //             ],
+                  //           ).show();
+                  // }
 
-                    game_data.deck = new List<int>();
-                    
-                    // Will randomly generate 3 different question indices for lookup.
-                    while (game_data.deck.length < 3) {
-                      var randomQuestionIndex = new Random();
-                      game_data.deck.add(randomQuestionIndex.nextInt((game_data.numCitronotQuestions)));
-                      game_data.deck.toSet().toList();
+                  // else {
+                    print('Start Game button has been pressed');
+                    game_data.citronotNumRounds = 2;
+
+                    // Download Q/As
+                    if ( game_data.status == game_data.Status.host ) {
+                      game_data.questionBank = await Firestore.instance.collection('citronot').getDocuments();
+
+                      game_data.deck = new List<int>();
+                      
+                      // Will randomly generate 3 different question indices for lookup.
+                      while (game_data.deck.length < 3) {
+                        var randomQuestionIndex = new Random();
+                        game_data.deck.add(randomQuestionIndex.nextInt((game_data.citronotNumQuestions)));
+                        game_data.deck.toSet().toList();
+                      }
+
+                      print(game_data.deck);
+                      
+                      var prompt = game_data.questionBank.documents[game_data.question][game_data.deck.last.toString()];
+
+                      game_data.gameRoom.child('prompt').set(prompt);
+
+                      var answer = game_data.questionBank.documents[game_data.answer][game_data.deck.removeLast().toString()];
+                      var correctAnswer = new CitronotAnswer("", answer, correct: true);
+                      
+                      game_data.gameRoom.child('fact').set(answer.toString());
+                      
+                      print("sdfljsdfkldsf PLAYER-INPUT ANSWER??? $answer");
+                      // print("sdfljsdfkldsf PLAYER-INPUT ANSWER??? ${answer.toString()}");
+
+                      print("sdfljsdfkldsf CORRECTANSWER2??? ${game_data.gameRoom.child('fact')}");
+                      // print("sdfljsdfkldsf CORRECTANSWER2??? ${correctAnswer.toString()}");
+                      // print("sdfljsdfkldsf CORRECTANSWER28787??? ${correctAnswer.answer.toString()}");
+
+                      var answerRef = game_data.gameRoom.child('answers').push();
+                      answerRef.set(correctAnswer.toJson());
+
+                      print("sdfljsdfkldsf PLAYER-INPUT ANSWER??? $answerRef");
+                      print("sdfljsdfkldsf PLAYER-INPUT ANSWER??? ${answerRef.toString()}");
+                      print("sdfljsdfkldsf PLAYER-INPUT ANSWER??? ${answerRef.child('answers')}");
+                      print("sdfljsdfkldsf PLAYER-INPUT ANSWER??? ${answerRef.child('answers').toString()}\n\n");
+
+
+
                     }
 
-                    print(game_data.deck);
-                    
-                    var prompt = game_data.questionBank.documents[game_data.question][game_data.deck.last.toString()];
+                    // Update Player
+                    var myPlayer = CitronotPlayer.fromSnapshot(
+                        await game_data.player.once());
+                    myPlayer.start = true;
+                    game_data.player.set(myPlayer.toJson());
 
-                    game_data.gameRoom.child('prompt').set(prompt);
-
-                    var answer = game_data.questionBank.documents[game_data.answer][game_data.deck.removeLast().toString()];
-                    var correctAnswer = new CitronotAnswer("", answer, correct: true);
-                    var answerRef = game_data.gameRoom.child('answers').push();
-                    answerRef.set(correctAnswer.toJson());
-                  }
-
-                  // Update Player
-                  var myPlayer = CitronotPlayer.fromSnapshot(
-                      await game_data.player.once());
-                  myPlayer.start = true;
-                  game_data.player.set(myPlayer.toJson());
-
-                  // Update Users who have answered
-                  await game_data.gameRoom.child('answerCount').runTransaction((transaction) async {
-                    transaction.value = (transaction.value ?? 0 ) + 1;
-                    return transaction;
-                  });
+                    // Update Users who have answered
+                    await game_data.gameRoom.child('answerCount').runTransaction((transaction) async {
+                      transaction.value = (transaction.value ?? 0 ) + 1;
+                      return transaction;
+                    });
+                  // } // end of else
                 },
               ),
             ),

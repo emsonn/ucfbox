@@ -66,9 +66,11 @@ class _PlayerInputState extends State<PlayerInput> {
                       fontWeight: FontWeight.bold)),
               onPressed: () async {
                 print('The user input is the following: $userInput');
+                String roundActualAnswer = (await game_data.gameRoom.once()).value['fact'];
+                print("Correct answer? $roundActualAnswer");
 
                 if (userInput.length == 0) {
-                  Alert(
+                    Alert(
                     context: context,
                     type: AlertType.error,
                     title: "UCFBox Alert",
@@ -87,26 +89,50 @@ class _PlayerInputState extends State<PlayerInput> {
                   ).show();
                 }
 
-                else if ((await game_data.gameRoom.once()).value['nextRoom'] == 0) {
-                  // Update my Answer
-                  var myAnswer =
-                  new CitronotAnswer(game_data.player.key, userInput);
-                  var answerRef = game_data.gameRoom.child('answers').push();
-                  answerRef.set(myAnswer.toJson());
+                // Condition for player entering in the same answer as the round's fact
+                else if (userInput.toLowerCase() == roundActualAnswer.toLowerCase()) {
+                  Alert(
+                    context: context,
+                    type: AlertType.error,
+                    title: "UCFBox Alert",
+                    desc: "Enter in a different answer, please!",
+                    buttons: [
+                      DialogButton(
+                        color: Color.fromRGBO(225, 202, 6, 100),
+                          child: Text(
+                            "CHARGE ON!",
+                            style: TextStyle(
+                              color: Colors.black, fontSize: 20),
+                          ),
+                        onPressed: () => Navigator.pop(context),
+                        width: 120,
+                      )
+                    ],
+                  ).show();
+                }
+                // Normal condition where the round's correct answer has not been input + submitted
+                else {
+                  if ( (await game_data.gameRoom.once()).value['nextRoom'] == 0 ){
+                    // Update my Answer
+                    var myAnswer = new CitronotAnswer(game_data.player.key, userInput);
+                    var answerRef = game_data.gameRoom.child('answers').push();
+                    answerRef.set(myAnswer.toJson());
 
-                  // Update Answer Count
-                  // Update Users who have answered
-                  final TransactionResult transactionResult = await game_data
-                      .gameRoom
-                      .child('answerCount')
-                      .runTransaction((transaction) async {
-                    transaction.value = (transaction.value ?? 0) + 1;
-                    return transaction;
-                  });
+                    // Update Answer Count
+                    // Update Users who have answered
+                    final TransactionResult transactionResult =
+                      await game_data
+                          .gameRoom
+                          .child('answerCount')
+                          .runTransaction((transaction) async {
+                      transaction.value = (transaction.value ?? 0 ) + 1;
+                      return transaction;
+                    });
 
-                  if (transactionResult.committed)
-                    Navigator.push(context,
+                    if (transactionResult.committed )
+                      Navigator.push(context,
                         MaterialPageRoute(builder: (context) => WaitingRoom()));
+                  }
                 }
               },
             ),
