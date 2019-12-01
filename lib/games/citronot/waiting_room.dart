@@ -36,8 +36,10 @@ class _WaitingState extends State<WaitingRoom> {
 
       var prompt = game_data.questionBank.documents[game_data.question][game_data.deck.last.toString()];
       game_data.gameRoom.child('prompt').set(prompt);
-
+                      
       var answer = game_data.questionBank.documents[game_data.answer][game_data.deck.removeLast().toString()];
+      game_data.gameRoom.child('fact').set(answer.toString());
+
       var correctAnswer = new CitronotAnswer("", answer, correct: true);
       var answerRef = game_data.gameRoom.child('answers').push();
       answerRef.set(correctAnswer.toJson());

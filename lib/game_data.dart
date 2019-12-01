@@ -34,7 +34,14 @@ List<int> questionList;
 QuerySnapshot questionBank;
 int globalNumPlayers = 0;
 int citronotNumRounds = 2; // 0 inclusive
-int numCitronotQuestions = 23; // 0-22
+int citronotNumQuestions = 24; // 0-23
+int citronotMinNumPlayers = 4;
+int citronotMaxNumPlayers = 8;
+
+// KnightQuips GameData
+int knightQuipsNumQuestions = 49; // 0-48
+int knightQuipsMinNumPlayers = 4;
+int knightQuipsMaxNumPlayers = 8;
 
 // Knight Quips GameData
 int numKQuipsQuestions = 48;  // 0-48

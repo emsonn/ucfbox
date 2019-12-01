@@ -68,7 +68,7 @@ class _KQuipsQuestionState extends State<KQuipsQuestion>
                     child: new StreamBuilder<Event>(
                       stream: game_data.gameRoom.child('questions').child(qselect).child('prompt').onValue,
                       builder: (BuildContext context, AsyncSnapshot<Event> event) {
-                        if (event.data.snapshot != null) {
+                        if (event.data != null) {
                       String prompt = event.data.snapshot.value;
                       return new Center(
                           child: Text(
