@@ -77,14 +77,12 @@ class _CitronotState extends State<Citronot> {
           Navigator.push(context,
               MaterialPageRoute(builder: (context) => Question()));
         }
-        print("Error!!!");
       }
   }
 
   _onPlayerAdded(Event event) {
     setState(() {
       playerList.add(CitronotPlayer.fromSnapshot(event.snapshot));
-      print('${playerList.length}');
     });
   }
 
@@ -112,7 +110,6 @@ class _CitronotState extends State<Citronot> {
           IconButton(
               icon: Icon(Icons.home),
               onPressed: () async {
-                // playerList.length--;
                 game_data.player.remove();
                 var result = await game_data.gameRoom.child('noOfPlayers').runTransaction((transaction) async {
                   transaction.value = (transaction.value ?? 0 ) - 1;
@@ -244,7 +241,6 @@ class _CitronotState extends State<Citronot> {
                   }
 
                   else {
-                    print('Start Game button has been pressed');
                     game_data.citronotNumRounds = 2;
 
                     // Download Q/As
@@ -259,8 +255,6 @@ class _CitronotState extends State<Citronot> {
                         game_data.deck.add(randomQuestionIndex.nextInt((game_data.citronotNumQuestions)));
                         game_data.deck.toSet().toList();
                       }
-
-                      print(game_data.deck);
                       
                       var prompt = game_data.questionBank.documents[game_data.question][game_data.deck.last.toString()];
 
