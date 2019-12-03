@@ -6,7 +6,7 @@ import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:ucfbox/rooms/user_name_page.dart';
 import 'package:ucfbox/game_data.dart' as game_data;
 import '../my_app_bar.dart';
-
+import 'package:connectivity/connectivity.dart';
 class JoinRoom extends StatelessWidget {
   String gameCode;
 

@@ -3,10 +3,43 @@ import 'package:flutter_swiper/flutter_swiper.dart';
 
 import '../my_app_bar.dart';
 import '../menu_of_games/game_card.dart';
-
+import 'package:connectivity/connectivity.dart';
 class CreateRoom extends StatelessWidget {
+
+  
   @override
   Widget build(BuildContext context) {
+
+   _showDialog(context, title, text) {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text(title),
+            content: Text(text),
+            actions: <Widget>[
+              FlatButton(
+                child: Text('OK'),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              )
+            ],
+          );
+        }
+      );
+    }
+
+    _checkInternetConnection() async {
+      var result = await Connectivity().checkConnectivity();
+      print('You are in _checkInternetConnection');
+      print('Result ==> $result');
+      if (result == ConnectivityResult.none) {
+      _showDialog(context, 'hello', 'welcome');
+      }
+    }
+
+ 
     /// List that contains all the games JSON formats.
     List<GameCard> games = [
       /// Citronot
@@ -73,6 +106,7 @@ class CreateRoom extends StatelessWidget {
             /// Swiper gives the cards a horizontal movement
             child: Swiper(
               itemBuilder: (BuildContext context, int index) {
+                _checkInternetConnection();
                 print('\n\n${games[index].toStringDeep()}\n\n');
                 return games[index];
               },

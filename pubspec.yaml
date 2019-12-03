@@ -20,7 +20,7 @@ dependencies:
   rflutter_alert: ^1.0.3
 
   timer_builder: ^1.3.0
-
+  connectivity: ^0.3.2
 
 dev_dependencies:
   flutter_test:
