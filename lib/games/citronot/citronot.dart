@@ -10,6 +10,7 @@ import 'package:ucfbox/games/citronot/howtoplay.dart';
 import 'package:ucfbox/games/citronot/question.dart';
 import 'package:ucfbox/home_page.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
+import 'package:ucfbox/my_app_bar.dart';
 
 class Citronot extends StatefulWidget {
   @override
@@ -101,36 +102,37 @@ class _CitronotState extends State<Citronot> {
 
     return new Scaffold(
       backgroundColor: Color(0xFFFFC904),
-      appBar: AppBar(
+      appBar: MyAppBar(),
+      //AppBar(
 
-        elevation: 0,
-        backgroundColor: Colors.transparent,
-        actions: <Widget>[
+      //   elevation: 0,
+      //   backgroundColor: Colors.transparent,
+      //   actions: <Widget>[
 
-          IconButton(
-              icon: Icon(Icons.home),
-              onPressed: () async {
-                game_data.player.remove();
-                var result = await game_data.gameRoom.child('noOfPlayers').runTransaction((transaction) async {
-                  transaction.value = (transaction.value ?? 0 ) - 1;
-                  return transaction;
-                });
-                Navigator.popUntil(
-                    context, ModalRoute.withName(Navigator.defaultRouteName));
+      //     IconButton(
+      //         icon: Icon(Icons.home),
+      //         onPressed: () async {
+      //           game_data.player.remove();
+      //           var result = await game_data.gameRoom.child('noOfPlayers').runTransaction((transaction) async {
+      //             transaction.value = (transaction.value ?? 0 ) - 1;
+      //             return transaction;
+      //           });
+      //           Navigator.popUntil(
+      //               context, ModalRoute.withName(Navigator.defaultRouteName));
 
-                playerList.length = result.dataSnapshot.value;
-                if(playerList.length == 0)
-                {
-                  game_data.gameRoom.remove();
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => HomePage()));
-                }
-              })
-        ],
+      //           playerList.length = result.dataSnapshot.value;
+      //           if(playerList.length == 0)
+      //           {
+      //             game_data.gameRoom.remove();
+      //             Navigator.push(context,
+      //                 MaterialPageRoute(builder: (context) => HomePage()));
+      //           }
+      //         })
+      //   ],
 
-      leading: new Container(),
+      // leading: new Container(),
 
-      ),
+      // ),
 
       body: SafeArea(
         child: Column(
