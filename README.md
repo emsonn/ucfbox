@@ -18,14 +18,14 @@ after answering their given questions, and the player with the most voted-on res
 
 Night Night Knightro is a round-based game, where players will communicate and work together
 to figure out what player was secretly assigned the role "Knightro."  Players are all
-given their own roles and have their own special abilities to help assist them.  
-Will you successfully guess who Knightro is, or will you see him outlive you?
+given their own roles and have their own special abilities to help assist them.  Will you 
+successfully guess who Knightro is, or will you see him outlive you?
+
 <br/>
 <br/>
 <br/>
 <br/>
 *A constant Internet connection is required to play this game.*
-<br/>
 <br/>
 #### Supported Players
 -4-8 players required 
