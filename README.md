@@ -20,17 +20,17 @@ Night Night Knightro is a round-based game, where players will communicate and w
 to figure out what player was secretly assigned the role "Knightro."  Players are all
 given their own roles and have their own special abilities to help assist them.  
 Will you successfully guess who Knightro is, or will you see him outlive you?
-
-
-
-
-*A constant Internet connection is required to play this game*
-
-
+<br/>
+<br/>
+<br/>
+<br/>
+*A constant Internet connection is required to play this game.*
+<br/>
+<br/>
 #### Supported Players
 -4-8 players required 
 
 #### System requirements
--iOS 8+ / Android 4.1.4+
--Constant Internet Connection
--250 MB of free space
+-iOS 8+ / Android 4.1.4+ <br/>
+-250 MB of free space <br/>
+-Constant Internet connection
