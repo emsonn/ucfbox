@@ -20,7 +20,6 @@ Night Night Knightro is a round-based game, where players will communicate and w
 to figure out what player was secretly assigned the role "Knightro."  Players are all
 given their own roles and have their own special abilities to help assist them.  Will you 
 successfully guess who Knightro is, or will you see him outlive you?
-
 <br/>
 <br/>
 <br/>
